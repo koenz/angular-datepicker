@@ -1,0 +1,8 @@
+
+  <button *ngFor="let day of days; index as i" 
+  [ngClass]="{
+    'is-today': day.isToday,
+    'is-selected': day.isSelected
+  }"
+  (click)="updateValue(day.date)"
+  >{{day.dayNumber}}</button>
