@@ -5,3 +5,9 @@ export interface Day {
     isSelected: boolean;
     isToday: boolean;
 }
+
+export interface Week {
+    weekNumber?: number;
+    inRange?: boolean;
+    days: Day[];
+}

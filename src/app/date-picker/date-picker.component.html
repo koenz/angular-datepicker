@@ -1,8 +1,22 @@
 
-  <button *ngFor="let day of days; index as i" 
+<app-navigation
+  (onPreviousClick)="goToPreviousMonth()"
+  (onNextClick)="goToNextMonth()"
+  [date]="date"
+></app-navigation>
+<table>
+  <thead>
+    <tr>
+       <td *ngFor="let weekday of weekDays; index as i">{{weekday}}</td>
+    </tr>
+  </thead>
+  <tr *ngFor="let week of weeks; index as i">
+    <td *ngFor="let day of week.days; index as i" 
   [ngClass]="{
     'is-today': day.isToday,
     'is-selected': day.isSelected
-  }"
-  (click)="updateValue(day.date)"
-  >{{day.dayNumber}}</button>
+  }">
+    <button (click)="updateValue(day.date)">{{day.dayNumber}}</button>
+  </td>
+</tr>
+</table>
