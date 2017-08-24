@@ -1,0 +1,31 @@
+@import "../common/scss/_helpers";
+
+:host {
+    @include clearfix();
+    position: relative;
+    display: block;
+    padding: 10px;
+
+    .navigation__title {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .navigation__previous {
+        @include reset-btn();
+        border: 1px solid grey;        
+        text-align: center;
+        float: left;
+        width: 42px;
+        height: 42px;
+    }
+    .navigation__next {
+        @include reset-btn();
+        border: 1px solid grey;        
+        text-align: center;
+        float: right;
+        width: 42px;
+        height: 42px;
+    }
+}

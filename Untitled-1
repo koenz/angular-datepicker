@@ -1,0 +1,10 @@
+  get weekDays() {
+    const array = []
+    for (var index = 0; index < 7; index++) {
+      let weekDayDate = new Date()
+      let weekday = this.date.toLocaleDateString('de-DE', { weekday: 'long'});
+      array.push(weekday); 
+    }    
+    return array;
+  }
+  [ngStyle]="{'transform': 'translateX(-' + transformX + '%'}"

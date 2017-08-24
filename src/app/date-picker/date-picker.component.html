@@ -4,19 +4,24 @@
   (onNextClick)="goToNextMonth()"
   [date]="date"
 ></app-navigation>
-<table>
-  <thead>
-    <tr>
-       <td *ngFor="let weekday of weekDays; index as i">{{weekday}}</td>
-    </tr>
-  </thead>
-  <tr *ngFor="let week of weeks; index as i">
-    <td *ngFor="let day of week.days; index as i" 
-  [ngClass]="{
-    'is-today': day.isToday,
-    'is-selected': day.isSelected
-  }">
-    <button (click)="updateValue(day.date)">{{day.dayNumber}}</button>
-  </td>
-</tr>
-</table>
+<div *ngIf="animate && styleObject" [ngStyle]="styleObject"></div>
+<div class="datepicker__wrapper">
+    <table class="datepicker__calendar" *ngFor="let month of months;" #calendarContainer>
+      <thead>
+        <tr>
+          <td class="datepicker__weekday" *ngFor="let weekday of weekdays; index as i">{{weekday}}</td>
+        </tr>
+      </thead>
+      <tbody [style.left]="leftPosition">
+        <tr *ngFor="let week of month.weeks; index as i">
+          <td class="datepicker__day" *ngFor="let day of week.days; index as i" 
+        [ngClass]="{
+          'is-today': day.isToday,
+          'is-selected': day.isSelected
+        }">
+          <button class="datepicker__button" (click)="updateValue(day.date)">{{day.dayNumber}}</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</div>
