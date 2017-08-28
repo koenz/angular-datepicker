@@ -63,4 +63,25 @@
             color: white;
         }
     }
+
+    .is-in-range {
+        .datepicker__button {
+            background-color: red;
+            color: white;
+        }
+    }
+    
+    .is-start-date {
+        .datepicker__button {
+            background-color: orange;
+            color: white;
+        }
+    }
+
+    .is-end-date {
+        .datepicker__button {
+            background-color: purple;
+            color: white;
+        }
+    }
 }

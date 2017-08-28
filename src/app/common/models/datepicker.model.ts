@@ -8,6 +8,8 @@ export interface Day {
     date: Date;
     dayNumber: number;
     inRange?: boolean;
+    isStartRange: boolean;
+    isEndRange: boolean;
     inDisabled?: boolean;
     isSelected: boolean;
     isToday: boolean;

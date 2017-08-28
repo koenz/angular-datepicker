@@ -11,12 +11,12 @@ import { Options } from "app/common/models/datepicker-options.model";
 export class DatePickerComponent implements OnInit, AfterViewInit {
 
   @Input() private options: Options = {
-    theme: null,
+    theme: '',
     selectMultiple: false,
     showRestDays: true,
     closeOnSelect: true,
     animate: false,
-    animateBy: 1,
+    numberOfMonths: 1,
     range: true,
     min: null,
     max: null
@@ -30,8 +30,8 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
   public calendarWidth: number;
   public calendarHeight: number;
   public styleObject: object;
-
-  this.selectedDate: Range = null
+  public isOpen = false;
+  public isAnimating = false;
 
   public date: Date = new Date();
   public today: Date = this.date;
@@ -42,7 +42,12 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
   private days: Day[] = null;
   private day: Day = null;
   private selectedDates: Date[] = [];
+
   public weekdays: string[] = ['Mo','Tu','We','Th','Fr','Sa','Su'];
+
+  public selectedRange = 'startDate';
+  public startDate: Date = null;
+  public endDate: Date = null;
 
   ngOnInit() {
     this.months = this.createCalendarArray();
@@ -50,7 +55,7 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
       console.warn('Multiple does not work in combination with the range option');
     }
     if(this.options.range && this.options.showRestDays){
-      console.warn('Showing rest days is not possible in combination with the range option');
+      console.warn('Showing rest days is not compatible with the range option');
     }
     if(this.options.animate && this.options.showRestDays){
       console.warn('Showing rest days is not possible in combination with the animate option');
@@ -85,7 +90,9 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
         isToday: this.isToday(date),
         isSelected: this.isSelected(date),
         isDisabled: this.isDisabled(date),
-        inRange: this.inRange(date)
+        isInRange: this.isInRange(date),
+        isStartDate: this.isStartDate(date),
+        isEndDate: this.isEndDate(date)
       }
       days.push(day);
     };
@@ -133,48 +140,83 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
   }
 
   updateValue(date: Date) {
-    if(!this.isSelected(date)){
-      if(this.options.range){
-        this.selectRange(date);
-      } else if(this.options.selectMultiple) {
+    if(this.options.range){
+      this.selectRange(date);
+    } else if(!this.isSelected(date)){
+      if(this.options.selectMultiple) {
         this.selectDate(date);
       } else {
-        this.toggleDate(date);  
+        this.toggleDate(date);
       }
     } else {
       this.deselectDate(date);
     }
-  }
-
-  selectRange(date: Date){
+    
+    this.months = this.createCalendarArray();
     
   }
 
-  toggleDate(date: Date) {
-    this.selectedDates = [];
+  selectRange(date: Date) {
+    if(this.isEarlier(date, this.startDate)) {
+      if(this.startDate){
+        this.toggleDate(date, this.startDate);
+      } else {
+        this.selectDate(date);
+      }
+      this.startDate = date;
+      this.selectEndDate();
+    } else if(this.endDate && this.isLater(date, this.endDate)) {
+      this.toggleDate(date, this.endDate);
+      this.endDate = date;
+      this.selectStartDate();
+    } else if(this.selectedRange === 'startDate') {
+      if(this.startDate){
+        this.toggleDate(date,this.startDate);
+      } else {
+        this.selectDate(date);
+      }
+      this.startDate = date;
+      this.selectEndDate();
+    } else if(this.selectedRange === 'endDate') {
+      if(this.endDate){
+        this.toggleDate(date,this.endDate);
+      } else {
+        this.selectDate(date);
+      }
+      this.endDate = date;
+      this.selectStartDate();
+      if(this.options.closeOnSelect){
+        this.close();
+      }
+    }
+  }
+
+  toggleDate(date: Date, toggleDate?: Date): void {
+    if(!toggleDate){
+      this.selectedDates = [];
+    } else {    
+      this.deselectDate(toggleDate);
+    }
     this.selectDate(date);
   }
 
-  selectDate(date: Date) { 
+  selectDate(date: Date): void {
     this.selectedDates.push(date);
-    this.months = this.createCalendarArray();
   }
 
-  deselectDate(date: Date) { 
+  deselectDate(date: Date): void { 
     this.selectedDates = this.selectedDates.filter((selectedDate)=>{
       return selectedDate.toDateString() !== date.toDateString();
-    });   
-
-    this.months = this.createCalendarArray();
+    });    
   }
 
-  goToNextMonth() {
+  goToNextMonth(): void {
     this.month = this.getNextMonth();
     this.year = this.getYearOfNextMonth();      
 
     if(this.options.animate){
       let array = []
-      for (var index = 0; index < this.options.animateBy; index++) {
+      for (var index = 0; index < this.options.numberOfMonths; index++) {
         array[index] = this.createCalendarArray();  
       }
       let previousMonths = [].concat.apply([], array);   
@@ -184,13 +226,13 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
     }
   }
 
-  goToPreviousMonth() {
+  goToPreviousMonth(): void {
     this.month = this.getPreviousMonth();
     this.year = this.getYearOfPreviousMonth(); 
     
     if(this.options.animate){
       let array = []
-      for (var index = 0; index < this.options.animateBy; index++) {
+      for (var index = 0; index < this.options.numberOfMonths; index++) {
         array[index] = this.createCalendarArray();  
       }
       let previousMonths = [].concat.apply([], array);   
@@ -198,6 +240,18 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
     } else {
       this.months = this.createCalendarArray();
     }
+  }
+
+  close(): void {
+    this.isOpen = false;
+  }
+
+  selectStartDate(): void {
+    this.selectedRange = 'startDate';
+  }
+
+  selectEndDate(): void {
+    this.selectedRange = 'endDate';
   }
 
   getYearOfNextMonth(): number{
@@ -216,30 +270,42 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
     return this.month === 0 ? 11 : this.month - 1;
   }
 
+  isStartDate(date: Date): boolean { 
+    return this.startDate && date.toDateString() === this.startDate.toDateString();
+  }
+
+  isEndDate(date: Date): boolean {
+    return this.endDate && date.toDateString() === this.endDate.toDateString();
+  }
+
   isToday(date: Date): boolean {
    return date.toDateString() == this.today.toDateString()
   }
 
+  isLater(date: Date, compareDate: Date): boolean {
+    return date > compareDate
+  }
+
+  isEarlier(date: Date, compareDate: Date): boolean {
+    return date < compareDate
+  }
+
+  isLaterThenSelected(date: Date): boolean {
+    return 
+  }
+
   isSelected(date: Date): boolean {
-    if(!this.selectedDates) {
-      return false;
-    }
-      
     return (this.selectedDates
     .map(date => date.toDateString())
     .indexOf(date.toDateString()) !== -1);
   }
 
   isDisabled(date: Date): boolean {
-    if(date < this.options.max && date > this.options.min) {
-      return false;
-    } else {
-      return true;
-    }
+    return (date < this.options.max && date > this.options.min);
   }
 
-  inRange(date: Date): boolean {
-    return false;
+  isInRange(date: Date): boolean {
+    return this.startDate && this.endDate && this.startDate < date && date < this.endDate;
   }
 
   getDaysInMonth(year: number, month: number): number {

@@ -17,7 +17,10 @@
           <td class="datepicker__day" *ngFor="let day of week.days; index as i" 
         [ngClass]="{
           'is-today': day.isToday,
-          'is-selected': day.isSelected
+          'is-selected': day.isSelected,
+          'is-in-range': day.isInRange,
+          'is-start-date': day.isStartDate,
+          'is-end-date': day.isEndDate
         }">
           <button class="datepicker__button" (click)="updateValue(day.date)">{{day.dayNumber}}</button>
           </td>
