@@ -15,7 +15,7 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
     selectMultiple: false,
     showRestDays: true,
     closeOnSelect: true,
-    animate: false,
+    animate: true,
     numberOfMonths: 1,
     range: true,
     min: null,

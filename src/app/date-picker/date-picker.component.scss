@@ -1,16 +1,21 @@
 @import "../common/scss/_helpers";
 
 :host {
-    display: inline-block;
-    border: 1px solid grey;
     font-family: Arial, Helvetica, sans-serif;
-    position: relative;
+    border: 1px solid grey;
+    width: 300px;
+    display: inline-block;
+    position: relative;    
 
     &.is-animate {
         .datepicker__wrapper {
             position: absolute;
-            bottom: 0;
-            display: inline-block;
+            width: 200%;
+            left: 0;
+        }
+        
+        .datepicker__calendar {
+            float: left;
         }
     }
 
