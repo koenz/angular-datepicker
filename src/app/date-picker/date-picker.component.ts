@@ -1,12 +1,24 @@
-import { Component, OnInit, HostBinding, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, HostBinding, Input, ViewChild, ElementRef, AfterViewInit, trigger, state, style, transition, animate } from '@angular/core';
 import { Day, Week, Month } from "app/common/models/datepicker.model";
 import { Observable } from "rxjs/Observable";
 import { Options } from "app/common/models/datepicker-options.model";
 
+
 @Component({
   selector: 'app-date-picker',
   templateUrl: './date-picker.component.html',
-  styleUrls: ['./date-picker.component.scss']
+  styleUrls: ['./date-picker.component.scss'],
+  animations: [
+    trigger('slideLeft', [
+      state('start', style({transform: 'translateX(0)'})),
+      state('end', style({transform: 'translateX(-50%)'})),
+      transition('* => end', [
+        style({transform: 'translateX(20%)'}),
+        animate(1000, style({transform: 'translateX(-50%)'}))
+      ])
+    ])
+  ]
+
 })
 export class DatePickerComponent implements OnInit, AfterViewInit {
 
@@ -21,14 +33,19 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
     min: null,
     max: null
   }
+  
 
   @ViewChild('calendarContainer') public calendarContainer: ElementRef;
-
+  @ViewChild('calendarTopContainer') public calendarTopContainer: ElementRef;
+  
+  @HostBinding('style.width.px') public calendarWidth: number;
+  @HostBinding('style.height.px') public calendarHeight: number;
   @HostBinding('class') @Input() theme: string;
   @HostBinding('class.is-animate') private animate: boolean = this.options.animate;
-
-  public calendarWidth: number;
-  public calendarHeight: number;
+  
+  public animationState;
+  public leftPosition: number;
+  public transformX: number;
   public styleObject: object;
   public isOpen = false;
   public isAnimating = false;
@@ -64,17 +81,13 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
   
   ngAfterViewInit() {
      setTimeout(() => {
-      this.calendarHeight = this.calendarContainer.nativeElement.offsetHeight;
+      this.calendarHeight = this.getCalendarHeight();
       this.calendarWidth = this.calendarContainer.nativeElement.offsetWidth;
-      this.setStyleObject();
      });
   }
 
-  setStyleObject(){
-    this.styleObject = {
-      'height.px': this.calendarHeight,
-      'width.px': this.calendarWidth
-    };
+  getCalendarHeight(): number {
+    return this.calendarContainer.nativeElement.offsetHeight + this.calendarTopContainer.nativeElement.offsetHeight
   }
 
   createDayArray(year = this.year, month = this.month): Day[] {
@@ -211,18 +224,26 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
   }
 
   goToNextMonth(): void {
-    this.month = this.getNextMonth();
-    this.year = this.getYearOfNextMonth();      
-
     if(this.options.animate){
-      let array = []
-      for (var index = 0; index < this.options.numberOfMonths; index++) {
-        array[index] = this.createCalendarArray();  
+
+      const currentMonth = this.createCalendarArray();
+      let array = [];
+
+      for (var index = 0; index < (this.options.numberOfMonths); index++) {
+        this.month = this.getNextMonth();
+        this.year = this.getYearOfNextMonth();
+        array[index] = this.createCalendarArray();
       }
-      let previousMonths = [].concat.apply([], array);   
-      this.months = this.months.concat(previousMonths)
+      
+      let nextMonths = [].concat.apply([], array);
+      this.months = currentMonth.concat(nextMonths);
+      this.slideLeft();
     } else {
+
+      this.month = this.getNextMonth();
+      this.year = this.getYearOfNextMonth();
       this.months = this.createCalendarArray();
+
     }
   }
 
@@ -237,9 +258,25 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
       }
       let previousMonths = [].concat.apply([], array);   
       this.months = previousMonths.concat(this.months)
+      this.slideRight();
     } else {
       this.months = this.createCalendarArray();
     }
+  }
+
+  slideRight(): void {
+   const calendarHeight = this.getCalendarHeight();
+    console.log(this.styleObject);
+    console.log(calendarHeight);
+  }
+
+  slideLeft(): void {
+   this.calendarHeight = this.getCalendarHeight();
+   this.leftPosition = 0;
+   this.transformX = -50;
+   this.animationState = 'end';
+   console.log(this.calendarHeight);
+      
   }
 
   close(): void {
@@ -254,20 +291,20 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
     this.selectedRange = 'endDate';
   }
 
-  getYearOfNextMonth(): number{
-    return this.month === 11 ? this.year + 1 : this.year;
+  getYearOfNextMonth(month = this.month, year = this.year): number {
+    return month === 11 ? year + 1 : year;
   }
 
-  getNextMonth(): number{
-    return this.month === 11 ? 0 : this.month + 1;
+  getNextMonth(month = this.month, year = this.year): number {
+    return month === 11 ? 0 : month + 1;
   }
 
-  getYearOfPreviousMonth(): number{
-    return this.month === 0 ? this.year - 1 : this.year;
+  getYearOfPreviousMonth(month = this.year, year = this.year): number {
+    return month === 0 ? year - 1 : year;
   }
 
-  getPreviousMonth(): number{
-    return this.month === 0 ? 11 : this.month - 1;
+  getPreviousMonth(month = this.year, year = this.year): number {
+    return month === 0 ? 11 : month - 1;
   }
 
   isStartDate(date: Date): boolean { 
