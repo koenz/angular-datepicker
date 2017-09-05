@@ -8,3 +8,17 @@
     return array;
   }
   [ngStyle]="{'transform': 'translateX(-' + transformX + '%'}"
+
+    animations: [
+    trigger('slideLeft', [
+      state('start', style({transform: 'translateX(0)'})),
+      transition('* => end', [
+        style({transform: 'translateX(0)'}),
+        animate(1000, style({transform: 'translateX(-50%)'}))
+      ]),
+      transition('end => *', [
+        style({transform: 'translateX(0)'}),
+        animate(1000, style({transform: 'translateX(0)'}))
+      ])
+    ])
+  ]

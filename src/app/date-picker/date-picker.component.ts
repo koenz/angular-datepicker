@@ -7,18 +7,7 @@ import { Options } from "app/common/models/datepicker-options.model";
 @Component({
   selector: 'app-date-picker',
   templateUrl: './date-picker.component.html',
-  styleUrls: ['./date-picker.component.scss'],
-  animations: [
-    trigger('slideLeft', [
-      state('start', style({transform: 'translateX(0)'})),
-      state('end', style({transform: 'translateX(-50%)'})),
-      transition('* => end', [
-        style({transform: 'translateX(20%)'}),
-        animate(1000, style({transform: 'translateX(-50%)'}))
-      ])
-    ])
-  ]
-
+  styleUrls: ['./date-picker.component.scss']
 })
 export class DatePickerComponent implements OnInit, AfterViewInit {
 
@@ -33,6 +22,8 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
     min: null,
     max: null
   }
+
+
   
 
   @ViewChild('calendarContainer') public calendarContainer: ElementRef;
@@ -45,7 +36,7 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
   
   public animationState;
   public leftPosition: number;
-  public transformX: number;
+  public translateX: number;
   public styleObject: object;
   public isOpen = false;
   public isAnimating = false;
@@ -78,11 +69,13 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
       console.warn('Showing rest days is not possible in combination with the animate option');
     }
   }
+
+  constructor(private elementRef:ElementRef) {}
   
   ngAfterViewInit() {
      setTimeout(() => {
       this.calendarHeight = this.getCalendarHeight();
-      this.calendarWidth = this.calendarContainer.nativeElement.offsetWidth;
+      this.calendarWidth = this.elementRef.nativeElement.offsetWidth;
      });
   }
 
@@ -166,7 +159,6 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
     }
     
     this.months = this.createCalendarArray();
-    
   }
 
   selectRange(date: Date) {
@@ -236,7 +228,10 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
       }
       
       let nextMonths = [].concat.apply([], array);
+      
       this.months = currentMonth.concat(nextMonths);
+      this.styleObject['transition'] = 'none'
+      this.translateX = 0;
       this.slideLeft();
     } else {
 
@@ -270,10 +265,19 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
     console.log(calendarHeight);
   }
 
+  setStyleObject(){
+    this.styleObject =  {
+      'transform': 'translateX(' + this.translateX + '%)',
+      'transition': 'transform 1s eas-in'
+    }
+  }
+
   slideLeft(): void {
    this.calendarHeight = this.getCalendarHeight();
    this.leftPosition = 0;
-   this.transformX = -50;
+   this.translateX = -50;
+   this.setStyleObject();
+   this.animationState = 'start';
    this.animationState = 'end';
    console.log(this.calendarHeight);
       

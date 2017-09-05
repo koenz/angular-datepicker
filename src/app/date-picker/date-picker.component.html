@@ -8,8 +8,8 @@
 ></app-navigation>
 <span class="datepicker__weekday" *ngFor="let weekday of weekdays; index as i">{{weekday}}</span>
 </div>
-<div class="datepicker__wrapper"  [@slideLeft]="animationState">
-  <table cellpadding="0" cellspacing="0" class="datepicker__calendar" *ngFor="let month of months;" #calendarContainer>
+<div class="datepicker__wrapper" #calendarContainer [ngStyle]="styleObject">
+  <table cellpadding="0" cellspacing="0" class="datepicker__calendar" *ngFor="let month of months;">
     <tbody>
       <tr *ngFor="let week of month.weeks; index as i">
         <td class="datepicker__day" *ngFor="let day of week.days; index as i" 
