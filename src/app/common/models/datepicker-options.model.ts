@@ -4,7 +4,11 @@ export interface Options {
     showRestDays: boolean;
     closeOnSelect: boolean;
     animate: boolean;
+    animationSpeed: number;
+    easing: string;
     numberOfMonths: number;
+    hideRestDays: boolean;
+    disableRestDays: boolean;
     range: boolean;
     min: Date;
     max: Date;

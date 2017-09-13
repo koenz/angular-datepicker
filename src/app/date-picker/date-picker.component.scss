@@ -1,22 +1,28 @@
 @import "../common/scss/_helpers";
+@import "../common/scss/_vars";
 
 :host {
     font-family: Arial, Helvetica, sans-serif;
-    border: 1px solid grey;
+    border: 1px solid $day-border-color;
     width: 300px;
     display: inline-block;
     position: relative;    
+    overflow: hidden;
+    border-radius: $border-radius;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
 
     &.is-animate {
+        transition: height .2s ease-in;
+
         .datepicker__wrapper {
             position: absolute;
             width: 200%;
             left: 0;
-            transition: transform .3s ease-in
         }
         
         .datepicker__calendar {
             float: left;
+            width: 50%;
         }
     }
 
@@ -25,12 +31,22 @@
     }
 
     tbody {
+        display: block;
+        padding: 0 10px 10px;
+    }
+
+    .datepicker__weekdays {
+        width: 100%;
         padding: 0 10px;
     }
 
     .datepicker__weekday {
         color: grey;
         font-size: 12px;
+        width: 14.2%;
+        height: 20px;
+        display: block;
+        float: left;
         text-align: center;
     }
 
@@ -46,48 +62,90 @@
 
     .datepicker__button {
         @include reset-btn();
-        color: inherit;
+        cursor: pointer;
+        color: $day-text-color;
         width: 100%;
         height: 100%;
         border-radius: 50%;
+        border: 1px solid $day-border-color;
         
         &:hover {
-            border: 1px solid grey;
+            border: 1px solid $day-border-color-hover;
+            background-color: $day-bg-hover;
+            color: $day-text-color-hover;
+        }
+    }
+
+    .is-hidden {
+        opacity: 0;
+    }
+
+    .is-rest {
+        .datepicker__button {
+            color: $day-rest-text-color;
+        }
+    }
+
+    .is-disabled {
+        .datepicker__button {
+            color: $day-disabled-text-color;
+
+            &:hover {
+                background-color: transparent;
+            }
         }
     }
 
     .is-today {
         .datepicker__button {
-            background-color: green;
-            color: white;
+            background-color: $day-bg-today;
         }
     }
 
     .is-selected {
         .datepicker__button {
-            background-color: blue;
-            color: white;
+            background-color: $day-selected-bg;
+            color: $day-selected-color;
+
+            &:hover {
+                background-color: $day-selected-bg-hover
+            }
         }
     }
 
     .is-in-range {
         .datepicker__button {
-            background-color: red;
+            background-color: $day-in-range-bg;
             color: white;
+
+            &:hover {
+                background-color: $day-in-range-bg-hover;
+            }
         }
     }
     
     .is-start-date {
         .datepicker__button {
-            background-color: orange;
+            background-color: $day-start-date-bg;
             color: white;
         }
     }
 
     .is-end-date {
         .datepicker__button {
-            background-color: purple;
+            background-color: $day-end-date-bg;
             color: white;
+        }
+    }
+
+    .is-disabled {
+        .datepicker__button {
+            color: $day-disabled-text-color;
+            cursor: default;
+            
+            &:hover {
+                background-color: transparent;
+            }
         }
     }
 }

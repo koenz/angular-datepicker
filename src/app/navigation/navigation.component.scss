@@ -1,4 +1,5 @@
 @import "../common/scss/_helpers";
+@import "../common/scss/_vars";
 
 :host {
     @include clearfix();
@@ -11,21 +12,28 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
+        font-weight: bold;
     }
-    .navigation__previous {
+    .navigation__button {
         @include reset-btn();
-        border: 1px solid grey;        
+        cursor: pointer;
+        border: 1px solid $day-navigation-border-color;        
         text-align: center;
-        float: left;
-        width: 42px;
-        height: 42px;
+        width: 32px;
+        height: 32px;
+        border-radius: $border-radius;
+
+        &:hover {
+            border-color: $day-navigation-border-color-hover;
+        }
+
+        &.is-previous {
+            float: left;
+        }
+
+        &.is-next {
+            float: right;
+        }
     }
-    .navigation__next {
-        @include reset-btn();
-        border: 1px solid grey;        
-        text-align: center;
-        float: right;
-        width: 42px;
-        height: 42px;
-    }
+
 }
