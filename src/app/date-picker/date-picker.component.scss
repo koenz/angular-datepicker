@@ -35,18 +35,21 @@
         padding: 0 10px 10px;
     }
 
+    .datepicker__weekdays-wrapper {
+        @include clearfix();
+    }
+
     .datepicker__weekdays {
+        table-layout: fixed;
         width: 100%;
         padding: 0 10px;
+        float: left;
     }
 
     .datepicker__weekday {
         color: grey;
         font-size: 12px;
-        width: 14.2%;
         height: 20px;
-        display: block;
-        float: left;
         text-align: center;
     }
 

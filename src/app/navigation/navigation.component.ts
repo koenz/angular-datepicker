@@ -13,6 +13,7 @@ export class NavigationComponent implements OnInit, OnChanges {
   @Input() private monthFormat: string = 'short' // "narrow", "short", "long";
   @Input() private language: string = navigator.language;
   @Input() private date: Date;
+  @Input() public numberOfMonths: Number[];
 
   private formatMonth = new Intl.DateTimeFormat(this.language, { month: this.monthFormat });
   public titleMomnth: string = this.formatMonth.format(this.date);

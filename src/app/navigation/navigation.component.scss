@@ -3,17 +3,21 @@
 
 :host {
     @include clearfix();
-    position: relative;
     display: block;
     padding: 10px;
+    
+    .navigation__wrapper {
+        position: relative;
+    }
 
     .navigation__title {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
+        width: 100%;
         font-weight: bold;
+        text-align: center;
+        float: left;
+        line-height: 2.2rem;
     }
+
     .navigation__button {
         @include reset-btn();
         cursor: pointer;
@@ -21,6 +25,7 @@
         text-align: center;
         width: 32px;
         height: 32px;
+        position: absolute;
         border-radius: $border-radius;
 
         &:hover {
@@ -28,11 +33,11 @@
         }
 
         &.is-previous {
-            float: left;
+            left: 0;
         }
 
         &.is-next {
-            float: right;
+            right: 0;
         }
     }
 

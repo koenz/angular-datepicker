@@ -19,7 +19,7 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
     animate: true, // Animate the datepicker
     animationSpeed: 400, // Animation speed in ms
     easing: 'ease-in', // Easing type string
-    numberOfMonths: 1, // Number of months shown
+    numberOfMonths: 2, // Number of months shown
     hideRestDays: false, // hide the rest days
     disableRestDays: true, // disable the click on rest days
     range: true, // Use range funcionality
@@ -58,13 +58,14 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
   private selectedDates: Date[] = [];
 
   public weekdays: string[] = ['Mo','Tu','We','Th','Fr','Sa','Su'];
+  public numberOfMonths: Number[] = new Array(2);
 
   public selectedRange = 'startDate';
   public startDate: Date = null;
   public endDate: Date = null;
 
   ngOnInit() {
-    if(this.options.numberOfMonths > 1){
+    if(this.options.numberOfMonths > 1){      
       this.months = this.getNextMonthArray();
     } else {
       this.months = this.createCalendarArray();
@@ -207,7 +208,10 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
   getNextMonthArray(): Month[] {
     const currentMonth = this.createCalendarArray();
     let array = [];
-    const times = this.options.numberOfMonths > 1 ? this.options.numberOfMonths - 1 : this.options.numberOfMonths
+    let times = this.options.numberOfMonths > 1 ? this.options.numberOfMonths - 1 : 1;
+    if(this.options.animate){
+      times = times * 2 + 1;
+    }
     for (var index = 0; index < times; index++) {
       this.month = this.getNextMonth();
       this.year = this.getYearOfNextMonth();

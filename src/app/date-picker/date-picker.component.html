@@ -4,21 +4,33 @@
 <app-navigation
   (onPreviousClick)="goToPreviousMonth()"
   (onNextClick)="goToNextMonth()"
+  [numberOfMonths]="numberOfMonths"
   [language]="language"
   [date]="date"
 ></app-navigation>
-  <table class="datepicker__weekdays" cellpadding="0" cellspacing="0">
-    <thead>
-      <td class="datepicker__weekday" *ngFor="let weekday of weekdays; index as i">{{weekday}}</td>
-    </thead>
-  </table>
+  <div class="datepicker__weekdays-wrapper">
+    <table 
+    class="datepicker__weekdays" cellpadding="0" cellspacing="0"
+    *ngFor="let month of numberOfMonths"
+    [ngStyle]="{
+      'width.%': (100 / numberOfMonths.length)
+    }">
+      <thead>
+        <td class="datepicker__weekday" *ngFor="let weekday of weekdays; index as i">{{weekday}}</td>
+      </thead>
+    </table>
+  </div>
 </div>
 <div class="datepicker__wrapper" #calendarContainer [ngStyle]="{
       'transform': 'translateX(' + translateX + '%)',
       'transition': transition,
       'left.%': leftPosition
     }">
-  <table cellpadding="0" cellspacing="0" class="datepicker__calendar" *ngFor="let month of months;">
+  <table cellpadding="0" cellspacing="0" class="datepicker__calendar" *ngFor="let month of months;"
+  [ngStyle]="{
+    'width.%': (50 / numberOfMonths.length)
+  }">
+
     <tbody>
       <tr *ngFor="let week of month.weeks; index as i">
         <td class="datepicker__day" *ngFor="let day of week.days; index as i" 
