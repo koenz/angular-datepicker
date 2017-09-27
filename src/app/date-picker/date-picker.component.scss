@@ -7,7 +7,7 @@
     width: 300px;
     display: inline-block;
     position: relative;    
-    overflow: hidden;
+    // overflow: hidden;
     border-radius: $border-radius;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
 
@@ -26,12 +26,21 @@
         }
     }
 
+    table {
+        table-layout: fixed;
+        border-spacing: 0;
+        border-collapse: collapse;
+    }
+
+    td {
+        padding: 0;
+    }
+
     thead {
         padding: 10px 10px 0;
     }
 
     tbody {
-        display: block;
         padding: 0 10px 10px;
     }
 
@@ -58,8 +67,6 @@
     }
 
     .datepicker__day {
-        width: 42px;
-        height: 42px;
         text-align: center
     }
 

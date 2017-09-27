@@ -1,16 +1,15 @@
 
-
 <div #calendarTopContainer>
 <app-navigation
   (onPreviousClick)="goToPreviousMonth()"
   (onNextClick)="goToNextMonth()"
-  [numberOfMonths]="numberOfMonths"
   [language]="language"
-  [date]="date"
+  [animate]="animate"
+  [currentMonthYear]="currentMonthYear"
 ></app-navigation>
   <div class="datepicker__weekdays-wrapper">
     <table 
-    class="datepicker__weekdays" cellpadding="0" cellspacing="0"
+    class="datepicker__weekdays"
     *ngFor="let month of numberOfMonths"
     [ngStyle]="{
       'width.%': (100 / numberOfMonths.length)
@@ -26,10 +25,10 @@
       'transition': transition,
       'left.%': leftPosition
     }">
-  <table cellpadding="0" cellspacing="0" class="datepicker__calendar" *ngFor="let month of months;"
-  [ngStyle]="{
-    'width.%': (50 / numberOfMonths.length)
-  }">
+  <table 
+    *ngFor="let month of months;"
+    class="datepicker__calendar" 
+    [ngStyle]="{'width.%': calendarWidth}">
 
     <tbody>
       <tr *ngFor="let week of month.weeks; index as i">

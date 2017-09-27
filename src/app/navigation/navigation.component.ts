@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, OnChanges, SimpleChanges, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'app-navigation',
@@ -12,22 +12,31 @@ export class NavigationComponent implements OnInit, OnChanges {
   
   @Input() private monthFormat: string = 'short' // "narrow", "short", "long";
   @Input() private language: string = navigator.language;
-  @Input() private date: Date;
-  @Input() public numberOfMonths: Number[];
+  @Input() private currentMonthYear: Object;
+
+  @HostBinding('class.is-animate') 
+  @Input() public animate: boolean;
 
   private formatMonth = new Intl.DateTimeFormat(this.language, { month: this.monthFormat });
-  public titleMomnth: string = this.formatMonth.format(this.date);
-  public titleYear: number;
+  public titleArray;
 
   ngOnInit() { 
-    this.titleYear = this.date.getFullYear();
+    this.setTitle(this.currentMonthYear);
   }
 
   ngOnChanges(changes: SimpleChanges){
-    if(!changes.date.firstChange){
-      this.titleYear = this.date.getFullYear();
-      this.titleMomnth = this.formatMonth.format(this.date);
+    if(!changes.currentMonthYear.firstChange){
+      this.setTitle(this.currentMonthYear);
     }
+  }
+
+  setTitle(currentMonthYear){
+    // TODO: maybe use setter instaed of ngOnchanges
+    this.titleArray = currentMonthYear.map(el => {
+      let date = new Date(el.year, el.month);
+      el.month = this.formatMonth.format(date);
+      return el;
+    });    
   }
 
   previous(): void {

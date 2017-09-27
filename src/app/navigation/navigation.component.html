@@ -1,10 +1,9 @@
 <div class="navigation__wrapper">
-<button class="navigation__button is-previous" (click)="previous()"><</button>
-<div class="navigation__title" 
-*ngFor="let months of numberOfMonths"
-[ngStyle]="{
-    'width.%': (100 / numberOfMonths.length)
-  }"
-><span>{{titleMomnth}}</span>, <span>{{titleYear}}</span></div>
-<button class="navigation__button is-next" (click)="next()">></button>
-</div> 
+  <button class="navigation__button is-previous" (click)="previous()"><</button>
+  <div *ngFor="let title of titleArray" class="navigation__title" 
+  [ngStyle]="{
+      'width.%': (100 / titleArray.length)
+    }"
+  ><span>{{title.month}}</span>, <span>{{title.year}}</span></div>
+  <button class="navigation__button is-next" (click)="next()">></button>
+</div>
