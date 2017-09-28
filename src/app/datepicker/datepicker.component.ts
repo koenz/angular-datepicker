@@ -5,11 +5,11 @@ import { Options } from "app/common/models/datepicker-options.model";
 
 
 @Component({
-  selector: 'app-date-picker',
-  templateUrl: './date-picker.component.html',
-  styleUrls: ['./date-picker.component.scss']
+  selector: 'app-datepicker',
+  templateUrl: './datepicker.component.html',
+  styleUrls: ['./datepicker.component.scss']
 })
-export class DatePickerComponent implements OnInit, AfterViewInit {
+export class DatepickerComponent implements OnInit, AfterViewInit {
 
   @Input() private options: Options = {
     theme: '', // Theme string is added to the host
@@ -251,50 +251,52 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
    * @param keepDate 
    */
   getPreviousMonthArray(month: number, year: number, keepDate = false): Month[] {
-        let array = [];
-        let times = this.options.numberOfMonths;
-  
-        if(this.options.animate) {
-          times = times * 2;
-        }
-    
-        for (var index = 0; index < times; index++) {
-          if(this.options.animate){
-            array[index] = {'month': month, 'year': year};            
-          }
-          month = this.getPreviousMonth(month);
-          year = this.getYearOfPreviousMonth(month, year);
+    let array = [];
+    let times = this.options.numberOfMonths;
 
-          if(!this.options.animate){
-            array[index] = {'month': month, 'year': year};            
-          }
-    
-          if(!keepDate) {
-            if(this.options.animate && index === this.options.numberOfMonths) {
-              this.month = month;
-              this.year = year;
-            } else if (!this.options.animate && index === (this.options.numberOfMonths - 1)) {
-              this.month = month;
-              this.year = year;
-            }
-          } 
-        }
-        
-        let previousArray = []
-        array.forEach(e => {     
-          previousArray.push(this.createCalendarArray(e.year, e.month)) ;
-        });
-        
-        let previousMonths = [].concat.apply([], previousArray);
-        this.transition = 'all 0ms ease-in';
-        this.translateX = 0;
-        this.leftPosition = -100;
-        const months = previousMonths;
-        this.currentMonthYear = array;
-        console.log(months);
-        
-        return months;
+    if(this.options.animate) {
+      times = times * 2;
+    }
+
+    for (var index = 0; index < times; index++) {
+
+      if(this.options.animate){
+        array[index] = {'month': month, 'year': year};            
       }
+    
+      month = this.getPreviousMonth(month);
+      year = this.getYearOfPreviousMonth(month, year);
+
+      if(!this.options.animate){
+        array[index] = {'month': month, 'year': year};            
+      }
+
+      if(!keepDate) {
+        if(this.options.animate && index === this.options.numberOfMonths) {
+          this.month = month;
+          this.year = year;
+        } else if (!this.options.animate && index === (this.options.numberOfMonths - 1)) {
+          this.month = month;
+          this.year = year;
+        }
+      } 
+    }
+    
+    let previousArray = []
+    array.forEach(e => {     
+      previousArray.push(this.createCalendarArray(e.year, e.month)) ;
+    });
+    
+    let previousMonths = [].concat.apply([], previousArray);
+    this.transition = 'all 0ms ease-in';
+    this.translateX = 0;
+    this.leftPosition = -100;
+    const months = previousMonths;
+    this.currentMonthYear = array;
+
+    
+    return months;
+  }
 
   /**
    * Update value is being triggered
@@ -413,6 +415,7 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
       this.months = this.getNextMonthArray(this.month, this.year);
 
       if(this.options.animate){
+        this.setDatepickerHeight();
         this.slideLeft();
       }
 
@@ -438,6 +441,7 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
       this.months = this.getPreviousMonthArray(this.month, this.year);
 
       if(this.options.animate){
+        this.setDatepickerHeight(true);
         this.slideRight();        
       }
     } else {
@@ -448,7 +452,6 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
   }
 
   slideRight(): void {
-    this.setDatepickerHeight(true);
     this.setIsAnimating();
     setTimeout(()=>{
       this.transition = 'transform ' + this.options.animationSpeed + 'ms ' + this.options.easing;
@@ -458,7 +461,6 @@ export class DatePickerComponent implements OnInit, AfterViewInit {
   }
 
   slideLeft(): void {
-    this.setDatepickerHeight();
     this.setIsAnimating();
     setTimeout(()=>{
       this.transition = 'transform ' + this.options.animationSpeed + 'ms ' + this.options.easing;

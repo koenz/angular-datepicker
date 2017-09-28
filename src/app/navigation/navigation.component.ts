@@ -13,6 +13,9 @@ export class NavigationComponent implements OnInit, OnChanges {
   @Input() private monthFormat: string = 'short' // "narrow", "short", "long";
   @Input() private language: string = navigator.language;
   @Input() private currentMonthYear: Object;
+  @Input() public transition;
+  @Input() public translateX;
+  @Input() public leftPosition;
 
   @HostBinding('class.is-animate') 
   @Input() public animate: boolean;
