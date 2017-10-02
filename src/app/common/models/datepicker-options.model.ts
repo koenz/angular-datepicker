@@ -7,6 +7,7 @@ export interface Options {
     animationSpeed: number;
     easing: string;
     numberOfMonths: number;
+    slideBy: number;
     hideRestDays: boolean;
     disableRestDays: boolean;
     range: boolean;

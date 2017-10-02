@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppComponent } from './app.component';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 import { NavigationComponent } from './navigation/navigation.component';
+import { UtilitiesService } from 'app/common/services/utilities.service.';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,9 @@ import { NavigationComponent } from './navigation/navigation.component';
     BrowserModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+    UtilitiesService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

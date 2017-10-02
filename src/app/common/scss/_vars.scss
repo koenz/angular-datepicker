@@ -1,6 +1,6 @@
 $day-navigation-border-color: lighten(#8e8d8a, 20%);
 $day-navigation-border-color-hover: #8e8d8a;
-$day-border-color: transparent;
+$day-border-color: lighten(#8e8d8a, 30%);
 $day-border-color-hover: transparent;
 $day-rest-text-color: lighten(#8e8d8a, 20%);
 $day-disabled-text-color: lighten(#8e8d8a, 30%);
@@ -16,3 +16,6 @@ $day-end-date-bg: #e85a4f;
 $day-in-range-bg: #e98074;
 $day-in-range-bg-hover: darken(#e98074, 5%);
 $border-radius: 4px;
+$day-width: auto;
+$day-height: 40px;
+$day-border-radius: 0;

@@ -2,6 +2,7 @@ import { Component, OnInit, HostBinding, Input, ViewChild, ElementRef, AfterView
 import { Day, Week, Month } from "app/common/models/datepicker.model";
 import { Observable } from "rxjs/Observable";
 import { Options } from "app/common/models/datepicker-options.model";
+import { UtilitiesService } from 'app/common/services/utilities.service.';
 
 
 @Component({
@@ -19,7 +20,8 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
     animate: true, // Animate the datepicker
     animationSpeed: 400, // Animation speed in ms
     easing: 'ease-in', // Easing type string
-    numberOfMonths: 2, // Number of months shown
+    numberOfMonths: 3, // Number of months shown
+    slideBy: null, // Number of months shown
     hideRestDays: false, // hide the rest days
     disableRestDays: true, // disable the click on rest days
     range: true, // Use range funcionality
@@ -66,7 +68,6 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
   public selectedRange = 'startDate';
   public startDate: Date = null;
   public endDate: Date = null;
-  
 
   ngOnInit() {
     if(this.options.numberOfMonths > 1){      
@@ -90,13 +91,14 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
    * Constructor - constucts the component with parameters
    * @param elementRef 
    */
-  constructor(private elementRef: ElementRef) {}
+  constructor(private elementRef: ElementRef,
+              private utilities: UtilitiesService) {}
   
   ngAfterViewInit() {    
     if(this.options.animate || this.options.numberOfMonths > 1){    
       setTimeout(() => {
         if(this.options.animate){
-          this.datepickerHeight = this.calendarContainer.nativeElement.offsetHeight + this.calendarTopContainer.nativeElement.offsetHeight          
+          this.datepickerHeight = this.calendarContainer.nativeElement.offsetHeight + this.calendarTopContainer.nativeElement.offsetHeight;         
         }
         this.datepickerWidth = this.elementRef.nativeElement.offsetWidth * this.options.numberOfMonths;
       },1);
@@ -104,14 +106,30 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Get the calendar height
-   * @return number;
+   * Set the datepicker height, used when animating
+   * @param directionRight 
    */
   setDatepickerHeight(directionRight?: boolean) {
-    const index = directionRight ? 0 : 1;
-    setTimeout(() => {
-      const calendar = this.elementRef.nativeElement.querySelectorAll('.datepicker__calendar')      
-      this.datepickerHeight = calendar[index].offsetHeight + this.calendarTopContainer.nativeElement.offsetHeight
+    let indexArray;
+
+    if (this.options.numberOfMonths > 1) {
+      const start = directionRight ? 0 : this.options.numberOfMonths;
+      const end = directionRight ? this.options.numberOfMonths - 1 : this.options.numberOfMonths + this.options.numberOfMonths - 1;
+      indexArray = this.utilities.createArray(start, end);  
+    } else {
+      indexArray = directionRight ? [0] : [1];
+    }
+
+    let that = this;
+    setTimeout(function(){
+      const calendarArray = that.elementRef.nativeElement.querySelectorAll('.datepicker__calendar-container');
+      let offsetHeight;
+      indexArray.forEach(el => {
+        if(offsetHeight === undefined || calendarArray[el].offsetHeight > offsetHeight){
+          offsetHeight = calendarArray[el].offsetHeight;
+        }
+      });
+      that.datepickerHeight = offsetHeight + that.calendarTopContainer.nativeElement.offsetHeight;      
     });
   }
   /**
@@ -272,7 +290,7 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
       }
 
       if(!keepDate) {
-        if(this.options.animate && index === this.options.numberOfMonths) {
+        if(this.options.animate && index === (this.options.numberOfMonths - 1)) {
           this.month = month;
           this.year = year;
         } else if (!this.options.animate && index === (this.options.numberOfMonths - 1)) {
@@ -282,9 +300,9 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
       } 
     }
     
-    let previousArray = []
-    array.forEach(e => {     
-      previousArray.push(this.createCalendarArray(e.year, e.month)) ;
+    let previousArray = [];
+    array.reverse().forEach(e => {     
+      previousArray.push(this.createCalendarArray(e.year, e.month));
     });
     
     let previousMonths = [].concat.apply([], previousArray);

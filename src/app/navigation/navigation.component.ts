@@ -12,7 +12,7 @@ export class NavigationComponent implements OnInit, OnChanges {
   
   @Input() private monthFormat: string = 'short' // "narrow", "short", "long";
   @Input() private language: string = navigator.language;
-  @Input() private currentMonthYear: Object;
+  @Input() private currentMonthYear: Object = null;
   @Input() public transition;
   @Input() public translateX;
   @Input() public leftPosition;
@@ -28,8 +28,11 @@ export class NavigationComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges){
-    if(!changes.currentMonthYear.firstChange){
-      this.setTitle(this.currentMonthYear);
+    //console.log(changes);
+    
+    if(changes.currentMonthYear && !changes.currentMonthYear.firstChange){
+      console.log(changes.currentMonthYear.currentValue);
+      this.setTitle(changes.currentMonthYear.currentValue);
     }
   }
 
