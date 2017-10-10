@@ -12,7 +12,7 @@ import { UtilitiesService } from 'app/common/services/utilities.service.';
 })
 export class DatepickerComponent implements OnInit, AfterViewInit {
 
-  @Input() private options: Options = {
+  @Input() public options: Options = {
     theme: '', // Theme string is added to the host
     selectMultiple: false, // Select multiple dates
     showRestDays: true, // Show the rest days from previous and next months
@@ -41,20 +41,20 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
   @HostBinding('style.width.px') public datepickerWidth: number;
   @HostBinding('style.height.px') public datepickerHeight: number;
   @HostBinding('class') @Input() theme: string;
-  @HostBinding('class.is-animate') public animate: boolean = this.options.animate;
+  @HostBinding('class.is-animate') public animate: boolean = this.options.animate; // REMOVE
   
   public leftPosition: number = 0;
   public transition: string;
   public translateX: number;
   public isOpen = false;
   public isAnimating = false;
-  private visableWidth = this.options.animate ? 50 : 100;
-  public calendarWidth = this.visableWidth / this.options.numberOfMonths;
+  private visableWidth = this.options.animate ? 50 : 100; // REMOVE
+  public calendarWidth = this.visableWidth / this.options.numberOfMonths // REMOVE;
 
   public date: Date = new Date();
   public today: Date = this.date;
-  private year: number = this.date.getFullYear();
-  private month: number = this.date.getMonth();
+  public year: number = this.date.getFullYear();
+  public month: number = this.date.getMonth();
   public months: Month[] = null;
   public weeks: Week[] = null;
   private days: Day[] = null;
@@ -63,7 +63,7 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
 
   public weekdays: string[] = ['Mo','Tu','We','Th','Fr','Sa','Su'];
   public numberOfMonths: Number[] = new Array(this.options.numberOfMonths);
-  public currentMonthYear: Object[];
+  public currentMonthYear: Object[]; // REMOVE?
 
   public selectedRange = 'startDate';
   public startDate: Date = null;
@@ -89,10 +89,10 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
 
   /**
    * Constructor - constucts the component with parameters
-   * @param elementRef 
+   * @param elementRef // REMOVE
    */
-  constructor(private elementRef: ElementRef,
-              private utilities: UtilitiesService) {}
+  constructor(public elementRef: ElementRef,
+    public utilities: UtilitiesService) {}
   
   ngAfterViewInit() {    
     if(this.options.animate || this.options.numberOfMonths > 1){    
@@ -106,7 +106,7 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Set the datepicker height, used when animating
+   * Set the datepicker height, used when animating // REMOVE
    * @param directionRight 
    */
   setDatepickerHeight(directionRight?: boolean) {
@@ -226,7 +226,7 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Get next month array, gets multiple months.
+   * Get next month array, gets multiple months. // REMOVE
    * Used when the options animate is set or multiple months are visable 
    * @return Month[]
    */
@@ -263,7 +263,7 @@ export class DatepickerComponent implements OnInit, AfterViewInit {
     return nextMonths;
   }
   /**
-   * Gets an array of previous months. Used for animation and when more months are displayed
+   * Gets an array of previous months. Used for animation and when more months are displayed // REMOVE
    * @param month 
    * @param year 
    * @param keepDate 
