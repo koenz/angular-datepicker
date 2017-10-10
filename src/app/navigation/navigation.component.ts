@@ -1,56 +1,54 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnChanges, SimpleChanges, HostBinding } from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, Input, OnChanges, SimpleChanges, HostBinding} from '@angular/core';
 
 @Component({
-  selector: 'app-navigation',
-  templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+	selector: 'app-navigation',
+	templateUrl: './navigation.component.html',
+	styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent implements OnInit, OnChanges {
 
-  @Output() onPreviousClick: EventEmitter<null> = new EventEmitter();
-  @Output() onNextClick: EventEmitter<null> = new EventEmitter();
-  
-  @Input() private monthFormat: string = 'short' // "narrow", "short", "long";
-  @Input() private language: string = navigator.language;
-  @Input() private currentMonthYear: Object = null;
-  @Input() public transition;
-  @Input() public translateX;
-  @Input() public leftPosition;
+	@Output() onPreviousClick: EventEmitter<null> = new EventEmitter();
+	@Output() onNextClick: EventEmitter<null> = new EventEmitter();
 
-  @HostBinding('class.is-animate') 
-  @Input() public animate: boolean;
+	@Input() private monthFormat = 'short' // "narrow", "short", "long";
+	@Input() private language: string = navigator.language;
+	@Input() private currentMonthYear: Object = null;
+	@Input() public transition;
+	@Input() public translateX;
+	@Input() public leftPosition;
 
-  private formatMonth = new Intl.DateTimeFormat(this.language, { month: this.monthFormat });
-  public titleArray;
+	@HostBinding('class.is-animate')
+	@Input() public animate: boolean;
 
-  ngOnInit() { 
-    this.setTitle(this.currentMonthYear);
-  }
+	private formatMonth = new Intl.DateTimeFormat(this.language, {month: this.monthFormat});
+	public titleArray;
 
-  ngOnChanges(changes: SimpleChanges){
-    //console.log(changes);
-    
-    if(changes.currentMonthYear && !changes.currentMonthYear.firstChange){
-      console.log(changes.currentMonthYear.currentValue);
-      this.setTitle(changes.currentMonthYear.currentValue);
-    }
-  }
+	ngOnInit() {
+		this.setTitle(this.currentMonthYear);
+	}
 
-  setTitle(currentMonthYear){
-    // TODO: maybe use setter instaed of ngOnchanges
-    this.titleArray = currentMonthYear.map(el => {
-      let date = new Date(el.year, el.month);
-      el.month = this.formatMonth.format(date);
-      return el;
-    });    
-  }
+	ngOnChanges(changes: SimpleChanges) {
+		if (changes.currentMonthYear && !changes.currentMonthYear.firstChange) {
+			console.log(changes.currentMonthYear.currentValue);
+			this.setTitle(changes.currentMonthYear.currentValue);
+		}
+	}
 
-  previous(): void {
-    this.onPreviousClick.emit();
-  }
+	setTitle(currentMonthYear): void {
+		// TODO: maybe use setter instaed of ngOnchanges
+		this.titleArray = currentMonthYear.map(el => {
+			let date = new Date(el.year, el.month);
+			el.month = this.formatMonth.format(date);
+			return el;
+		});
+	}
 
-  next(): void {
-    this.onNextClick.emit();
-  }
+	previous(): void {
+		this.onPreviousClick.emit();
+	}
+
+	next(): void {
+		this.onNextClick.emit();
+	}
 
 }
