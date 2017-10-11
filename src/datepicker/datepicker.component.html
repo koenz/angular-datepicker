@@ -25,10 +25,15 @@
     </div>
   </div>
 </div>
-<div class="datepicker__calendar-wrapper">
+<div class="datepicker__calendar-wrapper" #calendarContainer [ngStyle]="{
+      'transform': 'translateX(' + translateX + '%)',
+      'transition': transition,
+      'left.%': leftPosition
+    }">
   <div 
     *ngFor="let month of months;"
     class="datepicker__calendar-container"
+    [ngStyle]="{'width.%': calendarWidth}"
   >
     <table class="datepicker__calendar">
       <tbody>

@@ -4,7 +4,8 @@ import {
 	HostBinding,
 	Input,
 	ViewChild,
-	ElementRef
+	ElementRef,
+	AfterViewInit
 } from '@angular/core';
 import {Day, Week, Month} from 'app/common/models/datepicker.model';
 import {Options} from 'app/common/models/datepicker-options.model';
@@ -16,21 +17,21 @@ import {UtilitiesService} from 'app/common/services/utilities.service.';
 	templateUrl: './datepicker.component.html',
 	styleUrls: ['./datepicker.component.scss']
 })
-export class DatepickerComponent implements OnInit {
+export class DatepickerComponent implements OnInit, AfterViewInit {
 
 	@Input() public options: Options = {
 		theme: '', // Theme string is added to the host
 		selectMultiple: false, // Select multiple dates
 		showRestDays: true, // Show the rest days from previous and next months
 		closeOnSelect: true,  // Close datepicker when date(s) selected
-		animate: false, // Animate the datepicker
+		animate: true, // Animate the datepicker
 		animationSpeed: 400, // Animation speed in ms
 		easing: 'ease-in', // Easing type string
-		numberOfMonths: 1, // Number of months shown
+		numberOfMonths: 3, // Number of months shown
 		slideBy: null, // Number of months shown
 		hideRestDays: false, // hide the rest days
 		disableRestDays: true, // disable the click on rest days
-		range: false, // Use range functionality
+		range: true, // Use range functionality
 		min: null, // Disables dates until this date
 		max: null // Disables dates from this date
 	}
@@ -44,13 +45,23 @@ export class DatepickerComponent implements OnInit {
 	@ViewChild('calendarContainer') public calendarContainer: ElementRef;
 	@ViewChild('calendarTopContainer') public calendarTopContainer: ElementRef;
 
+	@HostBinding('style.width.px') public datepickerWidth: number;
+	@HostBinding('style.height.px') public datepickerHeight: number;
 	@HostBinding('class') @Input() theme: string;
+	@HostBinding('class.is-animate') public animate: boolean = this.options.animate;
 
+	public leftPosition = 0;
+	public transition: string;
+	public translateX: number;
 	public isOpen = false;
+	public isAnimating = false;
+	private visibleWidth = this.options.animate ? 50 : 100;
+	public calendarWidth = this.visibleWidth / this.options.numberOfMonths;
+
 	public date: Date = new Date();
 	public today: Date = this.date;
-	public year: number = this.date.getFullYear();
-	public month: number = this.date.getMonth();
+	private year: number = this.date.getFullYear();
+	private month: number = this.date.getMonth();
 	public months: Month[] = null;
 	private days: Day[] = null;
 	private selectedDates: Date[] = [];
@@ -80,7 +91,11 @@ export class DatepickerComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.months = this.createCalendarArray(this.year, this.month);
+		if (this.options.numberOfMonths > 1) {
+			this.months = this.getNextMonthArray(this.month, this.year, true);
+		} else {
+			this.months = this.createCalendarArray(this.year, this.month);
+		}
 
 		if (this.options.range && this.options.selectMultiple) {
 			console.warn('Multiple does not work in combination with the range option');
@@ -91,6 +106,55 @@ export class DatepickerComponent implements OnInit {
 		if (this.options.animate && this.options.showRestDays) {
 			console.warn('Showing rest days is not possible in combination with the animate option');
 		}
+	}
+
+	/**
+	 * Constructor - constucts the component with parameters
+	 * @param elementRef
+	 * @param utilities
+	 */
+	constructor(private elementRef: ElementRef,
+				private utilities: UtilitiesService) {
+	}
+
+	ngAfterViewInit() {
+		if (this.options.animate || this.options.numberOfMonths > 1) {
+			setTimeout(() => {
+				if (this.options.animate) {
+					this.datepickerHeight = this.calendarContainer.nativeElement.offsetHeight + this.calendarTopContainer.nativeElement.offsetHeight;
+				}
+				this.datepickerWidth = this.elementRef.nativeElement.offsetWidth * this.options.numberOfMonths;
+			}, 1);
+		}
+	}
+
+	/**
+	 * Set the datepicker height, used when animating
+	 * @param directionRight
+	 */
+	setDatepickerHeight(directionRight?: boolean) {
+		let indexArray;
+		let offsetHeight;
+
+		if (this.options.numberOfMonths > 1) {
+			const start = directionRight ? 0 : this.options.numberOfMonths;
+			const end = directionRight ? this.options.numberOfMonths - 1 : this.options.numberOfMonths + this.options.numberOfMonths - 1;
+			indexArray = this.utilities.createArray(start, end);
+		} else {
+			indexArray = directionRight ? [0] : [1];
+		}
+
+		const that = this;
+		setTimeout(function () {
+			const calendarArray = that.elementRef.nativeElement.querySelectorAll('.datepicker__calendar-container');
+
+			indexArray.forEach(el => {
+				if (offsetHeight === undefined || calendarArray[el].offsetHeight > offsetHeight) {
+					offsetHeight = calendarArray[el].offsetHeight;
+				}
+			});
+			that.datepickerHeight = offsetHeight + that.calendarTopContainer.nativeElement.offsetHeight;
+		});
 	}
 
 	/**
@@ -171,6 +235,104 @@ export class DatepickerComponent implements OnInit {
 	}
 
 	/**
+	 * Get next month array, gets multiple months.
+	 * Used when the options animate is set or multiple months are visable
+	 * @return Month[]
+	 */
+	getNextMonthArray(month: number, year: number, keepDate = false): Month[] {
+		const array = [];
+		let times = this.options.numberOfMonths;
+
+		if (this.options.animate) {
+			times = times * 2;
+		}
+
+		for (let index = 0; index < times; index++) {
+			array[index] = {'month': month, 'year': year};
+			month = this.getNextMonth(month);
+			year = this.getYearOfNextMonth(month, year);
+
+			if (!keepDate && index === (this.options.numberOfMonths - 1)) {
+				this.month = month;
+				this.year = year;
+			}
+		}
+
+		const monthArray = [];
+		array.forEach(e => {
+			monthArray.push(this.createCalendarArray(e.year, e.month));
+		});
+
+		const nextMonths = [].concat.apply([], monthArray);
+		this.resetStyle();
+		this.currentMonthYear = array;
+
+		return nextMonths;
+	}
+
+	/**
+	 * Reset Style
+	 * @param resetForPrevious - Optional
+	 */
+	resetStyle(resetForPrevious?: boolean) {
+		this.transition = 'transform 0ms ease-in';
+		this.translateX = 0;
+		this.leftPosition = resetForPrevious ? -100 : 0;
+	}
+
+	/**
+	 * Gets an array of previous months. Used for animation and when more months are displayed
+	 * @param month
+	 * @param year
+	 * @param keepDate
+	 */
+	getPreviousMonthArray(month: number, year: number, keepDate = false): Month[] {
+		const array = [];
+		let times = this.options.numberOfMonths;
+
+		if (this.options.animate) {
+			times = times * 2;
+		}
+
+		for (let index = 0; index < times; index++) {
+
+			if (this.options.animate) {
+				array[index] = {'month': month, 'year': year};
+			}
+
+			month = this.getPreviousMonth(month);
+			year = this.getYearOfPreviousMonth(month, year);
+
+			if (!this.options.animate) {
+				array[index] = {'month': month, 'year': year};
+			}
+
+			if (!keepDate) {
+				if (this.options.animate && index === (this.options.numberOfMonths - 1)) {
+					this.month = month;
+					this.year = year;
+				} else if (!this.options.animate && index === (this.options.numberOfMonths - 1)) {
+					this.month = month;
+					this.year = year;
+				}
+			}
+		}
+
+		const previousArray = [];
+		array.reverse().forEach(e => {
+			previousArray.push(this.createCalendarArray(e.year, e.month));
+		});
+
+		const previousMonths = [].concat.apply([], previousArray);
+		this.resetStyle(true);
+		const months = previousMonths;
+		this.currentMonthYear = array;
+
+
+		return months;
+	}
+
+	/**
 	 * Update value is being triggered
 	 * @param date
 	 */
@@ -185,11 +347,21 @@ export class DatepickerComponent implements OnInit {
 			}
 		} else {
 			this.deselectDate(date);
-    }
-    
-    this.month = this.getNextMonth(this.month);
-    this.year = this.getYearOfNextMonth(this.month, this.year);
-    this.months = this.createCalendarArray(this.year, this.month);
+		}
+
+		if (this.options.animate || this.options.numberOfMonths > 1) {
+
+			this.resetStyle();
+			this.months = this.getNextMonthArray(this.month, this.year, true);
+
+		} else {
+
+			this.month = this.getNextMonth(this.month);
+			this.year = this.getYearOfNextMonth(this.month, this.year);
+			this.months = this.createCalendarArray(this.year, this.month);
+
+		}
+
 	}
 
 	/**
@@ -267,19 +439,72 @@ export class DatepickerComponent implements OnInit {
 	 * Go to the next month
 	 */
 	goToNextMonth(): void {
+		if (this.options.animate || this.options.numberOfMonths > 1) {
+			if (this.isAnimating) {
+				return;
+			}
+
+			this.months = this.getNextMonthArray(this.month, this.year);
+
+			if (this.options.animate) {
+				this.setDatepickerHeight();
+				this.slideLeft();
+			}
+
+		} else {
+
 			this.month = this.getNextMonth(this.month);
 			this.year = this.getYearOfNextMonth(this.month, this.year);
 			this.currentMonthYear = [{'month': this.month, 'year': this.year}]
 			this.months = this.createCalendarArray(this.year, this.month);
+
+		}
 	}
 
 	/**
 	 * Go to the previous month
 	 */
 	goToPreviousMonth(): void {
-    this.month = this.getPreviousMonth(this.month);
-    this.year = this.getYearOfPreviousMonth(this.month, this.year);
-    this.months = this.createCalendarArray(this.year, this.month);
+		if (this.options.animate || this.options.numberOfMonths > 1) {
+			if (this.isAnimating) {
+				return;
+			}
+
+			this.months = this.getPreviousMonthArray(this.month, this.year);
+
+			if (this.options.animate) {
+				this.setDatepickerHeight(true);
+				this.slideRight();
+			}
+		} else {
+			this.month = this.getPreviousMonth(this.month);
+			this.year = this.getYearOfPreviousMonth(this.month, this.year);
+			this.months = this.createCalendarArray(this.year, this.month);
+		}
+	}
+
+	slideRight(): void {
+		this.setIsAnimating();
+		setTimeout(() => {
+			this.transition = 'transform ' + this.options.animationSpeed + 'ms ' + this.options.easing;
+			this.translateX = 50;
+		}, 1);
+
+	}
+
+	slideLeft(): void {
+		this.setIsAnimating();
+		setTimeout(() => {
+			this.transition = 'transform ' + this.options.animationSpeed + 'ms ' + this.options.easing;
+			this.translateX = -50;
+		}, 100);
+	}
+
+	setIsAnimating(): void {
+		this.isAnimating = true;
+		setTimeout(() => {
+			this.isAnimating = false;
+		}, this.options.animationSpeed);
 	}
 
 	close(): void {

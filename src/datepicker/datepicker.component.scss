@@ -22,10 +22,9 @@
             position: absolute;
             width: 200%;
             left: 0;
-		}
-		
+        }
+        
         .datepicker__calendar {
-			float: left;			
             width: 100%;
         }
 
@@ -39,7 +38,6 @@
     }
 
     table {
-		width: 100%;
         table-layout: fixed;
         border-spacing: 0;
         border-collapse: collapse;
@@ -68,6 +66,10 @@
         font-size: 12px;
         height: 20px;
         text-align: center;
+    }
+
+    .datepicker__calendar {
+        float: left;
     }
 
     .datepicker__day {
