@@ -6,9 +6,9 @@ import {
 	ViewChild,
 	ElementRef
 } from '@angular/core';
-import {Day, Week, Month} from 'app/common/models/datepicker.model';
-import {Options} from 'app/common/models/datepicker-options.model';
-import {UtilitiesService} from 'app/common/services/utilities.service.';
+import { Day, Week, Month } from 'app/common/models/datepicker.model';
+import { Options } from 'app/common/models/datepicker-options.model';
+import { UtilitiesService } from 'app/common/services/utilities.service.';
 
 
 @Component({
@@ -26,7 +26,7 @@ export class DatepickerComponent implements OnInit {
 		animate: false, // Animate the datepicker
 		animationSpeed: 400, // Animation speed in ms
 		easing: 'ease-in', // Easing type string
-		numberOfMonths: 1, // Number of months shown
+		numberOfMonths: 2, // Number of months shown
 		slideBy: null, // Number of months shown
 		hideRestDays: false, // hide the rest days
 		disableRestDays: true, // disable the click on rest days
@@ -65,6 +65,7 @@ export class DatepickerComponent implements OnInit {
 
 	/**
 	 * Create a week array from the merged day arrays
+	 * 
 	 * @param dayArray
 	 * @return Week[]
 	 */
@@ -78,8 +79,19 @@ export class DatepickerComponent implements OnInit {
 		}
 		return weeks;
 	}
+	
+	/**
+	 * Check if year is a leap year
+	 * 
+	 * @param year
+	 * @return boolean
+	 */
+	static isLeapYear(year: number): boolean {
+		return year % 4 === 0 && year % 100 !== 0 || year % 400 === 0;
+	}
 
 	ngOnInit() {
+		this.currentMonthYear = [{ 'month': this.month, 'year': this.year }];
 		this.months = this.createCalendarArray(this.year, this.month);
 
 		if (this.options.range && this.options.selectMultiple) {
@@ -130,9 +142,9 @@ export class DatepickerComponent implements OnInit {
 	 * @return Day[]
 	 */
 	getNextRestDays(year, month): Day[] {
-		const monthLength = this.getDaysInMonth(month, year);
-		const endOfTheMonth = new Date(month, year, monthLength).getDay();
-		const nextDays = this.createDayArray(this.getYearOfNextMonth(month, year), this.getNextMonth(month), true).slice(0, 7 - endOfTheMonth);
+		const monthLength = this.getDaysInMonth(year, month);
+		const endOfTheMonth = new Date(year, month, monthLength).getDay();
+		const nextDays = this.createDayArray(this.getYearOfNextMonth(year, month), this.getNextMonth(month), true).slice(0, 7 - endOfTheMonth);
 		return nextDays.length > 6 ? [] : nextDays;
 	}
 
@@ -142,7 +154,7 @@ export class DatepickerComponent implements OnInit {
 	 */
 	getPreviousRestDays(year, month): Day[] {
 		const startOfTheMonth = new Date(year, month, 0).getDay();
-		const previousDays = this.createDayArray(this.getYearOfPreviousMonth(month, year), this.getPreviousMonth(month), true);
+		const previousDays = this.createDayArray(this.getYearOfPreviousMonth(year, month),this.getPreviousMonth(month), true);
 		return previousDays.slice(previousDays.length - startOfTheMonth, previousDays.length);
 	}
 
@@ -167,14 +179,15 @@ export class DatepickerComponent implements OnInit {
 		this.date = new Date(year, month);
 		const dayArray = this.getMergedDayArrays(year, month);
 		const weeks = DatepickerComponent.createWeekArray(dayArray);
-		return [{weeks: weeks}]
+		return [{ weeks: weeks }]
 	}
 
 	/**
 	 * Update value is being triggered
+	 * 
 	 * @param date
 	 */
-	updateValue(date: Date): void {
+	updateValue(date: Date): void {	
 		if (this.options.range) {
 			this.selectRange(date);
 		} else if (!this.isSelected(date)) {
@@ -185,15 +198,14 @@ export class DatepickerComponent implements OnInit {
 			}
 		} else {
 			this.deselectDate(date);
-    }
-    
-    this.month = this.getNextMonth(this.month);
-    this.year = this.getYearOfNextMonth(this.month, this.year);
-    this.months = this.createCalendarArray(this.year, this.month);
+		}
+
+		this.months = this.createCalendarArray(this.year, this.month);
 	}
 
 	/**
 	 * Select range method - contains the logic to select the start- and endrange
+	 * 
 	 * @param date
 	 */
 	selectRange(date: Date): void {
@@ -233,6 +245,7 @@ export class DatepickerComponent implements OnInit {
 
 	/**
 	 * Toggle a date. One in, on out.
+	 * 
 	 * @param date - Date to be toggled on
 	 * @param toggleDate - Optional set specific date to toggle off
 	 */
@@ -247,6 +260,7 @@ export class DatepickerComponent implements OnInit {
 
 	/**
 	 * Select a date
+	 * 
 	 * @param date
 	 */
 	selectDate(date: Date): void {
@@ -255,6 +269,7 @@ export class DatepickerComponent implements OnInit {
 
 	/**
 	 * Deselect a date
+	 * 
 	 * @param date
 	 */
 	deselectDate(date: Date): void {
@@ -267,19 +282,20 @@ export class DatepickerComponent implements OnInit {
 	 * Go to the next month
 	 */
 	goToNextMonth(): void {
-			this.month = this.getNextMonth(this.month);
-			this.year = this.getYearOfNextMonth(this.month, this.year);
-			this.currentMonthYear = [{'month': this.month, 'year': this.year}]
-			this.months = this.createCalendarArray(this.year, this.month);
+		this.month = this.getNextMonth(this.month);
+		this.year = this.getYearOfNextMonth(this.year, this.month);
+		this.currentMonthYear = [{ 'month': this.month, 'year': this.year }];
+		this.months = this.createCalendarArray(this.year, this.month);
 	}
 
 	/**
 	 * Go to the previous month
 	 */
 	goToPreviousMonth(): void {
-    this.month = this.getPreviousMonth(this.month);
-    this.year = this.getYearOfPreviousMonth(this.month, this.year);
-    this.months = this.createCalendarArray(this.year, this.month);
+		this.month = this.getPreviousMonth(this.month);
+		this.year = this.getYearOfPreviousMonth(this.year, this.month);
+		this.currentMonthYear = [{ 'month': this.month, 'year': this.year }];
+		this.months = this.createCalendarArray(this.year, this.month);
 	}
 
 	close(): void {
@@ -294,7 +310,7 @@ export class DatepickerComponent implements OnInit {
 		this.selectedRange = 'endDate';
 	}
 
-	getYearOfNextMonth(month: number, year: number): number {
+	getYearOfNextMonth(year: number, month: number): number {
 		return month === 11 ? year + 1 : year;
 	}
 
@@ -302,7 +318,7 @@ export class DatepickerComponent implements OnInit {
 		return month === 11 ? 0 : month + 1;
 	}
 
-	getYearOfPreviousMonth(month: number, year: number): number {
+	getYearOfPreviousMonth(year: number, month: number): number {
 		return month === 0 ? year - 1 : year;
 	}
 
@@ -349,11 +365,7 @@ export class DatepickerComponent implements OnInit {
 	}
 
 	getDaysInMonth(year: number, month: number): number {
-		return [31, this.isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
-	}
-
-	isLeapYear(year: number): boolean {
-		return year % 4 === 0 && year % 100 !== 0 || year % 400 === 0;
+		return [31, DatepickerComponent.isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
 	}
 
 	// TODO: maybe add clear undefined, not sure why though

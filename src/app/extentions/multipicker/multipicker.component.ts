@@ -14,8 +14,6 @@ export class MultipickerComponent extends DatepickerComponent {
   @Input() public options: Options;
 
   @ViewChild('calendarContainer') public calendarContainer: ElementRef;
-
-
   @HostBinding('style.width.px') public datepickerWidth: number;
 
   public calendarWidth = 100 / this.options.numberOfMonths

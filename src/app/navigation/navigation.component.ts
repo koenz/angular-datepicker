@@ -18,7 +18,7 @@ export class NavigationComponent implements OnInit, OnChanges {
 	@Input() public leftPosition;
 
 	@HostBinding('class.is-animate')
-	@Input() public animate: boolean;
+	@Input() public animate = false;
 
 	private formatMonth = new Intl.DateTimeFormat(this.language, {month: this.monthFormat});
 	public titleArray;
@@ -27,15 +27,24 @@ export class NavigationComponent implements OnInit, OnChanges {
 		this.setTitle(this.currentMonthYear);
 	}
 
+	/**
+	 * ngOnChanges detects the changes made in component properties
+	 * 
+	 * @param changes
+	 */
 	ngOnChanges(changes: SimpleChanges) {
 		if (changes.currentMonthYear && !changes.currentMonthYear.firstChange) {
-			console.log(changes.currentMonthYear.currentValue);
 			this.setTitle(changes.currentMonthYear.currentValue);
 		}
 	}
 
+	/**
+	 * Sets the title
+	 * 
+	 * @param currentMonthYear 
+	 */
 	setTitle(currentMonthYear): void {
-		// TODO: maybe use setter instaed of ngOnchanges
+		// TODO: maybe use setter instead of ngOnchanges
 		this.titleArray = currentMonthYear.map(el => {
 			let date = new Date(el.year, el.month);
 			el.month = this.formatMonth.format(date);
@@ -43,10 +52,16 @@ export class NavigationComponent implements OnInit, OnChanges {
 		});
 	}
 
+	/**
+	 * Emits previous click event
+	 */
 	previous(): void {
 		this.onPreviousClick.emit();
 	}
 
+	/**
+	 * Emits next click event
+	 */
 	next(): void {
 		this.onNextClick.emit();
 	}
