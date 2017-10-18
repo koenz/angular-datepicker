@@ -162,7 +162,7 @@ export class DatepickerComponent implements OnInit {
 	 * Merge all the day arrays together
 	 * @return Day[]
 	 */
-	getMergedDayArrays(year, month): Day[] {
+	getMergedDayArrays(year: number, month: number): Day[] {
 		return [
 			...this.getPreviousRestDays(year, month),
 			...this.createDayArray(year, month),
@@ -175,7 +175,7 @@ export class DatepickerComponent implements OnInit {
 	 * @param year
 	 * @param month
 	 */
-	createCalendarArray(year, month): [{ weeks: Week[] }] {
+	createCalendarArray(year: number, month: number): [{ weeks: Week[] }] {
 		this.date = new Date(year, month);
 		const dayArray = this.getMergedDayArrays(year, month);
 		const weeks = DatepickerComponent.createWeekArray(dayArray);
