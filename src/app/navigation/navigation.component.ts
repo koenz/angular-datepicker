@@ -45,10 +45,11 @@ export class NavigationComponent implements OnInit, OnChanges {
 	 */
 	setTitle(currentMonthYear): void {
 		// TODO: maybe use setter instead of ngOnchanges
-		this.titleArray = currentMonthYear.map(el => {
-			let date = new Date(el.year, el.month);
-			el.month = this.formatMonth.format(date);
-			return el;
+		// TODO: find out why this chages the property in animate component
+		this.titleArray = currentMonthYear.map(s => {
+			let date = new Date(s.year, s.month);
+			s.m = this.formatMonth.format(date);
+			return s;
 		});
 	}
 

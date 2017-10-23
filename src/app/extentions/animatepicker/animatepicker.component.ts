@@ -30,7 +30,10 @@ export class AnimatepickerComponent extends DatepickerComponent {
 	}
 
 	ngOnInit() {
-		this.currentYearMonth = this.getInitialCurrentYearMonth(this.year, this.month);		
+		this.getPreviousYearMonthArray(this.year, this.month);
+		this.currentYearMonth = this.getNextYearMonthArray(this.year, this.month);
+		
+			
 		this.months = this.getNextMonthArray(this.currentYearMonth, true);
 	}
 
@@ -42,15 +45,36 @@ export class AnimatepickerComponent extends DatepickerComponent {
 	}
 
 	/**
+	 * Create an array of the next year and months
 	 * 
+	 * @param year 
+	 * @param month 
 	 */
-	getInitialCurrentYearMonth(year: number, month: number): Object[] {
+	getNextYearMonthArray(year: number, month: number): Object[] {
 		let array = []
 		for (var index = 0; index < this.options.numberOfMonths; index++) {
-			array[index] = { 'year': year, 'month': month };
+			array.push({ 'year': year, 'month': month });
 			month = this.getNextMonth(month);
 			year = this.getYearOfNextMonth(year, month);
 		}
+
+		return array;
+	}
+
+	/**
+	 * Create an array of the next previous and months
+	 * 
+	 * @param year 
+	 * @param month 
+	 */
+	getPreviousYearMonthArray(year: number, month: number): Object[] {
+		let array = []
+		for (var index = 0; index < this.options.numberOfMonths; index++) {
+			array.unshift({ 'year': year, 'month': month });
+			month = this.getPreviousMonth(month);
+			year = this.getYearOfPreviousMonth(year, month);
+		}
+		
 		return array;
 	}
 
@@ -91,30 +115,26 @@ export class AnimatepickerComponent extends DatepickerComponent {
 	 */
 	getNextMonthArray(currentYearMonth, keepDate = false): Month[] {
 
-		const lastIndex = this.options.numberOfMonths - 1;
+		// Get the last index, used for selecting the right year month object
+		const lastIndex = this.options.numberOfMonths - 1;		
 
-
-		
-		const nextMonths = this.getInitialCurrentYearMonth(
+		// Get next year and month in an Object
+		const nextMonths = this.getNextYearMonthArray(
 			this.getYearOfNextMonth(currentYearMonth[lastIndex].year, currentYearMonth[lastIndex].month),
 			this.getNextMonth(currentYearMonth[lastIndex].month)
 		);
-
-		const totalYearMonth = currentYearMonth.concat(nextMonths)
-
-		console.log(totalYearMonth[0].month);
 		
+		// Concatonate the two objects to create a total year and month object
+		this.currentMonthYear = currentYearMonth.concat(nextMonths);
 
-		let monthArray = []
-		totalYearMonth.forEach(e => {
-			monthArray.push(this.createCalendarArray(e.year, e.month));
+		// Create the calendar array using the total year and month Object
+		let monthArray = [];		
+		this.currentMonthYear.forEach(e => {
+			// TODO: Find out why I have to use the block quotes
+			monthArray.push(this.createCalendarArray(e['year'], e['month']));
 		});
 
-		this.resetStyle();
-		console.log(totalYearMonth);
-		
-		this.currentMonthYear = totalYearMonth;
-
+		// Set the new current year and month object.
 		if (!keepDate) {
 			this.currentYearMonth = nextMonths;
 		}
@@ -130,34 +150,29 @@ export class AnimatepickerComponent extends DatepickerComponent {
 	 * @param year 
 	 * @param keepDate 
 	 */
-	getPreviousMonthArray(month: number, year: number, keepDate = false): Month[] {
-		let array = [];
-		let times = this.options.numberOfMonths * 2;
+	getPreviousMonthArray(currentYearMonth, keepDate = false): Month[] {
 
-		for (var index = 0; index < times; index++) {
+		// Get previous year and month in an Object
+		const previousMonths = this.getPreviousYearMonthArray(
+			this.getYearOfPreviousMonth(currentYearMonth[0].year, currentYearMonth[0].month),
+			this.getPreviousMonth(currentYearMonth[0].month)
+		);
 
-			array[index] = { 'month': month, 'year': year };
+		// Concatonate the two objects to create a total year and month object
+		this.currentMonthYear = previousMonths.concat(currentYearMonth);
 
-			month = this.getPreviousMonth(month);
-			year = this.getYearOfPreviousMonth(year, month);
-
-			if (!keepDate) {
-				if (index === (this.options.numberOfMonths - 1)) {
-					this.month = month;
-					this.year = year;
-				}
-			}
-		}
-
-		let previousArray = [];
-		array.reverse().forEach(e => {
-			previousArray.push(this.createCalendarArray(e.year, e.month));
+		// Create the calendar array using the total year and month Object
+		let monthArray = [];
+		this.currentMonthYear.forEach(e => {
+			monthArray.push(this.createCalendarArray(e['year'], e['month']));
 		});
 
-		this.resetStyle(true);
-		this.currentMonthYear = array;
+		// Set the new current year and month object.
+		if (!keepDate) {
+			this.currentYearMonth = previousMonths;
+		}
 
-		return [].concat.apply([], previousArray);;
+		return [].concat.apply([], monthArray);
 	}
 
 	/**
@@ -192,6 +207,7 @@ export class AnimatepickerComponent extends DatepickerComponent {
 		}
 
 		this.months = this.getNextMonthArray(this.currentYearMonth);
+		this.resetStyle();
 		this.setDatepickerHeight();
 		this.slideLeft();
 	}
@@ -204,8 +220,8 @@ export class AnimatepickerComponent extends DatepickerComponent {
 			return;
 		}
 
-		this.months = this.getPreviousMonthArray(this.month, this.year);
-
+		this.months = this.getPreviousMonthArray(this.currentYearMonth);
+		this.resetStyle(true);
 		this.setDatepickerHeight(true);
 		this.slideRight();
 	}
@@ -218,8 +234,7 @@ export class AnimatepickerComponent extends DatepickerComponent {
 		setTimeout(() => {
 			this.transition = 'transform ' + this.options.animationSpeed + 'ms ' + this.options.easing;
 			this.translateX = 50;
-		}, 1);
-
+		});
 	}
 
 	/**
@@ -230,7 +245,7 @@ export class AnimatepickerComponent extends DatepickerComponent {
 		setTimeout(() => {
 			this.transition = 'transform ' + this.options.animationSpeed + 'ms ' + this.options.easing;
 			this.translateX = -50;
-		}, 100);
+		});
 	}
 
 	/**

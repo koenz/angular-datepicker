@@ -18,22 +18,22 @@ import { UtilitiesService } from 'app/common/services/utilities.service.';
 })
 export class DatepickerComponent implements OnInit {
 
-	@Input() public options: Options = {
-		theme: '', // Theme string is added to the host
-		selectMultiple: false, // Select multiple dates
-		showRestDays: true, // Show the rest days from previous and next months
-		closeOnSelect: true,  // Close datepicker when date(s) selected
-		animate: false, // Animate the datepicker
-		animationSpeed: 400, // Animation speed in ms
-		easing: 'ease-in', // Easing type string
-		numberOfMonths: 2, // Number of months shown
-		slideBy: null, // Number of months shown
-		hideRestDays: false, // hide the rest days
-		disableRestDays: true, // disable the click on rest days
-		range: false, // Use range functionality
-		min: null, // Disables dates until this date
-		max: null // Disables dates from this date
-	}
+	@Input() public options: Options; //= {
+	// 	theme: '', // Theme string is added to the host
+	// 	selectMultiple: false, // Select multiple dates
+	// 	showRestDays: true, // Show the rest days from previous and next months
+	// 	closeOnSelect: true,  // Close datepicker when date(s) selected
+	// 	animate: false, // Animate the datepicker
+	// 	animationSpeed: 400, // Animation speed in ms
+	// 	easing: 'ease-in', // Easing type string
+	// 	numberOfMonths: 1, // Number of months shown
+	// 	slideBy: null, // Number of months shown
+	// 	hideRestDays: false, // hide the rest days
+	// 	disableRestDays: true, // disable the click on rest days
+	// 	range: false, // Use range functionality
+	// 	min: null, // Disables dates until this date
+	// 	max: null // Disables dates from this date
+	//}
 
 	/**
 	 * Set the the language manualy. A string with a BCP 47 language tag
@@ -93,6 +93,8 @@ export class DatepickerComponent implements OnInit {
 	ngOnInit() {
 		this.currentMonthYear = [{ 'month': this.month, 'year': this.year }];
 		this.months = this.createCalendarArray(this.year, this.month);
+		console.log(this.numberOfMonths);
+		
 
 		if (this.options.range && this.options.selectMultiple) {
 			console.warn('Multiple does not work in combination with the range option');
