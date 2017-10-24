@@ -12,7 +12,9 @@ import { UtilitiesService } from 'app/common/services/utilities.service.';
 export class AnimatepickerComponent extends DatepickerComponent {
 
 	public animate = true;
-	public calendarWidth = 50 / this.options.numberOfMonths;
+	get calendarWidth(): Number {
+		return 50 / this.options.numberOfMonths;
+	} 
 	public isAnimating = false;
 	public leftPosition = 0;
 	public transition: string;

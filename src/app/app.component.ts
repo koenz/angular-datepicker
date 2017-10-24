@@ -16,7 +16,7 @@ export class AppComponent {
 		animate: false, // Animate the datepicker
 		animationSpeed: 400, // Animation speed in ms
 		easing: 'ease-in', // Easing type string
-		numberOfMonths: 1, // Number of months shown
+		numberOfMonths: 2, // Number of months shown
 		slideBy: null, // Number of months shown
 		hideRestDays: false, // hide the rest days
 		disableRestDays: true, // disable the click on rest days
