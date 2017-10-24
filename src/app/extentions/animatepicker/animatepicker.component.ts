@@ -11,10 +11,9 @@ import { UtilitiesService } from 'app/common/services/utilities.service.';
 })
 export class AnimatepickerComponent extends DatepickerComponent {
 
+	@Input() public userOptions;
 	public animate = true;
-	get calendarWidth(): Number {
-		return 50 / this.options.numberOfMonths;
-	} 
+	public calendarWidth;
 	public isAnimating = false;
 	public leftPosition = 0;
 	public transition: string;
@@ -29,13 +28,16 @@ export class AnimatepickerComponent extends DatepickerComponent {
 
 	constructor(public elementRef: ElementRef, public utilities: UtilitiesService) {
 		super();
+
+		this.options = Object.assign({}, this.defaults, this.userOptions);
+		this.numberOfMonths = new Array(this.options.numberOfMonths);
+		this.calendarWidth = 50 / this.options.numberOfMonths
+		console.log('sdsd',  this.options);
+		console.log(this.userOptions);
 	}
 
 	ngOnInit() {
-		this.getPreviousYearMonthArray(this.year, this.month);
 		this.currentYearMonth = this.getNextYearMonthArray(this.year, this.month);
-		
-			
 		this.months = this.getNextMonthArray(this.currentYearMonth, true);
 	}
 
@@ -76,7 +78,7 @@ export class AnimatepickerComponent extends DatepickerComponent {
 			month = this.getPreviousMonth(month);
 			year = this.getYearOfPreviousMonth(year, month);
 		}
-		
+
 		return array;
 	}
 
@@ -118,19 +120,19 @@ export class AnimatepickerComponent extends DatepickerComponent {
 	getNextMonthArray(currentYearMonth, keepDate = false): Month[] {
 
 		// Get the last index, used for selecting the right year month object
-		const lastIndex = this.options.numberOfMonths - 1;		
+		const lastIndex = this.options.numberOfMonths - 1;
 
 		// Get next year and month in an Object
 		const nextMonths = this.getNextYearMonthArray(
 			this.getYearOfNextMonth(currentYearMonth[lastIndex].year, currentYearMonth[lastIndex].month),
 			this.getNextMonth(currentYearMonth[lastIndex].month)
 		);
-		
+
 		// Concatonate the two objects to create a total year and month object
 		this.currentMonthYear = currentYearMonth.concat(nextMonths);
 
 		// Create the calendar array using the total year and month Object
-		let monthArray = [];		
+		let monthArray = [];
 		this.currentMonthYear.forEach(e => {
 			// TODO: Find out why I have to use the block quotes
 			monthArray.push(this.createCalendarArray(e['year'], e['month']));

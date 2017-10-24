@@ -18,8 +18,19 @@ import { UtilitiesService } from 'app/common/services/utilities.service.';
 })
 export class DatepickerComponent implements OnInit {
 
-	public options: Options;
-	@Input('options') userOptions;
+	_options;
+	@Input() set options(options) {
+		const mergedOptions = Object.assign(this.defaults, options)
+		console.log('set mergedOptions ', mergedOptions);
+		this.init();		
+		this._options = mergedOptions;
+	};
+
+	get options(){
+		console.log('getiscalled');
+		return this._options;
+	}
+
 	defaults: Options = {
 		theme: '', // Theme string is added to the host
 		selectMultiple: false, // Select multiple dates
@@ -93,28 +104,17 @@ export class DatepickerComponent implements OnInit {
 		return year % 4 === 0 && year % 100 !== 0 || year % 400 === 0;
 	}
 
-	constructor(){
-		console.log(this.userOptions);
-		
-		this.options = Object.assign(this.defaults, this.userOptions);
-		console.log(this.options);
-		
-		this.numberOfMonths = new Array(this.options.numberOfMonths);
+	ngOnInit() {
+
 	}
 
-	ngOnInit() {
-		this.currentMonthYear = [{ 'month': this.month, 'year': this.year }];
-		this.months = this.createCalendarArray(this.year, this.month);
+	init(){
+		setTimeout(()=>{
+			this.numberOfMonths = new Array(this.options.numberOfMonths);
+			this.currentMonthYear = [{ 'month': this.month, 'year': this.year }];
+			this.months = this.createCalendarArray(this.year, this.month);
+		});
 
-		if (this.options.range && this.options.selectMultiple) {
-			console.warn('Multiple does not work in combination with the range option');
-		}
-		if (this.options.range && this.options.showRestDays) {
-			console.warn('Showing rest days is not compatible with the range option');
-		}
-		if (this.options.animate && this.options.showRestDays) {
-			console.warn('Showing rest days is not possible in combination with the animate option');
-		}
 	}
 
 	/**
