@@ -1,15 +1,6 @@
-import {
-	Component,
-	OnInit,
-	HostBinding,
-	Input,
-	ViewChild,
-	ElementRef
-} from '@angular/core';
-import { Day, Week, Month } from 'app/common/models/datepicker.model';
+import { Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Day, Month, Week } from 'app/common/models/datepicker.model';
 import { Options } from 'app/common/models/datepicker-options.model';
-import { UtilitiesService } from 'app/common/services/utilities.service.';
-
 
 @Component({
 	selector: 'app-datepicker',
@@ -18,35 +9,51 @@ import { UtilitiesService } from 'app/common/services/utilities.service.';
 })
 export class DatepickerComponent implements OnInit {
 
-	_options;
-	@Input() set options(options) {
-		const mergedOptions = Object.assign(this.defaults, options)
-		console.log('set mergedOptions ', mergedOptions);
-		this.init();		
-		this._options = mergedOptions;
-	};
+	/* ==============================================
+	 * Internal Properties
+	 * ============================================== */
 
-	get options(){
-		console.log('getiscalled');
-		return this._options;
-	}
+	public date: Date = new Date();
+	public year: number = this.date.getFullYear();
+	public month: number = this.date.getMonth();
+	public today: Date = this.date;
+	public months: Month[] = null;
+	public weekdays: string[] = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+	public currentMonthYear: Object[];
+	public selectedRange = 'startDate';
+	public startDate: Date = null;
+	public endDate: Date = null;
+	public isOpen = false;
 
-	defaults: Options = {
+	/* ==============================================
+	 * Initial Options
+	 * ============================================== */
+
+	public options: Options;
+	@Input('options') _options: Options;
+	public defaults: Options = {
 		theme: '', // Theme string is added to the host
 		selectMultiple: false, // Select multiple dates
-		showRestDays: true, // Show the rest days from previous and next months
 		closeOnSelect: true,  // Close datepicker when date(s) selected
 		animate: false, // Animate the datepicker
 		animationSpeed: 400, // Animation speed in ms
 		easing: 'ease-in', // Easing type string
-		numberOfMonths: 1, // Number of months shown
+		numberOfMonths: 2, // Number of months shown
 		slideBy: null, // Number of months shown
-		hideRestDays: false, // hide the rest days
-		disableRestDays: true, // disable the click on rest days
-		range: false, // Use range functionality
+		hideRestDays: true, // Hide the rest days
+		disableRestDays: true, // Disable the click on rest days
+		hideNavigation: false, // Hide the navigation
+		range: true, // Use range functionality
 		min: null, // Disables dates until this date
-		max: null // Disables dates from this date
-	}
+		max: null, // Disables dates from this date
+		year: null, // Initial year that is displayed
+		month: null, // Initial month that is displayed
+		firstMonthRight: false // Show the first month on the right (only with multiple months)
+	};
+
+	/* ==============================================
+	 * External Properties
+	 * ============================================== */
 
 	/**
 	 * Set the the language manualy. A string with a BCP 47 language tag
@@ -54,32 +61,66 @@ export class DatepickerComponent implements OnInit {
 	 */
 	@Input() public language: string = navigator.language;
 
+	/**
+	 * Minimal Date: If set the dates before it will be disabled
+	 */
+	private _minDate = null;
+	@Input() set minDate(value: Date) {
+		this._minDate = new Date(value);
+	}
+
+	get minDate(): Date {
+		return this._minDate;
+	}
+
+	/**
+	 * Maximal Date: If set the dates after it will be disabled
+	 */
+	private _maxDate = null;
+	@Input() set maxDate(value: Date) {
+		this._maxDate = new Date(value);
+	}
+
+	get maxDate(): Date {
+		return this._maxDate;
+	}
+
+	/**
+	 * Selected Dates: handles the selected dates array. Can be set both internally and externally
+	 */
+	_selectedDates: Date[] = [];
+	@Output() selectedDatesChange = new EventEmitter();
+
+	@Input()
+	set selectedDates(value: Date[]) {
+		this._selectedDates = value;
+
+		if (this.options.range !== undefined && this.options.range) {
+			this.resetRange();
+		}
+
+		this.selectedDatesChange.emit(this._selectedDates);
+	}
+
+	get selectedDates(): Date[] {
+		return this._selectedDates;
+	}
+
+	/* ==============================================
+	 * Bindings and Child's
+	 * ============================================== */
+
 	@ViewChild('calendarContainer') public calendarContainer: ElementRef;
 	@ViewChild('calendarTopContainer') public calendarTopContainer: ElementRef;
-
 	@HostBinding('class') @Input() theme: string;
 
-	public isOpen = false;
-	public date: Date = new Date();
-	public today: Date = this.date;
-	public year: number = this.date.getFullYear();
-	public month: number = this.date.getMonth();
-	public months: Month[] = null;
-	private days: Day[] = null;
-	private selectedDates: Date[] = [];
-
-	public weekdays: string[] = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
-	public numberOfMonths: Number[];
-
-	public currentMonthYear: Object[];
-
-	public selectedRange = 'startDate';
-	public startDate: Date = null;
-	public endDate: Date = null;
+	/* ==============================================
+	 * Static Methods
+	 * ============================================== */
 
 	/**
 	 * Create a week array from the merged day arrays
-	 * 
+	 *
 	 * @param dayArray
 	 * @return Week[]
 	 */
@@ -93,10 +134,10 @@ export class DatepickerComponent implements OnInit {
 		}
 		return weeks;
 	}
-	
+
 	/**
 	 * Check if year is a leap year
-	 * 
+	 *
 	 * @param year
 	 * @return boolean
 	 */
@@ -104,17 +145,41 @@ export class DatepickerComponent implements OnInit {
 		return year % 4 === 0 && year % 100 !== 0 || year % 400 === 0;
 	}
 
-	ngOnInit() {
+	/**
+	 * Get the formatted weekdays
+	 *
+	 * @param language
+	 * @param format
+	 * @param start
+	 * @return {string[]}
+	 */
+	static getWeekDays(language: string, format: string, start: string): string[] {
+		const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'faturday', 'sunday'];
 
+		const index = days.indexOf(start.toLowerCase());
+		if (index < 0) {
+			throw new Error('Invalid week day start :' + start);
+		}
+
+		const weekdays = [];
+		for (let day = 5; day <= 11; day++) {
+			weekdays.push(
+				new Date(1970, 1 - 1, day + index).toLocaleString(language, { weekday: format })
+			);
+		}
+
+		return weekdays;
 	}
 
-	init(){
-		setTimeout(()=>{
-			this.numberOfMonths = new Array(this.options.numberOfMonths);
-			this.currentMonthYear = [{ 'month': this.month, 'year': this.year }];
-			this.months = this.createCalendarArray(this.year, this.month);
-		});
+	constructor() {
+		this.options = Object.assign(this.defaults, this._options);
+	}
 
+	ngOnInit() {
+		this.month = this.options.month;
+		this.year = this.options.year;
+		this.currentMonthYear = [{'month': this.month, 'year': this.year}];
+		this.months = this.createCalendarArray(this.year, this.month);
 	}
 
 	/**
@@ -134,12 +199,14 @@ export class DatepickerComponent implements OnInit {
 			const day = {
 				date,
 				dayNumber,
+				isFirst: dayNumber === 1,
+				isLast: dayNumber === daysInMonth,
 				isToday: this.isToday(date),
 				isSelected: this.isSelected(date),
 				isRest: isRestDays,
 				isHidden: isRestDays && (this.options.animate || this.options.hideRestDays),
-				isDisabled: this.isDisabled(date) || isRestDays && this.options.disableRestDays,
-				isInRange: this.isInRange(date),
+				isDisabled: this._minDate && this._maxDate && this.isDisabled(date) || isRestDays && this.options.disableRestDays,
+				isInRange: this.isInRange(date) || (this.isStartDate(date) || this.isEndDate(date)) && this.startDate && this.endDate,
 				isStartDate: this.isStartDate(date),
 				isEndDate: this.isEndDate(date)
 			};
@@ -166,7 +233,7 @@ export class DatepickerComponent implements OnInit {
 	 */
 	getPreviousRestDays(year, month): Day[] {
 		const startOfTheMonth = new Date(year, month, 0).getDay();
-		const previousDays = this.createDayArray(this.getYearOfPreviousMonth(year, month),this.getPreviousMonth(month), true);
+		const previousDays = this.createDayArray(this.getYearOfPreviousMonth(year, month), this.getPreviousMonth(month), true);
 		return previousDays.slice(previousDays.length - startOfTheMonth, previousDays.length);
 	}
 
@@ -179,7 +246,7 @@ export class DatepickerComponent implements OnInit {
 			...this.getPreviousRestDays(year, month),
 			...this.createDayArray(year, month),
 			...this.getNextRestDays(year, month)
-		]
+		];
 	}
 
 	/**
@@ -191,15 +258,15 @@ export class DatepickerComponent implements OnInit {
 		this.date = new Date(year, month);
 		const dayArray = this.getMergedDayArrays(year, month);
 		const weeks = DatepickerComponent.createWeekArray(dayArray);
-		return [{ weeks: weeks }]
+		return [{weeks: weeks}];
 	}
 
 	/**
 	 * Update value is being triggered
-	 * 
+	 *
 	 * @param date
 	 */
-	updateValue(date: Date): void {	
+	updateValue(date: Date): void {
 		if (this.options.range) {
 			this.selectRange(date);
 		} else if (!this.isSelected(date)) {
@@ -212,18 +279,19 @@ export class DatepickerComponent implements OnInit {
 			this.deselectDate(date);
 		}
 
-		this.months = this.createCalendarArray(this.year, this.month);
 	}
 
 	/**
 	 * Select range method - contains the logic to select the start- and endrange
-	 * 
+	 *
 	 * @param date
 	 */
 	selectRange(date: Date): void {
-		if (this.isEarlier(date, this.startDate)) {
+		if (this.isSelected(date)) {
+			this.deselectDate(date);
+		} else if (this.isEarlier(date, this.startDate)) {
 			if (this.startDate) {
-				this.toggleDate(date, this.startDate);
+				this.toggleDate(date, this.startDate, true);
 			} else {
 				this.selectDate(date);
 			}
@@ -235,7 +303,7 @@ export class DatepickerComponent implements OnInit {
 			this.selectStartDate();
 		} else if (this.selectedRange === 'startDate') {
 			if (this.startDate) {
-				this.toggleDate(date, this.startDate);
+				this.toggleDate(date, this.startDate, true);
 			} else {
 				this.selectDate(date);
 			}
@@ -256,36 +324,62 @@ export class DatepickerComponent implements OnInit {
 	}
 
 	/**
+	 * Reset the range if the selected dates change externally
+	 */
+	resetRange(): void {
+		if (this._selectedDates.length === 1) {
+			this.startDate = this._selectedDates[0];
+			this.endDate = null;
+		} else if (this._selectedDates.length === 0) {
+			this.startDate = null;
+			this.endDate = null;
+		}
+	}
+
+	/**
 	 * Toggle a date. One in, on out.
-	 * 
+	 *
 	 * @param date - Date to be toggled on
 	 * @param toggleDate - Optional set specific date to toggle off
+	 * @param unshift - Optional set to unshift in the selectedDates array. is passed to selectDate method
 	 */
-	toggleDate(date: Date, toggleDate?: Date): void {
+	toggleDate(date: Date, toggleDate?: Date, unshift?: boolean): void {
 		if (!toggleDate) {
-			this.selectedDates = [];
+			this.selectedDates = [date];
+		} else if (unshift) {
+			this._selectedDates.unshift(date);
+			this.selectedDates = this._selectedDates.filter((selectedDate) => {
+				return selectedDate.toDateString() !== toggleDate.toDateString();
+			});
 		} else {
-			this.deselectDate(toggleDate);
+			this._selectedDates.push(date);
+			this.selectedDates = this._selectedDates.filter((selectedDate) => {
+				return selectedDate.toDateString() !== toggleDate.toDateString();
+			});
 		}
-		this.selectDate(date);
 	}
 
 	/**
 	 * Select a date
-	 * 
+	 *
 	 * @param date
+	 * @param unshift - Optional set to unshift instead of push the date in the selectedDates array
 	 */
-	selectDate(date: Date): void {
-		this.selectedDates.push(date);
+	selectDate(date: Date, unshift?: boolean): void {
+		if (unshift) {
+			this.selectedDates.unshift(date);
+		} else {
+			this.selectedDates.push(date);
+		}
 	}
 
 	/**
 	 * Deselect a date
-	 * 
+	 *
 	 * @param date
 	 */
 	deselectDate(date: Date): void {
-		this.selectedDates = this.selectedDates.filter((selectedDate) => {
+		this.selectedDates = this._selectedDates.filter((selectedDate) => {
 			return selectedDate.toDateString() !== date.toDateString();
 		});
 	}
@@ -296,7 +390,7 @@ export class DatepickerComponent implements OnInit {
 	goToNextMonth(): void {
 		this.month = this.getNextMonth(this.month);
 		this.year = this.getYearOfNextMonth(this.year, this.month);
-		this.currentMonthYear = [{ 'month': this.month, 'year': this.year }];
+		this.currentMonthYear = [{'month': this.month, 'year': this.year}];
 		this.months = this.createCalendarArray(this.year, this.month);
 	}
 
@@ -306,7 +400,15 @@ export class DatepickerComponent implements OnInit {
 	goToPreviousMonth(): void {
 		this.month = this.getPreviousMonth(this.month);
 		this.year = this.getYearOfPreviousMonth(this.year, this.month);
-		this.currentMonthYear = [{ 'month': this.month, 'year': this.year }];
+		this.currentMonthYear = [{'month': this.month, 'year': this.year}];
+		this.months = this.createCalendarArray(this.year, this.month);
+	}
+
+	/**
+	 * Go to a specific month
+	 */
+	goToMonth(date: Date): void {
+		this.currentMonthYear = [{'month': date.getMonth(), 'year': date.getFullYear()}];
 		this.months = this.createCalendarArray(this.year, this.month);
 	}
 
@@ -338,6 +440,7 @@ export class DatepickerComponent implements OnInit {
 		return month === 0 ? 11 : month - 1;
 	}
 
+	// TODO: maybe output the startDate and Endate or just of internal use
 	isStartDate(date: Date): boolean {
 		return this.startDate && date.toDateString() === this.startDate.toDateString();
 	}
@@ -351,25 +454,25 @@ export class DatepickerComponent implements OnInit {
 	}
 
 	isLater(date: Date, compareDate: Date): boolean {
-		return date > compareDate
+		return date > compareDate;
 	}
 
 	isEarlier(date: Date, compareDate: Date): boolean {
-		return date < compareDate
+		return date < compareDate;
 	}
 
 	isLaterThenSelected(date: Date): boolean {
 		return;
 	}
 
-	isSelected(date: Date): boolean {
-		return (this.selectedDates
+	isSelected(dateToCheck: Date): boolean {
+		return (this._selectedDates
 			.map(date => date.toDateString())
-			.indexOf(date.toDateString()) !== -1);
+			.indexOf(dateToCheck.toDateString()) !== -1);
 	}
 
 	isDisabled(date: Date): boolean {
-		return (date < this.options.max && date > this.options.min);
+		return !(date < this.maxDate && date > this.minDate);
 	}
 
 	isInRange(date: Date): boolean {

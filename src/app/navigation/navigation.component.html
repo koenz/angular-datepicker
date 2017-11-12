@@ -1,13 +1,13 @@
-<button class="navigation__button is-previous" (click)="previous()"><</button>
+<button *ngIf="!hideNavigation" class="navigation__button is-previous" (click)="previous()"><</button>
 <div class="navigation__title-wrapper" [ngStyle]="{
   'transform': 'translateX(' + translateX + '%)',
   'transition': transition,
   'left.%': leftPosition
 }">
-  <div *ngFor="let title of titleArray" class="navigation__title" 
-  [ngStyle]="{
+  <div *ngFor="let title of titleArray" class="navigation__title"
+       [ngStyle]="{
       'width.%': (100 / titleArray.length)
     }"
-  ><span>{{title.m}}</span>, <span>{{title.year}}</span></div>
+  ><span>{{title.m}}</span> <span>{{title.year}}</span></div>
 </div>
-<button class="navigation__button is-next" (click)="next()">></button>
+<button *ngIf="!hideNavigation" class="navigation__button is-next" (click)="next()">></button>

@@ -1,45 +1,47 @@
-
 <div #calendarTopContainer>
-		<app-navigation
-		  (onPreviousClick)="goToPreviousMonth()"
-		  (onNextClick)="goToNextMonth()"
-		  [language]="language"
-		  [animate]="animate"
-		  [translateX]="translateX"
-		  [transition]="transition"
-		  [leftPosition]="leftPosition"
-		  [currentMonthYear]="currentMonthYear"
-		></app-navigation>
-		  <div class="datepicker__weekdays-wrapper">
-			<div 
-			*ngFor="let month of numberOfMonths"
-			[ngStyle]="{
+	<app-navigation
+			(onPreviousClick)="goToPreviousMonth()"
+			(onNextClick)="goToNextMonth()"
+			[language]="language"
+			[animate]="animate"
+			[translateX]="translateX"
+			[transition]="transition"
+			[leftPosition]="leftPosition"
+			[hideNavigation]="options.hideNavigation"
+			[currentMonthYear]="currentMonthYear"
+	></app-navigation>
+	<div class="datepicker__weekdays-wrapper">
+		<div 	*ngFor="let month of numberOfMonths"
+				[ngStyle]="{
 			  'width.%': (100 / numberOfMonths.length)
-			}" 
-			class="datepicker__weekdays-container">
+			}"
+				class="datepicker__weekdays-container">
 			<table class="datepicker__weekdays">
-			  <thead>
+				<thead>
 				<td class="datepicker__weekday" *ngFor="let weekday of weekdays; index as i">{{weekday}}</td>
-			  </thead>
+				</thead>
 			</table>
-			</div>
-		  </div>
 		</div>
-		<div class="datepicker__calendar-wrapper" #calendarContainer [ngStyle]="{
+	</div>
+</div>
+<div class="datepicker__calendar-wrapper" #calendarContainer [ngStyle]="{
 			  'transform': 'translateX(' + translateX + '%)',
 			  'transition': transition,
 			  'left.%': leftPosition
-			}">
-		  <div 
+			}"
+>
+	<div
 			*ngFor="let month of months;"
 			class="datepicker__calendar-container"
 			[ngStyle]="{'width.%': calendarWidth}"
-		  >
-			<table class="datepicker__calendar">
-			  <tbody>
-				<tr *ngFor="let week of month.weeks; index as i">
-				  <td class="datepicker__day" *ngFor="let day of week.days; index as i" 
-				[ngClass]="{
+	>
+		<table class="datepicker__calendar">
+			<tbody>
+			<tr *ngFor="let week of month.weeks; index as i" class="datepicker__week">
+				<td class="datepicker__day" *ngFor="let day of week.days; index as i"
+					[ngClass]="{
+				  'is-first': day.isFirst,
+		  		  'is-last': day.isLast,
 				  'is-hidden': day.isHidden,
 				  'is-disabled': day.isDisabled,
 				  'is-today': day.isToday,
@@ -49,11 +51,13 @@
 				  'is-end-date': day.isEndDate,
 				  'is-rest': day.isRest
 				}">
-				  <button class="datepicker__button" [disabled]="day.isDisabled || day.isHidden" (click)="updateValue(day.date)">{{day.dayNumber}}</button>
-				  </td>
-				</tr>
-			  </tbody>
-			</table>
-		  </div>
-		</div>
+					<button class="datepicker__button" [disabled]="day.isDisabled || day.isHidden"
+							(click)="updateValue(day.date)">{{day.dayNumber}}
+					</button>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
 		

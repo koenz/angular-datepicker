@@ -2,39 +2,38 @@
 @import "../../common/scss/_vars";
 
 :host {
-    font-family: Arial, Helvetica, sans-serif;
-    border: 1px solid $day-border-color;
-    width: 300px;
+    border: $datepicker-border;
     display: inline-block;
-    position: relative;    
+    position: relative;
+    width: #{(2 * $outer-spacing) + 22rem};
     border-radius: $border-radius;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
-	overflow: hidden;
+    box-shadow: $box-shadow;
+    overflow: hidden;
     transition: height .2s ease-in;
-	
+    box-sizing: border-box;
+
     * {
         box-sizing: border-box;
     }
 
-	.datepicker__calendar-wrapper {
-		position: absolute;
-		width: 200%;
-		left: 0;
-	}
-		
-	.datepicker__calendar {
-		float: left;			
-		width: 100%;
-	}
+    .datepicker__calendar-wrapper {
+        position: absolute;
+        width: 200%;
+        left: 0;
+    }
 
+    .datepicker__calendar {
+        float: left;
+        width: 100%;
+    }
 
     .datepicker__calendar-container {
-		float: left;            		
-        padding: 0 10px 10px;
+        padding: 0 $outer-spacing;
+        float: left;
     }
 
     table {
-		width: 100%;
+        width: 100%;
         table-layout: fixed;
         border-spacing: 0;
         border-collapse: collapse;
@@ -49,7 +48,7 @@
     }
 
     .datepicker__weekdays-container {
-        padding: 10px 10px 0;
+        padding: 10px $outer-spacing;
         float: left;
     }
 
@@ -59,21 +58,29 @@
     }
 
     .datepicker__weekday {
-        color: grey;
+        color: $weekday-color;
         font-size: 12px;
         height: 20px;
         text-align: center;
     }
 
+    .datepicker__week {
+        padding: .4rem 0;
+    }
+
     .datepicker__day {
+        position: relative;
         text-align: center;
         height: $day-height;
         width: $day-width;
-        border: 1px solid $day-border-color;
+        border: $day-border;
 
-        &.is-rest {
-            border: none;
+        &::after {
+            content: '';
+            display: block;
+            margin-top: 100%;
         }
+
     }
 
     .datepicker__button {
@@ -83,8 +90,12 @@
         width: 100%;
         height: 100%;
         border-radius: $day-border-radius;
-        
-        
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+
         &:hover {
             border: 1px solid $day-border-color-hover;
             background-color: $day-bg-hover;
@@ -94,42 +105,27 @@
 
     .is-hidden {
         opacity: 0;
+        display: table-cell;
     }
 
     .is-rest {
+        border: none;
+
         .datepicker__button {
             color: $day-rest-text-color;
-        }
-    }
-
-    .is-disabled {
-        .datepicker__button {
-            color: $day-disabled-text-color;
-
-            &:hover {
-                background-color: transparent;
-            }
         }
     }
 
     .is-today {
         .datepicker__button {
             background-color: $day-bg-today;
-        }
-    }
-
-    .is-selected {
-        .datepicker__button {
-            background-color: $day-selected-bg;
-            color: $day-selected-color;
-
-            &:hover {
-                background-color: $day-selected-bg-hover
-            }
+            border: $day-border-today;
         }
     }
 
     .is-in-range {
+        background-color: $day-in-range-bg;
+
         .datepicker__button {
             background-color: $day-in-range-bg;
             color: white;
@@ -138,19 +134,77 @@
                 background-color: $day-in-range-bg-hover;
             }
         }
+
+        &:first-of-type {
+            border-radius: $day-start-date-radius;
+
+            &.is-last {
+                border-radius: $day-border-radius;
+            }
+        }
+
+        &:last-of-type {
+            border-radius: $day-end-date-radius;
+
+            &.is-first {
+                border-radius: $day-border-radius;
+            }
+
+            &.is-start-date {
+                border-radius: $day-border-radius;
+            }
+        }
     }
-    
+
+    .is-selected {
+        .datepicker__button {
+            background-color: $day-selected-bg;
+            color: $day-selected-color;
+            border-radius: $day-selected-radius;
+            font-weight: bold;
+            border-color: $day-selected-bg;
+
+            &:hover {
+                border-color: $day-selected-bg-hover;
+                background-color: $day-selected-bg-hover;
+                color: $day-selected-color;
+            }
+        }
+    }
+
     .is-start-date {
         .datepicker__button {
             background-color: $day-start-date-bg;
-            color: white;
+            color: $day-selected-color;
+        }
+
+        &.is-in-range {
+            background-color: $day-in-range-bg;
+            border-radius: $day-start-date-radius;
+        }
+    }
+
+    .is-last {
+        &.is-in-range {
+            border-radius: $day-end-date-radius;
+        }
+    }
+
+    .is-first {
+        &.is-in-range {
+            border-radius: $day-start-date-radius;
         }
     }
 
     .is-end-date {
         .datepicker__button {
             background-color: $day-end-date-bg;
-            color: white;
+            color: $day-selected-color;
+        }
+
+        &.is-in-range {
+            background-color: $day-in-range-bg;
+            border-radius: $day-end-date-radius;
         }
     }
 
@@ -158,7 +212,7 @@
         .datepicker__button {
             color: $day-disabled-text-color;
             cursor: default;
-            
+
             &:hover {
                 background-color: transparent;
             }

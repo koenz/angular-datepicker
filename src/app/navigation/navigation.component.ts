@@ -1,53 +1,58 @@
-import {Component, OnInit, Output, EventEmitter, Input, OnChanges, SimpleChanges, HostBinding} from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 @Component({
 	selector: 'app-navigation',
 	templateUrl: './navigation.component.html',
 	styleUrls: ['./navigation.component.scss']
 })
-export class NavigationComponent implements OnInit, OnChanges {
+export class NavigationComponent implements OnChanges {
 
 	@Output() onPreviousClick: EventEmitter<null> = new EventEmitter();
 	@Output() onNextClick: EventEmitter<null> = new EventEmitter();
 
-	@Input() private monthFormat = 'short' // "narrow", "short", "long";
+	@Input() private monthFormat = 'long'; // "narrow", "short", "long";
 	@Input() private language: string = navigator.language;
 	@Input() private currentMonthYear: Object = null;
 	@Input() public transition;
 	@Input() public translateX;
 	@Input() public leftPosition;
+	@Input() public hideNavigation;
 
 	@HostBinding('class.is-animate')
 	@Input() public animate = false;
 
-	private formatMonth = new Intl.DateTimeFormat(this.language, {month: this.monthFormat});
+	private formatMonth;
 	public titleArray;
 
-	ngOnInit() {
-		this.setTitle(this.currentMonthYear);
-	}
 
 	/**
 	 * ngOnChanges detects the changes made in component properties
-	 * 
+	 *
 	 * @param changes
 	 */
 	ngOnChanges(changes: SimpleChanges) {
+		console.log('changes: ', changes);
+		if (this.language) {
+			this.formatMonth = new Intl.DateTimeFormat(this.language, {month: this.monthFormat});
+		}
 		if (changes.currentMonthYear && !changes.currentMonthYear.firstChange) {
 			this.setTitle(changes.currentMonthYear.currentValue);
+		}
+		if (this.currentMonthYear) {
+			this.setTitle(this.currentMonthYear);
 		}
 	}
 
 	/**
 	 * Sets the title
-	 * 
-	 * @param currentMonthYear 
+	 *
+	 * @param currentMonthYear
 	 */
 	setTitle(currentMonthYear): void {
-		// TODO: maybe use setter instead of ngOnchanges
-		// TODO: find out why this chages the property in animate component
+		// TODO: maybe use setter instead of ngOnChanges
+		// TODO: copy the object / remove the reference
 		this.titleArray = currentMonthYear.map(s => {
-			let date = new Date(s.year, s.month);
+			const date = new Date(s.year, s.month);
 			s.m = this.formatMonth.format(date);
 			return s;
 		});

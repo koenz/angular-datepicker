@@ -1,25 +1,46 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostBinding } from '@angular/core';
+import {
+	AfterViewInit,
+	Component,
+	ElementRef,
+	HostBinding,
+	Input,
+	OnChanges,
+	OnInit,
+	SimpleChanges,
+	ViewChild
+} from '@angular/core';
 import { DatepickerComponent } from 'app/datepicker/datepicker.component';
-import { Month } from "app/common/models/datepicker.model";
-import { Options } from 'app/common/models/datepicker-options.model';
-import { UtilitiesService } from 'app/common/services/utilities.service.';
+import { Month } from 'app/common/models/datepicker.model';
+import { UtilitiesService } from '../../common/services/utilities.service.';
 
 @Component({
 	selector: 'app-animatepicker',
 	templateUrl: './animatepicker.component.html',
 	styleUrls: ['./animatepicker.component.scss']
 })
-export class AnimatepickerComponent extends DatepickerComponent {
+export class AnimatepickerComponent extends DatepickerComponent implements OnInit, AfterViewInit, OnChanges {
 
-	@Input() public userOptions;
 	public animate = true;
-	public calendarWidth;
+	public initialWidth: number;
+	public calendarWidth: number;
 	public isAnimating = false;
 	public leftPosition = 0;
 	public transition: string;
 	public translateX: number;
+	public currentYearMonth: object = null;
 
-	public currentYearMonth;
+	/**
+	 * Number of months: the number of months displayed
+	 */
+	private _numberOfMonths: any = new Array(1);
+	@Input() set numberOfMonths(value) {
+		this._numberOfMonths = new Array(value);
+		this.setDatePickerDimension();
+	}
+
+	get numberOfMonths() {
+		return this._numberOfMonths;
+	}
 
 	@ViewChild('calendarContainer') public calendarContainer: ElementRef;
 	@ViewChild('calendarTopContainer') public calendarTopContainer: ElementRef;
@@ -28,77 +49,113 @@ export class AnimatepickerComponent extends DatepickerComponent {
 
 	constructor(public elementRef: ElementRef, public utilities: UtilitiesService) {
 		super();
+	}
 
-		this.options = Object.assign({}, this.defaults, this.userOptions);
-		this.numberOfMonths = new Array(this.options.numberOfMonths);
-		this.calendarWidth = 50 / this.options.numberOfMonths
-		console.log('sdsd',  this.options);
-		console.log(this.userOptions);
+	ngOnChanges(changes: SimpleChanges) {
+		console.log('changes: ', changes);
+		this.options = Object.assign(this.defaults, this._options);
+
+		if (changes._options !== undefined && changes._options.firstChange) {
+			this.month = this.options.month;
+			this.year = this.options.year;
+			console.log('_options are set ');
+		}
+
+		this.weekdays = DatepickerComponent.getWeekDays(this.language, 'short', 'monday');
+
+		if (changes.numberOfMonths !== undefined) {
+			this.currentYearMonth = this.getNextYearMonthArray(this.year, this.month);
+		}
+
+		this.initialise();
+
 	}
 
 	ngOnInit() {
+		// If options aren't set. Set the default options
+		if (this.options === null) {
+			this.options = this.defaults;
+		}
+
+		this.numberOfMonths = this.options.numberOfMonths;
+		const computedWidth = window.getComputedStyle(this.elementRef.nativeElement, null).getPropertyValue('width');
+		this.initialWidth = parseInt(computedWidth, 10);
 		this.currentYearMonth = this.getNextYearMonthArray(this.year, this.month);
-		this.months = this.getNextMonthArray(this.currentYearMonth, true);
+
+		this.initialise();
 	}
 
 	ngAfterViewInit() {
 		setTimeout(() => {
-			this.datepickerHeight = this.calendarContainer.nativeElement.offsetHeight + this.calendarTopContainer.nativeElement.offsetHeight;
-			this.datepickerWidth = this.elementRef.nativeElement.offsetWidth * this.options.numberOfMonths;
-		}, 1);
+			this.setDatePickerDimension();
+			this.setDatepickerHeight();
+		});
+	}
+
+	setDatePickerDimension(): void {
+		this.datepickerHeight = this.calendarContainer.nativeElement.offsetHeight + this.calendarTopContainer.nativeElement.offsetHeight;
+		this.datepickerWidth = this.initialWidth * this._numberOfMonths.length;
+	}
+
+	/**
+	 * Initialise method is fired onChanges and onInit
+	 */
+	initialise() {
+		this.calendarWidth = 50 / this._numberOfMonths.length;
+		this.months = this.getNextMonthArray(this.currentYearMonth, true);
+		this.resetStyle();
 	}
 
 	/**
 	 * Create an array of the next year and months
-	 * 
-	 * @param year 
-	 * @param month 
+	 *
+	 * @param year
+	 * @param month
 	 */
 	getNextYearMonthArray(year: number, month: number): Object[] {
-		let array = []
-		for (var index = 0; index < this.options.numberOfMonths; index++) {
-			array.push({ 'year': year, 'month': month });
-			month = this.getNextMonth(month);
+		const array = [];
+		for (let index = 0; index < this._numberOfMonths.length; index++) {
+			array.push({'year': year, 'month': month});
 			year = this.getYearOfNextMonth(year, month);
+			month = this.getNextMonth(month);
 		}
-
 		return array;
 	}
 
 	/**
 	 * Create an array of the next previous and months
-	 * 
-	 * @param year 
-	 * @param month 
+	 *
+	 * @param year
+	 * @param month
 	 */
 	getPreviousYearMonthArray(year: number, month: number): Object[] {
-		let array = []
-		for (var index = 0; index < this.options.numberOfMonths; index++) {
-			array.unshift({ 'year': year, 'month': month });
-			month = this.getPreviousMonth(month);
+		const array = [];
+		for (let index = 0; index < this._numberOfMonths.length; index++) {
+			array.unshift({'year': year, 'month': month});
 			year = this.getYearOfPreviousMonth(year, month);
+			month = this.getPreviousMonth(month);
 		}
-
 		return array;
 	}
 
+
 	/**
 	 * Set the datepicker height, used when animating
-	 * 
+	 *
 	 * @param directionRight - Set optional when sliding to the right
 	 */
-	setDatepickerHeight(directionRight?: boolean) {
+	setDatepickerHeight(directionRight?: boolean): void {
 		let indexArray;
 
-		if (this.options.numberOfMonths > 1) {
-			const start = directionRight ? 0 : this.options.numberOfMonths;
-			const end = directionRight ? this.options.numberOfMonths - 1 : this.options.numberOfMonths + this.options.numberOfMonths - 1;
+		if (this._numberOfMonths.length > 1) {
+			const start = directionRight ? 0 : this._numberOfMonths.length;
+			const end = directionRight ? this._numberOfMonths.length - 1 : this._numberOfMonths.length + this._numberOfMonths.length - 1;
 			indexArray = this.utilities.createArray(start, end);
 		} else {
 			indexArray = directionRight ? [0] : [1];
 		}
 
-		let that = this;
+		const that = this;
 		setTimeout(function () {
 			const calendarArray = that.elementRef.nativeElement.querySelectorAll('.datepicker__calendar-container');
 			let offsetHeight;
@@ -113,26 +170,26 @@ export class AnimatepickerComponent extends DatepickerComponent {
 
 	/**
 	 * Get next month array, gets multiple months.
-	 * Used when the options animate is set or multiple months are visable 
-	 * 
+	 * Used when the options animate is set or multiple months are visable
+	 *
 	 * @return Month[]
 	 */
-	getNextMonthArray(currentYearMonth, keepDate = false): Month[] {
+	getNextMonthArray(currentYearMonth, keepDate = false, nextMonthsYearMonthArray?): Month[] {
 
 		// Get the last index, used for selecting the right year month object
-		const lastIndex = this.options.numberOfMonths - 1;
+		const lastIndex = this._numberOfMonths.length - 1;
 
 		// Get next year and month in an Object
-		const nextMonths = this.getNextYearMonthArray(
-			this.getYearOfNextMonth(currentYearMonth[lastIndex].year, currentYearMonth[lastIndex].month),
-			this.getNextMonth(currentYearMonth[lastIndex].month)
-		);
+		const nextMonths = nextMonthsYearMonthArray || this.getNextYearMonthArray(
+				this.getYearOfNextMonth(currentYearMonth[lastIndex].year, currentYearMonth[lastIndex].month),
+				this.getNextMonth(currentYearMonth[lastIndex].month)
+			);
 
-		// Concatonate the two objects to create a total year and month object
+		// Concatenates the two objects to create a total year and month object
 		this.currentMonthYear = currentYearMonth.concat(nextMonths);
 
 		// Create the calendar array using the total year and month Object
-		let monthArray = [];
+		const monthArray = [];
 		this.currentMonthYear.forEach(e => {
 			// TODO: Find out why I have to use the block quotes
 			monthArray.push(this.createCalendarArray(e['year'], e['month']));
@@ -147,12 +204,11 @@ export class AnimatepickerComponent extends DatepickerComponent {
 	}
 
 	/**
-	 * Gets an array of previous months. 
+	 * Gets an array of previous months.
 	 * Used for animation and when more months are displayed
-	 * 
-	 * @param month 
-	 * @param year 
-	 * @param keepDate 
+	 *
+	 * @param currentYearMonth
+	 * @param keepDate
 	 */
 	getPreviousMonthArray(currentYearMonth, keepDate = false): Month[] {
 
@@ -162,11 +218,11 @@ export class AnimatepickerComponent extends DatepickerComponent {
 			this.getPreviousMonth(currentYearMonth[0].month)
 		);
 
-		// Concatonate the two objects to create a total year and month object
+		// Concatenates the two objects to create a total year and month object
 		this.currentMonthYear = previousMonths.concat(currentYearMonth);
 
 		// Create the calendar array using the total year and month Object
-		let monthArray = [];
+		const monthArray = [];
 		this.currentMonthYear.forEach(e => {
 			monthArray.push(this.createCalendarArray(e['year'], e['month']));
 		});
@@ -181,8 +237,8 @@ export class AnimatepickerComponent extends DatepickerComponent {
 
 	/**
 	 * Update value is being triggered
-	 * 
-	 * @param date 
+	 *
+	 * @param date
 	 */
 	updateValue(date: Date): void {
 		if (this.options.range) {
@@ -231,6 +287,18 @@ export class AnimatepickerComponent extends DatepickerComponent {
 	}
 
 	/**
+	 * Go to a specific month
+	 * TODO: WIP Check if date is in current range, or if it is later or earlier
+	 */
+	goToMonth(date: Date): void {
+		const nextMonths = this.getNextYearMonthArray(date.getFullYear(), date.getMonth());
+		this.months = this.getNextMonthArray(this.currentMonthYear, false, nextMonths);
+		this.resetStyle();
+		this.setDatepickerHeight();
+		this.slideRight();
+	}
+
+	/**
 	 * Slide to the right
 	 */
 	slideRight(): void {
@@ -264,7 +332,7 @@ export class AnimatepickerComponent extends DatepickerComponent {
 
 	/**
 	 * Reset Style
-	 * 
+	 *
 	 * @param resetForPrevious - Optional
 	 */
 	resetStyle(resetForPrevious?: boolean) {

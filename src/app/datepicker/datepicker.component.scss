@@ -6,9 +6,9 @@
     border: 1px solid $day-border-color;
     width: 300px;
     display: inline-block;
-    position: relative;    
+    position: relative;
     border-radius: $border-radius;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, .15);
     overflow: hidden;
 
     * {
@@ -22,15 +22,15 @@
             position: absolute;
             width: 200%;
             left: 0;
-		}
-		
+        }
+
         .datepicker__calendar {
-			float: left;			
+            float: left;
             width: 100%;
         }
 
         .datepicker__calendar-container {
-            float: left;            
+            float: left;
         }
     }
 
@@ -39,7 +39,7 @@
     }
 
     table {
-		width: 100%;
+        width: 100%;
         table-layout: fixed;
         border-spacing: 0;
         border-collapse: collapse;
@@ -88,8 +88,7 @@
         width: 100%;
         height: 100%;
         border-radius: $day-border-radius;
-        
-        
+
         &:hover {
             border: 1px solid $day-border-color-hover;
             background-color: $day-bg-hover;
@@ -107,16 +106,6 @@
         }
     }
 
-    .is-disabled {
-        .datepicker__button {
-            color: $day-disabled-text-color;
-
-            &:hover {
-                background-color: transparent;
-            }
-        }
-    }
-
     .is-today {
         .datepicker__button {
             background-color: $day-bg-today;
@@ -129,7 +118,7 @@
             color: $day-selected-color;
 
             &:hover {
-                background-color: $day-selected-bg-hover
+                background-color: $day-selected-bg-hover;
             }
         }
     }
@@ -144,7 +133,7 @@
             }
         }
     }
-    
+
     .is-start-date {
         .datepicker__button {
             background-color: $day-start-date-bg;
@@ -163,7 +152,7 @@
         .datepicker__button {
             color: $day-disabled-text-color;
             cursor: default;
-            
+
             &:hover {
                 background-color: transparent;
             }
