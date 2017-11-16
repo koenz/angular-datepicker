@@ -38,16 +38,16 @@ export class DatepickerComponent implements OnInit {
 		animate: false, // Animate the datepicker
 		animationSpeed: 400, // Animation speed in ms
 		easing: 'ease-in', // Easing type string
-		numberOfMonths: 2, // Number of months shown
+		numberOfMonths: 1, // Number of months shown
 		slideBy: null, // Number of months shown
-		hideRestDays: true, // Hide the rest days
+		hideRestDays: false, // Hide the rest days
 		disableRestDays: true, // Disable the click on rest days
 		hideNavigation: false, // Hide the navigation
-		range: true, // Use range functionality
+		range: false, // Use range functionality
 		min: null, // Disables dates until this date
 		max: null, // Disables dates from this date
-		year: null, // Initial year that is displayed
-		month: null, // Initial month that is displayed
+		year: this.year, // Initial year that is displayed
+		month: this.month, // Initial month that is displayed
 		firstMonthRight: false // Show the first month on the right (only with multiple months)
 	};
 
@@ -107,7 +107,7 @@ export class DatepickerComponent implements OnInit {
 	}
 
 	/* ==============================================
-	 * Bindings and Child's
+	 * Bindings and Children
 	 * ============================================== */
 
 	@ViewChild('calendarContainer') public calendarContainer: ElementRef;
@@ -176,8 +176,10 @@ export class DatepickerComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		this.options = Object.assign(this.defaults, this._options);
 		this.month = this.options.month;
 		this.year = this.options.year;
+
 		this.currentMonthYear = [{'month': this.month, 'year': this.year}];
 		this.months = this.createCalendarArray(this.year, this.month);
 	}
@@ -255,7 +257,6 @@ export class DatepickerComponent implements OnInit {
 	 * @param month
 	 */
 	createCalendarArray(year: number, month: number): [{ weeks: Week[] }] {
-		this.date = new Date(year, month);
 		const dayArray = this.getMergedDayArrays(year, month);
 		const weeks = DatepickerComponent.createWeekArray(dayArray);
 		return [{weeks: weeks}];
@@ -279,6 +280,7 @@ export class DatepickerComponent implements OnInit {
 			this.deselectDate(date);
 		}
 
+		this.months = this.createCalendarArray(this.year, this.month);
 	}
 
 	/**

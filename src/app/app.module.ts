@@ -7,15 +7,13 @@ import { DatepickerComponent } from './datepicker/datepicker.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { UtilitiesService } from 'app/common/services/utilities.service.';
 import { AnimatepickerComponent } from './extentions/animatepicker/animatepicker.component';
-import { MultipickerComponent } from './extentions/multipicker/multipicker.component';
 
 @NgModule({
 	declarations: [
 		AppComponent,
 		DatepickerComponent,
 		NavigationComponent,
-		AnimatepickerComponent,
-		MultipickerComponent
+		AnimatepickerComponent
 	],
 	imports: [
 		BrowserModule,

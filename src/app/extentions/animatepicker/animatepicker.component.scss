@@ -2,6 +2,7 @@
 @import "../../common/scss/_vars";
 
 :host {
+	font-family: Arial, Helvetica, sans-serif;
     border: $datepicker-border;
     display: inline-block;
     position: relative;
@@ -28,7 +29,7 @@
     }
 
     .datepicker__calendar-container {
-        padding: 0 $outer-spacing;
+        padding: 0 $outer-spacing $outer-spacing;
         float: left;
     }
 

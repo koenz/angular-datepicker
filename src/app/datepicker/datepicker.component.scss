@@ -72,9 +72,9 @@
 
     .datepicker__day {
         text-align: center;
-        height: $day-height;
+        height: 40px;
         width: $day-width;
-        border: 1px solid $day-border-color;
+        border: $day-border;
 
         &.is-rest {
             border: none;

@@ -20,6 +20,10 @@ import { UtilitiesService } from '../../common/services/utilities.service.';
 })
 export class AnimatepickerComponent extends DatepickerComponent implements OnInit, AfterViewInit, OnChanges {
 
+	/* ==============================================
+	 * Internal Properties
+	 * ============================================== */
+
 	public animate = true;
 	public initialWidth: number;
 	public calendarWidth: number;
@@ -29,10 +33,14 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	public translateX: number;
 	public currentYearMonth: object = null;
 
+	/* ==============================================
+	 * External Properties
+	 * ============================================== */
+
 	/**
 	 * Number of months: the number of months displayed
 	 */
-	private _numberOfMonths: any = new Array(1);
+	private _numberOfMonths: any = new Array(this.defaults.numberOfMonths);
 	@Input() set numberOfMonths(value) {
 		this._numberOfMonths = new Array(value);
 		this.setDatePickerDimension();
@@ -41,6 +49,10 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	get numberOfMonths() {
 		return this._numberOfMonths;
 	}
+
+	/* ==============================================
+	 * Bindings and Children
+	 * ============================================== */
 
 	@ViewChild('calendarContainer') public calendarContainer: ElementRef;
 	@ViewChild('calendarTopContainer') public calendarTopContainer: ElementRef;
@@ -52,7 +64,6 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	}
 
 	ngOnChanges(changes: SimpleChanges) {
-		console.log('changes: ', changes);
 		this.options = Object.assign(this.defaults, this._options);
 
 		if (changes._options !== undefined && changes._options.firstChange) {
@@ -67,7 +78,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 			this.currentYearMonth = this.getNextYearMonthArray(this.year, this.month);
 		}
 
-		this.initialise();
+		// this.initialise();
 
 	}
 
@@ -77,9 +88,11 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 			this.options = this.defaults;
 		}
 
-		this.numberOfMonths = this.options.numberOfMonths;
+		// Get the computed width from the calendar. Set the initial width
 		const computedWidth = window.getComputedStyle(this.elementRef.nativeElement, null).getPropertyValue('width');
 		this.initialWidth = parseInt(computedWidth, 10);
+
+		// Set the current year and month object
 		this.currentYearMonth = this.getNextYearMonthArray(this.year, this.month);
 
 		this.initialise();
@@ -92,6 +105,9 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 		});
 	}
 
+	/**
+	 * Set the height and the width properties
+	 */
 	setDatePickerDimension(): void {
 		this.datepickerHeight = this.calendarContainer.nativeElement.offsetHeight + this.calendarTopContainer.nativeElement.offsetHeight;
 		this.datepickerWidth = this.initialWidth * this._numberOfMonths.length;

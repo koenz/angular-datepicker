@@ -31,7 +31,6 @@ export class NavigationComponent implements OnChanges {
 	 * @param changes
 	 */
 	ngOnChanges(changes: SimpleChanges) {
-		console.log('changes: ', changes);
 		if (this.language) {
 			this.formatMonth = new Intl.DateTimeFormat(this.language, {month: this.monthFormat});
 		}
