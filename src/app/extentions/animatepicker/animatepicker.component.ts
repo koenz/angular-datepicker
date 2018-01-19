@@ -32,6 +32,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	public transition: string;
 	public translateX: number;
 	public currentYearMonth: object = null;
+	public datepickerPosition: object;
 
 	/* ==============================================
 	 * External Properties
@@ -41,13 +42,11 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	 * Number of months: the number of months displayed
 	 */
 	private _numberOfMonths: any = new Array(this.defaults.numberOfMonths);
-	@Input() set numberOfMonths(value) {
+	@Input() 
+	get numberOfMonths(): Number[] {return this._numberOfMonths;}	
+	set numberOfMonths(value) {
 		this._numberOfMonths = new Array(value);
 		this.setDatePickerDimension();
-	}
-
-	get numberOfMonths() {
-		return this._numberOfMonths;
 	}
 
 	/* ==============================================
@@ -60,7 +59,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	@HostBinding('style.height.px') public datepickerHeight: number;
 
 	constructor(public elementRef: ElementRef, public utilities: UtilitiesService) {
-		super();
+		super(utilities);
 	}
 
 	ngOnChanges(changes: SimpleChanges) {

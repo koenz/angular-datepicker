@@ -1,6 +1,8 @@
 import { Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Day, Month, Week } from 'app/common/models/datepicker.model';
 import { Options } from 'app/common/models/datepicker-options.model';
+import { UtilitiesService } from 'app/common/services/utilities.service.';
+import { log } from 'util';
 
 @Component({
 	selector: 'app-datepicker',
@@ -23,7 +25,6 @@ export class DatepickerComponent implements OnInit {
 	public selectedRange = 'startDate';
 	public startDate: Date = null;
 	public endDate: Date = null;
-	public isOpen = false;
 
 	/* ==============================================
 	 * Initial Options
@@ -39,7 +40,6 @@ export class DatepickerComponent implements OnInit {
 		animationSpeed: 400, // Animation speed in ms
 		easing: 'ease-in', // Easing type string
 		numberOfMonths: 1, // Number of months shown
-		slideBy: null, // Number of months shown
 		hideRestDays: false, // Hide the rest days
 		disableRestDays: true, // Disable the click on rest days
 		hideNavigation: false, // Hide the navigation
@@ -47,8 +47,7 @@ export class DatepickerComponent implements OnInit {
 		min: null, // Disables dates until this date
 		max: null, // Disables dates from this date
 		year: this.year, // Initial year that is displayed
-		month: this.month, // Initial month that is displayed
-		firstMonthRight: false // Show the first month on the right (only with multiple months)
+		month: this.month // Initial month that is displayed
 	};
 
 	/* ==============================================
@@ -65,24 +64,20 @@ export class DatepickerComponent implements OnInit {
 	 * Minimal Date: If set the dates before it will be disabled
 	 */
 	private _minDate = null;
-	@Input() set minDate(value: Date) {
+	@Input()
+	get minDate(): Date { return this._minDate; }	
+	set minDate(value: Date) {
 		this._minDate = new Date(value);
-	}
-
-	get minDate(): Date {
-		return this._minDate;
 	}
 
 	/**
 	 * Maximal Date: If set the dates after it will be disabled
 	 */
 	private _maxDate = null;
-	@Input() set maxDate(value: Date) {
+	@Input()
+	get maxDate(): Date { return this._maxDate; }	
+	set maxDate(value: Date) {
 		this._maxDate = new Date(value);
-	}
-
-	get maxDate(): Date {
-		return this._maxDate;
 	}
 
 	/**
@@ -90,8 +85,8 @@ export class DatepickerComponent implements OnInit {
 	 */
 	_selectedDates: Date[] = [];
 	@Output() selectedDatesChange = new EventEmitter();
-
-	@Input()
+	@Input() 
+	get selectedDates(): Date[] { return this._selectedDates; }	
 	set selectedDates(value: Date[]) {
 		this._selectedDates = value;
 
@@ -102,10 +97,6 @@ export class DatepickerComponent implements OnInit {
 		this.selectedDatesChange.emit(this._selectedDates);
 	}
 
-	get selectedDates(): Date[] {
-		return this._selectedDates;
-	}
-
 	/* ==============================================
 	 * Bindings and Children
 	 * ============================================== */
@@ -113,6 +104,9 @@ export class DatepickerComponent implements OnInit {
 	@ViewChild('calendarContainer') public calendarContainer: ElementRef;
 	@ViewChild('calendarTopContainer') public calendarTopContainer: ElementRef;
 	@HostBinding('class') @Input() theme: string;
+	@HostBinding('class.is-open') @Input() isOpen = false;
+	@HostBinding('style.left') leftPosition = 20;
+	@HostBinding('style.right') topPosition = 20;
 
 	/* ==============================================
 	 * Static Methods
@@ -171,7 +165,7 @@ export class DatepickerComponent implements OnInit {
 		return weekdays;
 	}
 
-	constructor() {
+	constructor(public utilities: UtilitiesService) {
 		this.options = Object.assign(this.defaults, this._options);
 	}
 
@@ -186,6 +180,7 @@ export class DatepickerComponent implements OnInit {
 
 	/**
 	 * Creates a day array
+	 * 
 	 * @param year
 	 * @param month
 	 * @param isRestDays
@@ -220,6 +215,7 @@ export class DatepickerComponent implements OnInit {
 
 	/**
 	 * Get the days from the next month and fills the last week of the current
+	 * 
 	 * @return Day[]
 	 */
 	getNextRestDays(year, month): Day[] {
@@ -241,6 +237,7 @@ export class DatepickerComponent implements OnInit {
 
 	/**
 	 * Merge all the day arrays together
+	 * 
 	 * @return Day[]
 	 */
 	getMergedDayArrays(year: number, month: number): Day[] {
@@ -273,8 +270,10 @@ export class DatepickerComponent implements OnInit {
 		} else if (!this.isSelected(date)) {
 			if (this.options.selectMultiple) {
 				this.selectDate(date);
+				this.close();
 			} else {
 				this.toggleDate(date);
+				this.close();
 			}
 		} else {
 			this.deselectDate(date);
@@ -408,14 +407,32 @@ export class DatepickerComponent implements OnInit {
 
 	/**
 	 * Go to a specific month
+	 * 
+	 * @param date 
 	 */
 	goToMonth(date: Date): void {
 		this.currentMonthYear = [{'month': date.getMonth(), 'year': date.getFullYear()}];
 		this.months = this.createCalendarArray(this.year, this.month);
 	}
 
+	open(): void {
+		if(this.isOpen){
+			return;
+		}
+		
+		this.isOpen = true;
+	}
+
 	close(): void {
+		if(!this.isOpen){
+			return;
+		}
+
 		this.isOpen = false;
+	}
+
+	setPostion(){
+		this.utilities.position;
 	}
 
 	selectStartDate(): void {

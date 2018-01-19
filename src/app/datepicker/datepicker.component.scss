@@ -6,14 +6,21 @@
     border: 1px solid $day-border-color;
     width: 300px;
     display: inline-block;
-    position: relative;
+	position: absolute;
+	z-index: 2;
     border-radius: $border-radius;
     box-shadow: 0 1px 5px rgba(0, 0, 0, .15);
-    overflow: hidden;
+	overflow: hidden;
+	display: none;
+	background-color: #fff;
 
     * {
         box-sizing: border-box;
-    }
+	}
+	
+	&.is-open {
+		display: block;
+	}
 
     &.is-animate {
         transition: height .2s ease-in;

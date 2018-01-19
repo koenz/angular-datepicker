@@ -7,13 +7,15 @@ import { DatepickerComponent } from './datepicker/datepicker.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { UtilitiesService } from 'app/common/services/utilities.service.';
 import { AnimatepickerComponent } from './extentions/animatepicker/animatepicker.component';
+import { DatepickerDirective } from './datepicker/datepicker.directive';
 
 @NgModule({
 	declarations: [
 		AppComponent,
 		DatepickerComponent,
 		NavigationComponent,
-		AnimatepickerComponent
+		AnimatepickerComponent,
+		DatepickerDirective
 	],
 	imports: [
 		BrowserModule,
@@ -22,7 +24,8 @@ import { AnimatepickerComponent } from './extentions/animatepicker/animatepicker
 	providers: [
 		UtilitiesService
 	],
-	bootstrap: [AppComponent]
+	entryComponents: [ DatepickerComponent ],
+	bootstrap: [AppComponent],
 })
 export class AppModule {
 }
