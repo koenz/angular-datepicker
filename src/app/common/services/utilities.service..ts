@@ -3,7 +3,12 @@ import { log } from "util";
 
 @Injectable()
 export class UtilitiesService {
-	public position: Object;
+	public position: Object = {
+		top: null,
+		left: null,
+		right: null,
+		bottom: null,
+	};
 	
 	private static getScrollOffset(){
 		const x = window.pageXOffset;
@@ -26,12 +31,12 @@ export class UtilitiesService {
 			 	top: props.top + scrollOffset.y,
 				left: props.left + scrollOffset.x,
 				right: props.left + scrollOffset.x + width,
-				bottom: props.top + scrollOffset.y + height
-			}
-			console.log(position);			
+				bottom: props.top + scrollOffset.y + height,
+				forRight: window.innerWidth - props.left,
+				forBottom: window.innerHeight - (props.top + scrollOffset.y)
+			}	
+
+			return position;
 		}
 	}
-
-
-
 }

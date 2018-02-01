@@ -14,4 +14,6 @@ export interface Options {
 	max: Date; // Disables dates from this date
 	year: number; // Initial year that is displayed
 	month: number; // Initial month that is displayed
+	appendToBody: boolean; // Append the body, default false
+	openDirection: string; // 
 }

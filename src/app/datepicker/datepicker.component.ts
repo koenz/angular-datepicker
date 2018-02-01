@@ -47,7 +47,9 @@ export class DatepickerComponent implements OnInit {
 		min: null, // Disables dates until this date
 		max: null, // Disables dates from this date
 		year: this.year, // Initial year that is displayed
-		month: this.month // Initial month that is displayed
+		month: this.month, // Initial month that is displayed
+		appendToBody: true,
+		openDirection: 'bottom'
 	};
 
 	/* ==============================================
@@ -83,7 +85,7 @@ export class DatepickerComponent implements OnInit {
 	/**
 	 * Selected Dates: handles the selected dates array. Can be set both internally and externally
 	 */
-	_selectedDates: Date[] = [];
+	private _selectedDates: Date[] = [];
 	@Output() selectedDatesChange = new EventEmitter();
 	@Input() 
 	get selectedDates(): Date[] { return this._selectedDates; }	
@@ -105,8 +107,10 @@ export class DatepickerComponent implements OnInit {
 	@ViewChild('calendarTopContainer') public calendarTopContainer: ElementRef;
 	@HostBinding('class') @Input() theme: string;
 	@HostBinding('class.is-open') @Input() isOpen = false;
-	@HostBinding('style.left') leftPosition = 20;
-	@HostBinding('style.right') topPosition = 20;
+	@HostBinding('style.top.px') @Input() topPosition = null;
+	@HostBinding('style.left.px') @Input() leftPosition = null;
+	@HostBinding('style.bottom.px') @Input() bottomPosition = null;
+	@HostBinding('style.right.px') @Input() rightPosition = null;
 
 	/* ==============================================
 	 * Static Methods
@@ -165,7 +169,7 @@ export class DatepickerComponent implements OnInit {
 		return weekdays;
 	}
 
-	constructor(public utilities: UtilitiesService) {
+	constructor(public utils: UtilitiesService) {
 		this.options = Object.assign(this.defaults, this._options);
 	}
 
@@ -421,6 +425,7 @@ export class DatepickerComponent implements OnInit {
 		}
 		
 		this.isOpen = true;
+
 	}
 
 	close(): void {
@@ -429,10 +434,6 @@ export class DatepickerComponent implements OnInit {
 		}
 
 		this.isOpen = false;
-	}
-
-	setPostion(){
-		this.utilities.position;
 	}
 
 	selectStartDate(): void {
