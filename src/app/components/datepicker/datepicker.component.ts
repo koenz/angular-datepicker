@@ -1,23 +1,23 @@
-import { Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Day, Month, Week } from 'app/common/models/datepicker.model';
-import { Options } from 'app/common/models/datepicker-options.model';
-import { UtilitiesService } from 'app/common/services/utilities.service.';
-import { log } from 'util';
+import { Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Day, Month, Week } from 'app/models/datepicker.model';
+import { Options } from 'app/models/datepicker-options.model';
+import { UtilitiesService } from 'app/services/utilities.service.';
+import { DatepickerService } from 'app/components/datepicker/datepicker.service.';
+import { DefaultOptions } from './datepicker.options'
 
 @Component({
 	selector: 'app-datepicker',
 	templateUrl: './datepicker.component.html',
 	styleUrls: ['./datepicker.component.scss']
 })
-export class DatepickerComponent implements OnInit {
+export class DatepickerComponent implements OnInit, OnChanges {
 
 	/* ==============================================
 	 * Internal Properties
 	 * ============================================== */
-
 	public date: Date = new Date();
-	public year: number = this.date.getFullYear();
-	public month: number = this.date.getMonth();
+	public year: number = null;
+	public month: number = null;
 	public today: Date = this.date;
 	public months: Month[] = null;
 	public weekdays: string[] = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
@@ -29,28 +29,8 @@ export class DatepickerComponent implements OnInit {
 	/* ==============================================
 	 * Initial Options
 	 * ============================================== */
-
-	public options: Options;
+	public options: Options = DefaultOptions;
 	@Input('options') _options: Options;
-	public defaults: Options = {
-		theme: '', // Theme string is added to the host
-		selectMultiple: false, // Select multiple dates
-		closeOnSelect: true,  // Close datepicker when date(s) selected
-		animate: false, // Animate the datepicker
-		animationSpeed: 400, // Animation speed in ms
-		easing: 'ease-in', // Easing type string
-		numberOfMonths: 1, // Number of months shown
-		hideRestDays: false, // Hide the rest days
-		disableRestDays: true, // Disable the click on rest days
-		hideNavigation: false, // Hide the navigation
-		range: false, // Use range functionality
-		min: null, // Disables dates until this date
-		max: null, // Disables dates from this date
-		year: this.year, // Initial year that is displayed
-		month: this.month, // Initial month that is displayed
-		appendToBody: true,
-		openDirection: 'bottom'
-	};
 
 	/* ==============================================
 	 * External Properties
@@ -60,61 +40,94 @@ export class DatepickerComponent implements OnInit {
 	 * Set the the language manualy. A string with a BCP 47 language tag
 	 * @example nl-NL
 	 */
-	@Input() public language: string = navigator.language;
+	_language = navigator.language;
+	@Input() 
+	set language(value: string){
+		if(!value || value === undefined || !DatepickerComponent.isValidIsoCode(value)) {
+			return;
+		}
+	
+		this._language = value;
+	}
+	get language(){
+		return this._language
+	}
 
 	/**
 	 * Minimal Date: If set the dates before it will be disabled
 	 */
-	private _minDate = null;
+	public _minDate = null;
 	@Input()
-	get minDate(): Date { return this._minDate; }	
-	set minDate(value: Date) {
+	set minDate(value: Date) {		
+		if(value === undefined || value === this._minDate) {
+			return;
+		}
 		this._minDate = new Date(value);
+		this.goToDate(this.date);
 	}
+	get minDate(): Date { return this._minDate; }
 
 	/**
 	 * Maximal Date: If set the dates after it will be disabled
 	 */
-	private _maxDate = null;
+	public _maxDate = null;
 	@Input()
-	get maxDate(): Date { return this._maxDate; }	
 	set maxDate(value: Date) {
+		if(value === undefined || value === this._minDate) {
+			return;
+		}
 		this._maxDate = new Date(value);
+		this.goToDate(this.date);
 	}
+	get maxDate(): Date { return this._maxDate; }
+	
 
 	/**
 	 * Selected Dates: handles the selected dates array. Can be set both internally and externally
 	 */
 	private _selectedDates: Date[] = [];
 	@Output() selectedDatesChange = new EventEmitter();
-	@Input() 
-	get selectedDates(): Date[] { return this._selectedDates; }	
+	@Input()
+	get selectedDates(): Date[] { return this._selectedDates; }
 	set selectedDates(value: Date[]) {
-		this._selectedDates = value;
+		const _value = Array.isArray(value) ? value : [value];
+		if (!this.isValidDate(_value)) {
+			return;
+		}
+		
+		this._selectedDates = _value;
 
-		if (this.options.range !== undefined && this.options.range) {
+		if (this.options.range) {
 			this.resetRange();
 		}
 
 		this.selectedDatesChange.emit(this._selectedDates);
+		
+
 	}
 
 	/* ==============================================
 	 * Bindings and Children
 	 * ============================================== */
-
 	@ViewChild('calendarContainer') public calendarContainer: ElementRef;
 	@ViewChild('calendarTopContainer') public calendarTopContainer: ElementRef;
-	@HostBinding('class') @Input() theme: string;
-	@HostBinding('class.is-open') @Input() isOpen = false;
-	@HostBinding('style.top.px') @Input() topPosition = null;
-	@HostBinding('style.left.px') @Input() leftPosition = null;
-	@HostBinding('style.bottom.px') @Input() bottomPosition = null;
-	@HostBinding('style.right.px') @Input() rightPosition = null;
+	@HostBinding('class') @Input() theme: string = null;
+	@HostBinding('class.is-open') @Input() isOpen = true;
+	@HostBinding('class.is-directive') @Input() asDirective = false;
+	@HostBinding('class.is-animate') animate = false;
+	@HostBinding('style.top.px') topPosition = null;
+	@HostBinding('style.left.px') leftPosition = null;
+	@HostBinding('style.bottom.px') bottomPosition = null;
+	@HostBinding('style.right.px') rightPosition = null;
 
 	/* ==============================================
 	 * Static Methods
 	 * ============================================== */
+
+	 static isValidIsoCode(isoCode: string): boolean {
+		const pattern = new RegExp(/([a-z]{2})-([A-Z]{2})/);
+		return pattern.test(isoCode);
+	 }
 
 	/**
 	 * Create a week array from the merged day arrays
@@ -169,18 +182,34 @@ export class DatepickerComponent implements OnInit {
 		return weekdays;
 	}
 
-	constructor(public utils: UtilitiesService) {
-		this.options = Object.assign(this.defaults, this._options);
+	constructor(
+		public utils: UtilitiesService,
+		public datepickerService: DatepickerService,
+		public element: ElementRef
+	) {}
+
+	ngOnChanges(changes: SimpleChanges) {
+		if (changes._options && changes._options.currentValue !== undefined) {
+			this.options = Object.assign(this.options, this._options);
+			
+			if(changes._options.currentValue.currentDate){
+				this.date = this.options.currentDate;
+			}
+
+			this.goToDate(this.date);
+		}
+
+		if(changes.language){
+			this.weekdays = DatepickerComponent.getWeekDays(this.language, 'short', 'monday');
+		}
 	}
 
 	ngOnInit() {
-		this.options = Object.assign(this.defaults, this._options);
-		this.month = this.options.month;
-		this.year = this.options.year;
-
-		this.currentMonthYear = [{'month': this.month, 'year': this.year}];
-		this.months = this.createCalendarArray(this.year, this.month);
+		if(!this.month && !this.year) {
+			this.goToDate(this.options.currentDate);
+		}
 	}
+
 
 	/**
 	 * Creates a day array
@@ -205,8 +234,8 @@ export class DatepickerComponent implements OnInit {
 				isToday: this.isToday(date),
 				isSelected: this.isSelected(date),
 				isRest: isRestDays,
-				isHidden: isRestDays && (this.options.animate || this.options.hideRestDays),
-				isDisabled: this._minDate && this._maxDate && this.isDisabled(date) || isRestDays && this.options.disableRestDays,
+				isHidden: isRestDays && (this.animate || this.options.hideRestDays),
+				isDisabled: (this.minDate || this.maxDate) && this.isDisabled(date) || isRestDays && this.options.disableRestDays,
 				isInRange: this.isInRange(date) || (this.isStartDate(date) || this.isEndDate(date)) && this.startDate && this.endDate,
 				isStartDate: this.isStartDate(date),
 				isEndDate: this.isEndDate(date)
@@ -260,7 +289,7 @@ export class DatepickerComponent implements OnInit {
 	createCalendarArray(year: number, month: number): [{ weeks: Week[] }] {
 		const dayArray = this.getMergedDayArrays(year, month);
 		const weeks = DatepickerComponent.createWeekArray(dayArray);
-		return [{weeks: weeks}];
+		return [{ weeks: weeks }];
 	}
 
 	/**
@@ -393,9 +422,9 @@ export class DatepickerComponent implements OnInit {
 	 * Go to the next month
 	 */
 	goToNextMonth(): void {
-		this.month = this.getNextMonth(this.month);
 		this.year = this.getYearOfNextMonth(this.year, this.month);
-		this.currentMonthYear = [{'month': this.month, 'year': this.year}];
+		this.month = this.getNextMonth(this.month);
+		this.currentMonthYear = [{ 'month': this.month, 'year': this.year }];
 		this.months = this.createCalendarArray(this.year, this.month);
 	}
 
@@ -403,9 +432,9 @@ export class DatepickerComponent implements OnInit {
 	 * Go to the previous month
 	 */
 	goToPreviousMonth(): void {
-		this.month = this.getPreviousMonth(this.month);
 		this.year = this.getYearOfPreviousMonth(this.year, this.month);
-		this.currentMonthYear = [{'month': this.month, 'year': this.year}];
+		this.month = this.getPreviousMonth(this.month);
+		this.currentMonthYear = [{ 'month': this.month, 'year': this.year }];
 		this.months = this.createCalendarArray(this.year, this.month);
 	}
 
@@ -414,26 +443,32 @@ export class DatepickerComponent implements OnInit {
 	 * 
 	 * @param date 
 	 */
-	goToMonth(date: Date): void {
-		this.currentMonthYear = [{'month': date.getMonth(), 'year': date.getFullYear()}];
+	goToDate(date: Date): void {
+		this.month = date.getMonth();
+		this.year = date.getFullYear();
+		this.currentMonthYear = [{ 'month': this.month, 'year': this.year }];
 		this.months = this.createCalendarArray(this.year, this.month);
 	}
 
 	open(): void {
-		if(this.isOpen){
+		if (this.isOpen) {
 			return;
 		}
-		
+
 		this.isOpen = true;
 
 	}
 
-	close(): void {
-		if(!this.isOpen){
+	close(noTimeout?: boolean): void {
+		if (!this.isOpen) {
 			return;
 		}
 
-		this.isOpen = false;
+		const timeout = noTimeout ? this.options.timeoutBeforeClosing : 0;
+
+		setTimeout(() => {
+			this.isOpen = false;
+		}, timeout);
 	}
 
 	selectStartDate(): void {
@@ -492,6 +527,14 @@ export class DatepickerComponent implements OnInit {
 	}
 
 	isDisabled(date: Date): boolean {
+		if(!this.minDate){
+			return !(date < this.maxDate);
+		}
+
+		if(!this.maxDate){
+			return !(date > this.minDate);
+		}
+
 		return !(date < this.maxDate && date > this.minDate);
 	}
 
@@ -503,7 +546,19 @@ export class DatepickerComponent implements OnInit {
 		return [31, DatepickerComponent.isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
 	}
 
-	// TODO: maybe add clear undefined, not sure why though
-	clearUndefined() {
+	isValidDate(value: any): boolean {
+		let validDate = true;
+ 
+		for (let i = 0; i < value.length; i++) {
+			if (!this.isDate(value[i]) && validDate) {
+				validDate = false;
+			}
+		}
+
+		return validDate;
+	}
+
+	isDate(value: Date) {
+		return value instanceof Date
 	}
 }

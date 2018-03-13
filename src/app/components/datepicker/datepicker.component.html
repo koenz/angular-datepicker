@@ -1,8 +1,9 @@
 <div class="datepicker__wrapper"
-[ngStyle]="datepickerPosition"
+[ngStyle]="{'top.px': calendarWidth}"
 >
 	<div>
 		<app-navigation
+				[hideNavigation]="options.hideNavigation"
 				(onPreviousClick)="goToPreviousMonth()"
 				(onNextClick)="goToNextMonth()"
 				[language]="language"

@@ -1,0 +1,81 @@
+// @import "~bootstrap/dist/css/bootstrap.min.css";
+// @import "node_modules/bootstrap/scss/bootstrap";
+// Required
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
+@import "node_modules/bootstrap/scss/mixins";
+
+@import "node_modules/bootstrap/scss/reboot";
+@import "node_modules/bootstrap/scss/grid";
+@import "node_modules/prismjs/themes/prism-okaidia";
+// @import "node_modules/node.normalize.scss/_normalize.scss";
+
+:host {
+	font-family: Arial, Helvetica, sans-serif;
+
+	.demo__datepicker-block {
+		background-color: rgb(232, 232, 232);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 60px;
+	}
+
+	.demo__option-block {
+		padding: 60px;
+		color: #fff;
+		background-color: #272822;
+	}
+
+	.demo__text-block {
+		background:	#fff;
+		padding: 60px;
+	}
+
+	.demo__datepicker-container {
+		display: inline-block;
+	}
+
+	.text-muted {
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.form-check-input {
+		margin-right: 5px;
+	}
+
+	.form-check {
+		display: inline-block;
+		margin-right: 5px;
+	}
+
+	.form-check-label {
+		margin-top: 5px;
+	}
+
+	.col-form-label {
+		padding: 4px;
+		margin: 4px 0;
+		font-size: 13px;
+	}
+
+	.form-control {
+		border: 1px solid rgba(#fff, .4);
+		color: #fff; 
+		border-radius: 4px;
+		margin: 4px 12px 4px 0;
+		padding: 4px;
+		width: 130px;
+		background-color: rgba(#fff, .1);
+		font-size: 12px;
+
+		&.is-small {
+			width: 90px;
+		}
+	}
+
+	.demo__input-container {
+		display: flex;
+	}
+}

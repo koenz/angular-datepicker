@@ -9,7 +9,7 @@
 				[animate]="animate"
 				[translateX]="translateX"
 				[transition]="transition"
-				[leftPosition]="leftPosition"
+				[leftPosition]="leftInnerPosition"
 				[hideNavigation]="options.hideNavigation"
 				[currentMonthYear]="currentMonthYear"
 		></app-navigation>
@@ -30,7 +30,7 @@
 	<div class="datepicker__calendar-wrapper" #calendarContainer [ngStyle]="{
 				'transform': 'translateX(' + translateX + '%)',
 				'transition': transition,
-				'left.%': leftPosition
+				'left.%': leftInnerPosition
 				}"
 	>
 		<div

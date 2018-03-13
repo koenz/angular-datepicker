@@ -31,10 +31,18 @@ export class NavigationComponent implements OnChanges {
 	 * @param changes
 	 */
 	ngOnChanges(changes: SimpleChanges) {
-		if (this.language) {
+		if (this.language) {			
 			this.formatMonth = new Intl.DateTimeFormat(this.language, {month: this.monthFormat});
 		}
-		if (changes.currentMonthYear && !changes.currentMonthYear.firstChange) {
+		
+		if (
+			changes.currentMonthYear 
+			&& !changes.currentMonthYear.firstChange
+			&& changes.currentMonthYear.currentValue.month !== undefined
+			&& changes.currentMonthYear.currentValue.year !== undefined
+		) {
+			
+			
 			this.setTitle(changes.currentMonthYear.currentValue);
 		}
 		if (this.currentMonthYear) {

@@ -1,25 +1,28 @@
-@import "../common/scss/_helpers";
-@import "../common/scss/_vars";
+@import "../../shared/scss/_helpers";
+@import "../../shared/scss/_vars";
 
-:host {
+.standard-theme {
     font-family: Arial, Helvetica, sans-serif;
     border: 1px solid $day-border-color;
     width: 300px;
     display: inline-block;
-	position: absolute;
 	z-index: 2;
     border-radius: $border-radius;
     box-shadow: 0 1px 5px rgba(0, 0, 0, .15);
 	overflow: hidden;
-	display: none;
 	background-color: #fff;
 
     * {
         box-sizing: border-box;
 	}
+
+	&.is-directive {
+		display: none;	
+		position: absolute;
+	}
 	
 	&.is-open {
-		display: block;
+		display: inline-block;
 	}
 
     &.is-animate {

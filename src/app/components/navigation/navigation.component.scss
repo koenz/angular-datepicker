@@ -1,5 +1,5 @@
-@import "../common/scss/_helpers";
-@import "../common/scss/_vars";
+@import "../../shared/scss/_helpers";
+@import "../../shared/scss/_vars";
 
 :host {
     @include clearfix();

@@ -1,12 +1,12 @@
-@import "../../common/scss/_helpers";
-@import "../../common/scss/_vars";
+@import "../../shared/scss/_helpers";
+@import "../../shared/scss/_vars";
 
 :host {
 	font-family: Arial, Helvetica, sans-serif;
     border: $datepicker-border;
     display: inline-block;
     position: relative;
-    width: #{(2 * $outer-spacing) + 22rem};
+    width: #{(2 * $outer-spacing) + 280px};
     border-radius: $border-radius;
     box-shadow: $box-shadow;
     overflow: hidden;
@@ -66,7 +66,7 @@
     }
 
     .datepicker__week {
-        padding: .4rem 0;
+        padding: 4px 0;
     }
 
     .datepicker__day {
