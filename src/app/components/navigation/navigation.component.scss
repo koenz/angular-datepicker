@@ -5,7 +5,8 @@
     @include clearfix();
     position: relative;
     display: block;
-    padding: 10px;
+	padding: 10px;
+	height: 52px;
 
     &.is-animate {
         .navigation__title-wrapper {

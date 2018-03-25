@@ -1,87 +1,102 @@
 <div class="demo__wrapper">
-
-
 	<div class="container">
 		<div class="row">
-				<div class="demo__text-block col-sm-12">
-					<h1>The Animatepicker</h1>
-				</div>
+			<div class="demo__text-block col-sm-12">
+				<h1>The Animatepicker</h1>
 			</div>
+		</div>
 		<div class="row">
 			<div class="demo__datepicker-block col-lg-12 justify-content-center align-items-center">
-				<div class="demo__datepicker-container">
-					<app-animatepicker 
-						[minDate]="selectedMinDate" 
-						[maxDate]="selectedMaxDate" 
-						[options]="animatePickerOptions" 
-						[numberOfMonths]="animateInputsForm.value.numberOfMonths"
-						[language]="animateInputsForm.value.language"></app-animatepicker>
-					</div>
+				<div class="demo__datepicker-actions">
+					<div class="demo__action-button" (click)="next()">Next</div>
+					<div class="demo__action-button" (click)="previous()">Prev</div>
+					<div class="demo__action-button" (click)="close()">Close</div>
+					<div class="demo__action-button" (click)="open()">Open</div>
 				</div>
+				<div class="demo__datepicker-container">
+					<aa-animatepicker 
+					[minDate]="selectedMinDate" 
+					[maxDate]="selectedMaxDate" 
+					[numberOfMonths]="animateInputsForm.value.numberOfMonths"
+					[language]="animateInputsForm.value.language"
+					[theme]="animateInputsForm.value.theme"
+					[options]="animateOptions"
+					[(selectedDates)]="selectedDatesAnimate"
+					#demoDatepicker></aa-animatepicker>
+				</div>
+				<div class="demo__output-example">
+					<h4>Output:</h4>
+					<ul class="demo__selected-dates-list">
+						<li *ngFor="let date of selectedDatesAnimate; let i = index" class="demo__selected-dates-item">
+							<span (click)="removeDate(i)" class="demo__remove-date-button">x</span>{{date}}
+						</li>
+					</ul>
+				</div>
+			</div>
 		</div>
 
 		<div class="row">
 			<div class="demo__option-block col-lg-6">
 				<h2>Animatepicker @Input()</h2>
 				<code class="language-typescript">
-							<form [formGroup]="animateInputsForm">
-								<div class="form-group row">
-									<label class="col-sm-3 col-form-label">minDate</label>
-									<div class="col-sm-9">
-										<div class="demo__input-container">
-											<input [value]="selectedMinDate | date" [(selectedDates)]="selectedMinDate" aDatepicker class="form-control" type="text" formControlName="minDate">
-										<small class="text-muted token comment">
-												Disables dates until this date
-										</small>
-									</div>
-									</div>
+					<form [formGroup]="animateInputsForm">
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">minDate</label>
+							<div class="col-sm-9">
+								<div class="demo__input-container">
+									<input [value]="selectedMinDate | date" [(selectedDates)]="selectedMinDate" aaDatepicker class="form-control" type="text" formControlName="minDate">
+								<small class="text-muted token comment">
+										Disables dates until this date
+								</small>
+							</div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">maxDate</label>
+							<div class="col-sm-9">
+								<div class="demo__input-container">
+									<input [value]="selectedMaxDate | date" [(selectedDates)]="selectedMaxDate" aaDatepicker class="form-control" type="text" formControlName="maxDate">
+									<small class="text-muted token comment">
+											Disables dates from this date
+									</small>
 								</div>
-								<div class="form-group row">
-									<label class="col-sm-3 col-form-label">maxDate</label>
-									<div class="col-sm-9">
-										<div class="demo__input-container">
-											<input [value]="selectedMaxDate | date" [(selectedDates)]="selectedMaxDate" aDatepicker class="form-control" type="text" formControlName="maxDate">
-											<small class="text-muted token comment">
-													Disables dates from this date
-											</small>
-										</div>
-									</div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">numberOfMonths</label>
+							<div class="col-sm-9">
+								<div class="demo__input-container">
+									<input class="form-control is-small" type="number" formControlName="numberOfMonths">
+									<small class="text-muted token comment">
+											Number of months shown
+									</small>
 								</div>
-								<div class="form-group row">
-										<label class="col-sm-3 col-form-label">numberOfMonths</label>
-										<div class="col-sm-9">
-											<div class="demo__input-container">
-												<input class="form-control is-small" type="number" formControlName="numberOfMonths">
-												<small class="text-muted token comment">
-														Number of months shown
-												</small>
-											</div>
-										</div>
-									</div>
-									<div class="form-group row">
-											<label class="col-sm-3 col-form-label">language</label>
-											<div class="col-sm-9">
-												<div class="demo__input-container">
-													<input class="form-control is-small" type="text" formControlName="language">
-													<small class="text-muted token comment">
-															Set a language. example: nl-NL. default: browser language
-													</small>
-												</div>
-											</div>
-										</div>
-								<div class="form-group row">
-										<label class="col-sm-3 col-form-label">theme</label>
-										<div class="col-sm-9">
-											<div class="demo__input-container">
-												<input class="form-control" type="text" formControlName="theme">
-												<small class="text-muted token comment">
-														Theme string is added to the host
-												</small>
-											</div>
-										</div>
-									</div>
-							</form>
-						</code>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">language</label>
+							<div class="col-sm-9">
+								<div class="demo__input-container">
+									<input class="form-control is-small" type="text" formControlName="language">
+									<small class="text-muted token comment">
+											Set a language. example: nl-NL. default: browser language
+									</small>
+								</div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">theme</label>
+							<div class="col-sm-9">
+								<div class="demo__input-container">
+									<input class="form-control" type="text" formControlName="theme">
+									<small class="text-muted token comment">
+											Theme string is added to the host
+									</small>
+								</div>
+							</div>
+						</div>
+					</form>
+				</code>
 			</div>
 			<div class="demo__option-block col-lg-6">
 				<h2>Animatepicker Options</h2>
@@ -198,9 +213,9 @@
 		</div>
 
 		<div class="row row-eq-height">
-				<div class="demo__option-block col-lg-6">
-					<h2>Datepicker @Input()</h2>
-					<code class="language-typescript">
+			<div class="demo__option-block col-lg-6">
+				<h2>Directive @Input()</h2>
+				<code class="language-typescript">
 						<form [formGroup]="directiveOptionsForm">
 								<div class="form-group row">
 										<label class="col-sm-3 col-form-label">appendToBody</label>
@@ -241,30 +256,38 @@
 								</div>
 						</form>
 					</code>
-				</div>
-				<div class="demo__datepicker-block col-lg-6  justify-content-center align-items-center">
-					<div class="demo__datepicker-container">
-						<input type="text" [value]="selectedDirectiveDates | date" [(selectedDates)]="selectedDirectiveDates" [aDatepicker]="directiveOptions">
-					</div>
+			</div>
+			<div class="demo__datepicker-block col-lg-6  justify-content-center align-items-center">
+				<div class="demo__datepicker-container">
+					<input class="form-control is-white" type="text" 
+					[minDate]="selectedMinDate" 
+					[maxDate]="selectedMaxDate" 
+					[numberOfMonths]="1"
+					[language]="animateInputsForm.value.language"
+					[theme]="animateInputsForm.value.theme"
+					[value]="selectedDirectiveDates | date" 	
+					[(selectedDates)]="selectedDirectiveDates"
+					 [aaDatepicker]="directiveOptions">
 				</div>
 			</div>
+		</div>
 
 		<div class="row">
-				<div class="demo__text-block col-sm-12">
-					<h1>Regular Datepicker component</h1>
-				</div>
+			<div class="demo__text-block col-sm-12">
+				<h1>Regular Datepicker component</h1>
 			</div>
+		</div>
 
 		<div class="row row-eq-height">
 			<div class="demo__datepicker-block col-lg-6  justify-content-center align-items-center">
 				<div class="demo__datepicker-container">
-					<app-datepicker [options]="animateOptions"></app-datepicker>
+					<aa-datepicker [options]="basicOptionsForm.value"></aa-datepicker>
 				</div>
 			</div>
 			<div class="demo__option-block col-lg-6">
 				<h2>Datepicker Options</h2>
 				<code class="language-typescript">
-					<form [formGroup]="animateOptionsForm">
+					<form [formGroup]="basicOptionsForm">
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">selectMultiple</label>
 							<div class="col-sm-9">
@@ -357,7 +380,7 @@
 							<label class="col-sm-3 col-form-label">minDate</label>
 							<div class="col-sm-9">
 								<div class="demo__input-container">
-									<input  [value]="selectedBasicMinDate | date" [(selectedDates)]="selectedBasicMinDate" aDatepicker class="form-control" type="text" formControlName="basicMinDate">
+									<input  [value]="selectedBasicMinDate | date" [(selectedDates)]="selectedBasicMinDate" aaDatepicker class="form-control" type="text" formControlName="basicMinDate">
 								<small class="text-muted token comment">
 										Disables dates until this date
 								</small>
@@ -368,7 +391,7 @@
 							<label class="col-sm-3 col-form-label">maxDate</label>
 							<div class="col-sm-9">
 								<div class="demo__input-container">
-									<input [value]="selectedBasicMaxDate | date" [(selectedDates)]="selectedBasicMaxDate" [aDatepicker] class="form-control" type="text" formControlName="basicMaxDate">
+									<input [value]="selectedBasicMaxDate | date" [(selectedDates)]="selectedBasicMaxDate" [aaDatepicker] class="form-control" type="text" formControlName="basicMaxDate">
 									<small class="text-muted token comment">
 											Disables dates from this date
 									</small>
@@ -391,10 +414,9 @@
 			</div>
 			<div class="demo__datepicker-block col-lg-6  justify-content-center align-items-center">
 				<div class="demo__datepicker-container">
-					<app-datepicker [options]="animateOptions" [minDate]="selectedBasicMinDate" [maxDate]="selectedBasicMaxDate"></app-datepicker>
+					<aa-datepicker [minDate]="selectedBasicMinDate" [maxDate]="selectedBasicMaxDate"></aa-datepicker>
 				</div>
 			</div>
 		</div>
 	</div>
-
 </div>

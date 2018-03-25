@@ -1,6 +1,6 @@
- export const DefaultOptions = {
+export const DefaultOptions = {
 	selectMultiple: false, // Select multiple dates
-	closeOnSelect: true,  // Close datepicker when date(s) selected
+	closeOnSelect: true, // Close datepicker when date(s) selected
 	animationSpeed: 400, // Animation speed in ms
 	easing: 'ease-in', // Easing type string
 	numberOfMonths: 1, // Number of months shown

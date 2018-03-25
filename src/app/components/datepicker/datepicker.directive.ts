@@ -1,59 +1,151 @@
-import { Directive, Input, ViewContainerRef, ComponentFactoryResolver, HostListener, OnInit, ApplicationRef, Injector, EmbeddedViewRef, Output, EventEmitter, Renderer2 } from '@angular/core';
-import { Options } from 'app/models/datepicker-options.model';
+import {
+	ApplicationRef,
+	ComponentFactoryResolver,
+	Directive,
+	EmbeddedViewRef,
+	EventEmitter,
+	HostListener,
+	Injector,
+	Input,
+	OnInit,
+	Output,
+	Renderer2,
+	ViewContainerRef
+} from '@angular/core';
 import { DatepickerComponent } from 'app/components/datepicker/datepicker.component';
-import { UtilitiesService } from 'app/services/utilities.service.';
-import { DatepickerService } from 'app/components/datepicker/datepicker.service.';
+import { Options } from 'app/models/datepicker-options.model';
 import { DirectiveOptions } from 'app/models/directive-options.model';
-import { DefaultDirectiveOptions } from './datepicker.options'
-
+import { UtilitiesService } from 'app/services/utilities.service';
+import { AnimatepickerComponent } from '../animatepicker/animatepicker.component';
+import { DefaultDirectiveOptions } from './datepicker.options';
+import { tokenKey } from '@angular/core/src/view';
 
 @Directive({
-	selector: '[aDatepicker]'
+	selector: '[aaDatepicker]'
 })
 export class DatepickerDirective {
-	datepicker: DatepickerComponent = null;
+	datepicker: any = null; // TODO: fix types: DatepickerComponent | AnimatepickerComponent
 	clickListener;
-	
+
 	_options = DefaultDirectiveOptions;
-	@Input('aDatepicker')
-	set options(options: DirectiveOptions) {			
-		if(options === undefined || !options) {
+	@Input('aaDatepicker')
+	set options(options: DirectiveOptions) {
+		if (options === undefined || !options) {
 			return;
 		}
-		console.log(options);
-		this._options = Object.assign(this._options, options);
+		this._options = {...this._options, ...options};
 	}
 	get options(): DirectiveOptions {
 		return this._options;
 	}
 
-	_datepickerOptions;
-	@Input()
+	private _datepickerOptions;
+	@Input('options')
 	set datepickerOptions(options: Options) {
-		this.datepicker._options = options;
+		this._datepickerOptions = options;
+		console.log('directive: ', this._datepickerOptions);
+		if(this.datepicker){
+			console.log('datepicker was already set joh');
+			
+			this.datepicker.options = options;
+		}
+	}
+	get datepickerOptions(){
+		return this._datepickerOptions;
 	}
 
-	@HostListener('click', ['$event.target'])
-	onClick() {
-		if (!this.datepicker) {
-			this.datepicker = this.createDatepicker();
-			// ToDo hava a look at this. Set to false if is directive
-			this.datepicker.isOpen = false;
-			this.datepicker.selectedDates = this._selectedDates;
-			this.datepicker.asDirective = true;
-			this.subvscribestuff();
-		}
+	/**
+	 * Set the the language manualy. A string with a BCP 47 language tag
+	 * @example nl-NL
+	 */
+	private _language;
+	@Input()
+	set language(value: string) {
+		this._language = value;
 
-		if (!this.datepicker.isOpen) {
-			this.setPosition();
-			this.datepicker.open();
-
-			if (this.options.closeOnBlur) {
-				setTimeout(() =>
-					this.clickListener = this.renderer.listen('document', 'click', this.onBlurHandler.bind(this))
-				);
-			}
+		if(this.datepicker){
+			this.datepicker.language = value;
 		}
+	}
+
+	/**
+	 * Minimal Date: If set the dates before it will be disabled
+	 */
+	private _minDate;
+	@Input()
+	set minDate(value: Date) {
+		this._minDate = value;
+
+		if(this.datepicker){
+			this.datepicker.minDate = value;
+		}
+	}
+	get minDate(){
+		return this._minDate;
+	}
+
+	/**
+	 * Maximal Date: If set the dates after it will be disabled
+	 */
+	private _maxDate;
+	@Input()
+	set maxDate(value: Date) {
+		this._maxDate = value;
+
+		if(this.datepicker){
+			this.datepicker.maxDate = value;
+		}
+	}
+	get maxDate(){
+		return this._minDate;
+	}
+
+	/**
+	 * Number of months: the number of months displayed
+	 */
+	private _numberOfMonths;
+	@Input()
+	set numberOfMonths(value) {
+		this._numberOfMonths = value
+
+		if(this.datepicker){
+			this.datepicker.numberOfMonths = value;
+		}
+	}
+	get numberOfMonths(){
+		return this._numberOfMonths;
+	}
+
+	/**
+	 * Theme string is added to the host
+	 */
+	private _theme;
+	@Input()
+	set theme(value) {
+		this._theme;
+
+		if(this.datepicker){
+			this.datepicker.theme = value;
+		}
+	}
+	get theme(){
+		return this._theme;
+	}
+
+	/**
+	 * The open state
+	 */
+	private _isOpen;
+	@Input()
+	set isOpen(value) {
+		this._isOpen = value;
+
+		if(this.datepicker){
+			this.datepicker.isOpen = value;
+		}
+	}
+	get isOpen() {
+		return this._isOpen;
 	}
 
 	/**
@@ -62,13 +154,40 @@ export class DatepickerDirective {
 	private _selectedDates: Date[] = [];
 	@Output() selectedDatesChange = new EventEmitter();
 	@Input()
-	get selectedDates(): Date[] { return this._selectedDates; }
 	set selectedDates(value: Date[]) {
 		if (value === undefined || this._selectedDates === value) {
 			return;
 		}
+		console.log('direvtive: ', value);
+		
 		this._selectedDates = value;
 		this.selectedDatesChange.emit(this._selectedDates);
+	}
+	get selectedDates(): Date[] {
+		return this._selectedDates;
+	}
+
+	@HostListener('click', ['$event.target'])
+	onClick() {
+		if (!this.datepicker) {
+			this.datepicker = this.createDatepicker();
+			
+			this.setDatepickerOptionsAndInputs();
+			this.subscribeToSelectedChanges();
+		}
+
+		if (!this.datepicker.isOpen) {
+			if (this.options.appendToBody) {
+				this.setPosition();
+			}
+			this.datepicker.open();
+
+			if (this.options.closeOnBlur) {
+				setTimeout(
+					() => (this.clickListener = this.renderer.listen('document', 'click', this.onBlurHandler.bind(this)))
+				);
+			}
+		}
 	}
 
 	constructor(
@@ -77,37 +196,54 @@ export class DatepickerDirective {
 		public componentFactoryResolver: ComponentFactoryResolver,
 		private appRef: ApplicationRef,
 		private injector: Injector,
-		private datepickerService: DatepickerService,
 		private renderer: Renderer2
-	) {	}
+	) { }
 
-	subvscribestuff() {
-		this.datepicker.selectedDatesChange.subscribe((date) => {
+	/**
+	 * Add selected changes
+	 */
+	subscribeToSelectedChanges(): void {
+		this.datepicker.selectedDatesChange.subscribe(date => {
 			this.selectedDates = date;
 		});
 	}
+
+	setDatepickerOptionsAndInputs() {
+		this.datepicker.options = this.datepickerOptions;
+		this.datepicker.isOpen = this.isOpen || false;
+		this.datepicker.asDirective = true;
+		this.datepicker.numberOfMonths = this.numberOfMonths;
+		this.datepicker.theme = this.theme;
+		// TODO: check if this works
+		this.datepicker._selectedDates = this.selectedDates;
+		this.datepicker.language = this.language;
+		this.datepicker.minDate = this.minDate;
+		this.datepicker.minDate = this.maxDate;
+	}
+
 	/**
 	 * Handles the (faked) blur event
-	 * 
-	 * @param event 
+	 *
+	 * @param event
 	 */
 	onBlurHandler(event: Event): void {
-		if (!this.datepicker.element.nativeElement.contains(event.target)) { // check click origin
-			this.clickListener()
+		if (!this.datepicker.element.nativeElement.contains(event.target)) {
+			// check click origin
+			this.clickListener();
 			this.datepicker.close();
 		}
 	}
 
-	/** 
+	/**
 	 * Returns a create DatepickerComponent method
-	*/
-	createDatepicker(): DatepickerComponent {
+	 */
+	createDatepicker(): DatepickerComponent | AnimatepickerComponent {
 		return this.options.appendToBody ? this.appendToBody() : this.appendToContainer();
 	}
 
-	/** 
+	/**
 	 * Sets the position of the datepicker
-	*/
+	 */
 	setPosition() {
 		const position = this.utils.getPageOffset(this.viewContainerRef.element.nativeElement);
 		if (this.options.openDirection === 'bottom') {
@@ -134,8 +270,11 @@ export class DatepickerDirective {
 	/**
 	 * Appends the DatepickerComponent to the body and returns the instance
 	 */
-	appendToBody(): DatepickerComponent {
-		const componentRef = this.componentFactoryResolver.resolveComponentFactory(DatepickerComponent).create(this.injector);
+	appendToBody(): DatepickerComponent | AnimatepickerComponent {
+		const datepickerComponent = this.options.useAnimatePicker ? AnimatepickerComponent : DatepickerComponent;
+		const componentRef = this.componentFactoryResolver
+			.resolveComponentFactory(datepickerComponent)
+			.create(this.injector);
 
 		this.appRef.attachView(componentRef.hostView);
 
@@ -149,8 +288,9 @@ export class DatepickerDirective {
 	/**
 	 * Appends the DatepickerComponent to the container and returns the instance
 	 */
-	appendToContainer(): DatepickerComponent {
-		const componentRef = this.componentFactoryResolver.resolveComponentFactory(DatepickerComponent);
+	appendToContainer(): DatepickerComponent | AnimatepickerComponent {
+		const datepickerComponent = this.options.useAnimatePicker ? AnimatepickerComponent : DatepickerComponent;
+		const componentRef = this.componentFactoryResolver.resolveComponentFactory(datepickerComponent);
 		return this.viewContainerRef.createComponent(componentRef).instance;
 	}
 }

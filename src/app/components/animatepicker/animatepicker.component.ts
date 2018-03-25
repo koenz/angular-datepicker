@@ -11,15 +11,14 @@ import {
 } from '@angular/core';
 import { DatepickerComponent } from 'app/components/datepicker/datepicker.component';
 import { Month } from 'app/models/datepicker.model';
-import { UtilitiesService } from 'app/services/utilities.service.';
-import { DatepickerService } from 'app/components/datepicker/datepicker.service.';
+import { UtilitiesService } from 'app/services/utilities.service';
 
 @Component({
-	selector: 'app-animatepicker',
+	selector: 'aa-animatepicker',
 	templateUrl: './animatepicker.component.html',
 	styleUrls: ['../datepicker/datepicker.component.scss']
 })
-export class AnimatepickerComponent extends DatepickerComponent implements OnInit, AfterViewInit, OnChanges {
+export class AnimatepickerComponent extends DatepickerComponent implements OnInit, AfterViewInit {
 
 	/* ==============================================
 	 * Internal Properties
@@ -46,7 +45,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	@Input()
 	get numberOfMonths(): Number[] { return this._numberOfMonths; }
 	set numberOfMonths(value) {
-		if(value === undefined || value === this._numberOfMonths.length) {
+		if (value === undefined || value === this._numberOfMonths.length) {
 			return;
 		}
 		this._numberOfMonths = new Array(value);
@@ -63,26 +62,8 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	@HostBinding('style.width.px') public datepickerWidth: number;
 	@HostBinding('style.height.px') public datepickerHeight: number;
 
-	constructor(public elementRef: ElementRef, public utilities: UtilitiesService, public datepickerService: DatepickerService) {
-		super(utilities, datepickerService, elementRef);
-	}
-
-	ngOnChanges(changes: SimpleChanges) {
-		// TODO: Use getter and setter
-		if (changes._options && changes._options.currentValue !== undefined) {
-			this.options = Object.assign(this.options, this._options);
-
-			// TODO: check this
-			if(changes._options.currentValue.currentDate){
-				this.date = this.options.currentDate;
-			}
-			
-			this.goToDate(this.date);
-		}
-
-		if(changes.language){
-			this.weekdays = DatepickerComponent.getWeekDays(this.language, 'short', 'monday');
-		}
+	constructor(public elementRef: ElementRef, public utilities: UtilitiesService) {
+		super(utilities, elementRef);
 	}
 
 	ngOnInit() {
@@ -91,7 +72,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 		this.initialWidth = parseInt(computedWidth, 10);
 
 		// Set the current year and month object
-		if(!this.month && !this.year) {
+		if (!this.month && !this.year) {
 			this.goToDate(this.options.currentDate);
 		}
 	}
@@ -99,7 +80,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	ngAfterViewInit() {
 		setTimeout(() => {
 			this.setDatePickerDimension();
-			this.setDatepickerHeight();
+			this.setDatepickerHeight(true);
 		});
 	}
 
@@ -113,8 +94,8 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 
 	/**
 	 * Go to a specific month
-	 * 
-	 * @param date 
+	 *
+	 * @param date
 	 */
 	goToDate(date: Date): void {
 		this.month = date.getMonth();
@@ -268,13 +249,19 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 			} else {
 				this.toggleDate(date);
 			}
+
+			if (this.options.closeOnSelect) {
+				this.close();
+			}
 		} else {
 			this.deselectDate(date);
+
+			if (this.options.closeOnSelect) {
+				this.close();
+			}
 		}
-
-		this.resetStyle();
 		this.months = this.getNextMonthArray(this.currentYearMonth, true);
-
+		this.resetStyle();
 	}
 
 	/**

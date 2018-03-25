@@ -1,9 +1,8 @@
- export const DefaultOptions = {
+export const DefaultOptions = {
 	selectMultiple: false, // Select multiple dates
-	closeOnSelect: true,  // Close datepicker when date(s) selected
+	closeOnSelect: false, // Close datepicker when date(s) selected
 	animationSpeed: 400, // Animation speed in ms
 	easing: 'ease-in', // Easing type string
-	numberOfMonths: 1, // Number of months shown
 	hideRestDays: false, // Hide the rest days
 	disableRestDays: true, // Disable the click on rest days
 	hideNavigation: false, // Hide the navigation
@@ -15,5 +14,6 @@
 export const DefaultDirectiveOptions = {
 	appendToBody: true, // Append Datepicker to body
 	openDirection: 'bottom', // The direction it should open to
-	closeOnBlur: true // Close the
+	closeOnBlur: true, // Close the datepicker onBlur
+	useAnimatePicker: true // Use the animatepickerComponent
 };

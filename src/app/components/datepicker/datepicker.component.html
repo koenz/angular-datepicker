@@ -2,12 +2,12 @@
 [ngStyle]="{'top.px': calendarWidth}"
 >
 	<div>
-		<app-navigation
+		<aa-navigation
 				[hideNavigation]="options.hideNavigation"
 				(onPreviousClick)="goToPreviousMonth()"
 				(onNextClick)="goToNextMonth()"
 				[language]="language"
-				[currentMonthYear]="currentMonthYear"></app-navigation>
+				[currentMonthYear]="currentMonthYear"></aa-navigation>
 		<div class="datepicker__weekdays-wrapper">
 			<div class="datepicker__weekdays-container">
 				<table class="datepicker__weekdays">

@@ -1,28 +1,116 @@
-# Datepicker
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.2.0.
+# Animating Angular Datepicker
+*Note: this is a beta version. but will is updated frequently. Want a improvement or found bug? please use the pull request functionality or create en issue *
 
-## Development server
+An Animating Datepicker for Angular 2+. For some smooth date picking :). Including range functionality, multiple calendars next to each other and loads of other functionality. Checkout the [Demo page](http://zigterman.com/datepicker) for a preview.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Installation
+To install go through the following steps
+1. `npm install ng2-animating-datepicker --save` -- or --  
+   `yarn add ng2-animating-datepicker`  
+3. Add `aaDatepickerModule` to your module imports:  
+```ts
+ import {aaDatepickerModule} from 'ng2-animating-datepicker';
 
-## Code scaffolding
+ @NgModule({
+   ...
+   imports: [
+     ...
+     DpDatePickerModule
+   ]
+ }
+  ```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|module`.
+## Basic Usage
+Implement the datepicker component in one of the following ways
+### 1. Inline Animatepicker
+Implement aaAnimatepicker component inline
+```html
+    <aa-animatepicker 
+       [options]="datepickerOptions"
+       [(selectedDates)]="dates"></aa-animatepicker>
+```
+### 2. As Directive 
+Implement datepicker as a directive
+```html
+    <input type="text" value="dates | date" [options]="datepickerOptions"  [(selectedDates)]="dates" aaDatepicker="directiveOptions" />
+```
+### Options
+The options can be used for the inline- as well as the directive implementation.
 
-## Build
+In the following example you'll see the default options:
+```ts
+datepickerOptions: Options = {
+	selectMultiple:  false, // Select multiple dates
+	closeOnSelect:  false, // Close datepicker when date(s) selected
+	animationSpeed:  400, // Animation speed in ms
+	easing:  'ease-in', // CSS easing type string
+	numberOfMonths:  1, // Number of months shown
+	hideRestDays:  false, // Hide the rest days
+	disableRestDays:  true, // Disable the click on rest days
+	hideNavigation:  false, // Hide the navigation
+	range:  false, // Use range functionality
+	currentDate:  new  Date(), // Tne current displayed date (month, year)
+	timeoutBeforeClosing:  5000  // The timeout / delay before closing
+};
+```
+#### Directive options
+These options can be used only on the directive like so
+```html
+<input aaDatepicker="directiveOptions" />
+```
+In the following example you'll see the default options
+```ts
+directiveOptions: DirectiveOptions  = {
+	appendToBody:  true, // Append Datepicker to body
+	openDirection:  'bottom', // The direction it should open to
+	closeOnBlur:  true  // Close the
+};
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+### @Input's()
+The following Inputs are available for the Animatepicker
+```ts
+  @Input() minDate: Date; // Disables dates until this date
+  @Input() maxDate: Date; // Disables dates from this date
+  @Input() language: string; // Set the locale string. Example: nl-NL
+  @Input() numberOfMonths: number;  // Number of months shown next to eachother
+  @Input() selectedDates: Date | Date[]; // Also a @Output (two-way data bindend)
+  @Input() theme:  string; // Theme string is added to the host
+  @Input() isOpen: boolean; // The open state  
+  ```
+  #### Directive @input's()
+  All the above @Input's() can be used with the directive implementation as well. Additionally you can use these @Input's() for the directive. The assigned values are the default once:
+  ```ts
+   @Input() appendToBody = true; // Append Datepicker to the body else append to directive
+   @Input() openDirection = 'bottom' // 'top', 'left', 'right', 'bottom'
+   @Input() closeOnBlur = true; // Close datepicker on blur
+   ```
+   ### Regular Datepicker Component
+  The Animatepicker is an extension of the regular datepicker component. Don't want all that fancy animating? Then this is exactly something for you ;). Use `aa-datepicker` to implement in your component
 
-## Running unit tests
+  ## Advanced Usage
+  You can also control the datepicker programmaticly from within you component by useing `ViewChild()`. Like so:
+  ```ts
+	  @ViewChild('demoDatepicker') demoDatepicker: AnimatepickerComponent;
+	  
+	close(){
+		this.demoDatepicker.close();
+	}
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+	open(){
+		this.demoDatepicker.open();
+	}
 
-## Running end-to-end tests
+	next(){
+		this.demoDatepicker.goToNextMonth();
+	}
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+	previous(){
+		this.demoDatepicker.goToPreviousMonth();
+	}
+  ```
+  And in your template
+  ```html
+	
+  ```

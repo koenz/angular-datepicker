@@ -2,7 +2,7 @@
 [ngStyle]="datepickerPosition"
 >
 	<div #calendarTopContainer>
-		<app-navigation
+		<aa-navigation
 				(onPreviousClick)="goToPreviousMonth()"
 				(onNextClick)="goToNextMonth()"
 				[language]="language"
@@ -12,7 +12,7 @@
 				[leftPosition]="leftInnerPosition"
 				[hideNavigation]="options.hideNavigation"
 				[currentMonthYear]="currentMonthYear"
-		></app-navigation>
+		></aa-navigation>
 		<div class="datepicker__weekdays-wrapper">
 			<div 	*ngFor="let month of numberOfMonths"
 					[ngStyle]="{

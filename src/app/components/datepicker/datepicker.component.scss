@@ -13,18 +13,19 @@
 	overflow: hidden;
 	background-color: #fff;
 	box-sizing: border-box;
+	visibility: hidden;
 
     * {
         box-sizing: border-box;
 	}
 
 	&.is-directive {
-		display: none;	
+		visibility: hidden;
 		position: absolute;
 	}
 	
 	&.is-open {
-		display: inline-block;
+		visibility: visible;
 	}
 
     &.is-animate {

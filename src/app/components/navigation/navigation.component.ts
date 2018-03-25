@@ -1,12 +1,11 @@
 import { Component, EventEmitter, HostBinding, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 @Component({
-	selector: 'app-navigation',
+	selector: 'aa-navigation',
 	templateUrl: './navigation.component.html',
 	styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent implements OnChanges {
-
 	@Output() onPreviousClick: EventEmitter<null> = new EventEmitter();
 	@Output() onNextClick: EventEmitter<null> = new EventEmitter();
 
@@ -18,12 +17,10 @@ export class NavigationComponent implements OnChanges {
 	@Input() public leftPosition;
 	@Input() public hideNavigation;
 
-	@HostBinding('class.is-animate')
-	@Input() public animate = false;
+	@HostBinding('class.is-animate') @Input() public animate = false;
 
 	private formatMonth;
 	public titleArray;
-
 
 	/**
 	 * ngOnChanges detects the changes made in component properties
@@ -31,18 +28,16 @@ export class NavigationComponent implements OnChanges {
 	 * @param changes
 	 */
 	ngOnChanges(changes: SimpleChanges) {
-		if (this.language) {			
-			this.formatMonth = new Intl.DateTimeFormat(this.language, {month: this.monthFormat});
+		if (this.language) {
+			this.formatMonth = new Intl.DateTimeFormat(this.language, { month: this.monthFormat });
 		}
-		
+
 		if (
-			changes.currentMonthYear 
-			&& !changes.currentMonthYear.firstChange
-			&& changes.currentMonthYear.currentValue.month !== undefined
-			&& changes.currentMonthYear.currentValue.year !== undefined
+			changes.currentMonthYear &&
+			!changes.currentMonthYear.firstChange &&
+			changes.currentMonthYear.currentValue.month !== undefined &&
+			changes.currentMonthYear.currentValue.year !== undefined
 		) {
-			
-			
 			this.setTitle(changes.currentMonthYear.currentValue);
 		}
 		if (this.currentMonthYear) {
@@ -78,5 +73,4 @@ export class NavigationComponent implements OnChanges {
 	next(): void {
 		this.onNextClick.emit();
 	}
-
 }

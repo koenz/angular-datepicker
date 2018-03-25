@@ -1,5 +1,5 @@
-import { Injectable } from "@angular/core";
-import { log } from "util";
+import { Injectable } from '@angular/core';
+import { log } from 'util';
 
 @Injectable()
 export class UtilitiesService {
@@ -7,17 +7,17 @@ export class UtilitiesService {
 		top: null,
 		left: null,
 		right: null,
-		bottom: null,
+		bottom: null
 	};
-	
-	private static getScrollOffset(){
-		const x = window.pageXOffset;
-		const y = window.pageYOffset;
-		return {x: x, y: y}
+
+	private static getScrollOffset() {
+		const x = window.pageXOffset || document.documentElement.scrollLeft;
+		const y = window.pageYOffset || document.documentElement.scrollTop;
+		return { x: x, y: y };
 	}
 
 	createArray(start: number, end: number): number[] {
-        return new Array(end - start + 1).fill(1).map((_, idx) => start + idx);
+		return new Array(end - start + 1).fill(1).map((_, idx) => start + idx);
 	}
 
 	getPageOffset(el: HTMLElement) {
@@ -25,16 +25,16 @@ export class UtilitiesService {
 		const width = el.offsetWidth;
 		const height = el.offsetHeight;
 
-		if ( el.getBoundingClientRect ) {
+		if (el.getBoundingClientRect) {
 			const props = el.getBoundingClientRect();
 			const position = {
-			 	top: props.top + scrollOffset.y,
+				top: props.top + scrollOffset.y,
 				left: props.left + scrollOffset.x,
 				right: props.left + scrollOffset.x + width,
 				bottom: props.top + scrollOffset.y + height,
 				forRight: window.innerWidth - props.left,
 				forBottom: window.innerHeight - (props.top + scrollOffset.y)
-			}	
+			};
 
 			return position;
 		}
