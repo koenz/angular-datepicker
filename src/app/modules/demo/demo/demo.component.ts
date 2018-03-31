@@ -22,6 +22,8 @@ export class DemoComponent implements OnInit {
 	public animateInputs;
 	public basicOptions;
 	public basicInputs;
+	public selectedBasicMinDate;
+	public selectedBasicMaxDate;
 	public selectedMinDate;
 	public selectedMaxDate;
 	public numberOfMonths;

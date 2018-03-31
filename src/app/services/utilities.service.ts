@@ -3,13 +3,6 @@ import { log } from 'util';
 
 @Injectable()
 export class UtilitiesService {
-	public position: Object = {
-		top: null,
-		left: null,
-		right: null,
-		bottom: null
-	};
-
 	private static getScrollOffset() {
 		const x = window.pageXOffset || document.documentElement.scrollLeft;
 		const y = window.pageYOffset || document.documentElement.scrollTop;

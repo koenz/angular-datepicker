@@ -43,10 +43,8 @@ export class DatepickerDirective {
 	@Input('options')
 	set datepickerOptions(options: Options) {
 		this._datepickerOptions = options;
-		console.log('directive: ', this._datepickerOptions);
-		if(this.datepicker){
-			console.log('datepicker was already set joh');
-			
+
+		if(this.datepicker){		
 			this.datepicker.options = options;
 		}
 	}
@@ -158,7 +156,6 @@ export class DatepickerDirective {
 		if (value === undefined || this._selectedDates === value) {
 			return;
 		}
-		console.log('direvtive: ', value);
 		
 		this._selectedDates = value;
 		this.selectedDatesChange.emit(this._selectedDates);

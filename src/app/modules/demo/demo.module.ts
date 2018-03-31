@@ -7,6 +7,7 @@ import { DemoComponent } from './demo/demo.component';
 @NgModule({
 	imports: [BrowserModule, AaDatepickerModule, ReactiveFormsModule],
 	declarations: [DemoComponent],
-	bootstrap: [DemoComponent]
+	bootstrap: [DemoComponent],
+	entryComponents: [DemoComponent]
 })
-export class DemoModule { }
+export class DemoModule {}
