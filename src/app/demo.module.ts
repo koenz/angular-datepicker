@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { AaDatepickerModule } from 'app/datepicker.module';
+import { AaDatepickerModule } from 'ngx-animating-datepicker';
 import { DemoComponent } from './demo/demo.component';
 
 @NgModule({

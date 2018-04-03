@@ -9,9 +9,10 @@ import {
 	SimpleChanges,
 	ViewChild
 } from '@angular/core';
-import { DatepickerComponent } from 'app/components/datepicker/datepicker.component';
-import { Month } from 'app/models/datepicker.model';
-import { UtilitiesService } from 'app/services/utilities.service';
+import { DatepickerComponent } from '../datepicker/datepicker.component';
+import { UtilitiesService } from '../../services/utilities.service';
+import { Month } from '../../models/datepicker.model';
+
 
 @Component({
 	selector: 'aa-animatepicker',

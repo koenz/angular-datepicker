@@ -10,10 +10,10 @@ import {
 	SimpleChanges,
 	ViewChild
 } from '@angular/core';
-import { Options } from 'app/models/datepicker-options.model';
-import { Day, Month, Week } from 'app/models/datepicker.model';
-import { UtilitiesService } from 'app/services/utilities.service';
 import { DefaultOptions } from './datepicker.options';
+import { Month, Day, Week } from '../../models/datepicker.model';
+import { Options } from '../../models/datepicker-options.model';
+import { UtilitiesService } from '../../services/utilities.service';
 
 @Component({
 	selector: 'aa-datepicker',
@@ -164,7 +164,6 @@ export class DatepickerComponent implements OnInit {
      * Create a week array from the merged day arrays
      *
      * @param dayArray
-     * @return Week[]
      */
 	static createWeekArray(dayArray: Day[]): Week[] {
 		const size = 7;
@@ -181,7 +180,6 @@ export class DatepickerComponent implements OnInit {
      * Check if year is a leap year
      *
      * @param year
-     * @return boolean
      */
 	static isLeapYear(year: number): boolean {
 		return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
@@ -193,7 +191,6 @@ export class DatepickerComponent implements OnInit {
      * @param language
      * @param format
      * @param start
-     * @return {string[]}
      */
 	static getWeekDays(language: string, format: string, start: string): string[] {
 		const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'faturday', 'sunday'];
@@ -229,7 +226,6 @@ export class DatepickerComponent implements OnInit {
      * @param year
      * @param month
      * @param isRestDays
-     * @return Day[]
      */
 	createDayArray(year: number, month: number, isRestDays?: boolean): Day[] {
 		const days = [];
@@ -265,7 +261,6 @@ export class DatepickerComponent implements OnInit {
     /**
      * Get the days from the next month and fills the last week of the current
      *
-     * @return Day[]
      */
 	getNextRestDays(year, month): Day[] {
 		const monthLength = this.getDaysInMonth(year, month);
@@ -280,7 +275,6 @@ export class DatepickerComponent implements OnInit {
 
     /**
      * Get the days of the previous month and fills the first week of the current
-     * @return Day[]
      */
 	getPreviousRestDays(year, month): Day[] {
 		const startOfTheMonth = new Date(year, month, 0).getDay();
@@ -295,7 +289,6 @@ export class DatepickerComponent implements OnInit {
     /**
      * Merge all the day arrays together
      *
-     * @return Day[]
      */
 	getMergedDayArrays(year: number, month: number): Day[] {
 		return [

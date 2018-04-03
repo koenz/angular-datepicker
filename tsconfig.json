@@ -1,8 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "./dist/out-tsc",
-    "baseUrl": "src",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
@@ -13,8 +11,16 @@
       "node_modules/@types"
     ],
     "lib": [
-      "es2016",
+      "es2017",
       "dom"
-    ]
-  }
+	],
+	"baseUrl": ".",
+    "paths": {
+      "ngx-animating-datepicker": ["./libs/ngx-animating-datepicker"]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

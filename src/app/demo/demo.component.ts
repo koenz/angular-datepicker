@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { DefaultDirectiveOptions, DefaultOptions } from '../../../components/datepicker/datepicker.options';
-import { AnimatepickerComponent } from '../../../components/animatepicker/animatepicker.component';
+import { DefaultDirectiveOptions, DefaultOptions } from '../../../libs/ngx-animating-datepicker/src/components/datepicker/datepicker.options';
+import { AnimatepickerComponent } from 'ngx-animating-datepicker';
 
 
 @Component({

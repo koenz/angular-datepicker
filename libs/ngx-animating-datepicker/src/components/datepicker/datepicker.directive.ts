@@ -12,13 +12,13 @@ import {
 	Renderer2,
 	ViewContainerRef
 } from '@angular/core';
-import { DatepickerComponent } from 'app/components/datepicker/datepicker.component';
-import { Options } from 'app/models/datepicker-options.model';
-import { DirectiveOptions } from 'app/models/directive-options.model';
-import { UtilitiesService } from 'app/services/utilities.service';
 import { AnimatepickerComponent } from '../animatepicker/animatepicker.component';
 import { DefaultDirectiveOptions } from './datepicker.options';
 import { tokenKey } from '@angular/core/src/view';
+import { DirectiveOptions } from '../../models/directive-options.model';
+import { Options } from '../../models/datepicker-options.model';
+import { UtilitiesService } from '../../services/utilities.service';
+import { DatepickerComponent } from './datepicker.component';
 
 @Directive({
 	selector: '[aaDatepicker]'
@@ -234,7 +234,7 @@ export class DatepickerDirective {
 	/**
 	 * Returns a create DatepickerComponent method
 	 */
-	createDatepicker(): DatepickerComponent | AnimatepickerComponent {
+	createDatepicker(): any {
 		return this.options.appendToBody ? this.appendToBody() : this.appendToContainer();
 	}
 
@@ -267,7 +267,7 @@ export class DatepickerDirective {
 	/**
 	 * Appends the DatepickerComponent to the body and returns the instance
 	 */
-	appendToBody(): DatepickerComponent | AnimatepickerComponent {
+	appendToBody(): any {
 		const datepickerComponent = this.options.useAnimatePicker ? AnimatepickerComponent : DatepickerComponent;
 		const componentRef = this.componentFactoryResolver
 			.resolveComponentFactory(datepickerComponent)
@@ -285,7 +285,7 @@ export class DatepickerDirective {
 	/**
 	 * Appends the DatepickerComponent to the container and returns the instance
 	 */
-	appendToContainer(): DatepickerComponent | AnimatepickerComponent {
+	appendToContainer(): any {
 		const datepickerComponent = this.options.useAnimatePicker ? AnimatepickerComponent : DatepickerComponent;
 		const componentRef = this.componentFactoryResolver.resolveComponentFactory(datepickerComponent);
 		return this.viewContainerRef.createComponent(componentRef).instance;
