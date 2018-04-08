@@ -96,13 +96,13 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	/**
 	 * Go to a specific month
 	 *
-	 * @param date
+	 * @param date - optional
 	 */
-	goToDate(date: Date): void {
-		this.month = date.getMonth();
-		this.year = date.getFullYear();
+	goToDate(date?: Date): void {
+		if(date){
+			this.currentYearMonth = this.getNextYearMonthArray(date.getFullYear(), date.getMonth());
+		}
 		this.calendarWidth = 50 / this._numberOfMonths.length;
-		this.currentYearMonth = this.getNextYearMonthArray(this.year, this.month);
 		this.months = this.getNextMonthArray(this.currentYearMonth, true);
 		this.resetStyle();
 	}

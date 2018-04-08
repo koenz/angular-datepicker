@@ -70,10 +70,35 @@
 			}
 		},
 		{
+			"name": "demo-packaged",
+			"root": "src",
+			"outDir": "dist/demo-packaged",
+			"assets": [
+				"assets",
+				"favicon.ico"
+			],
+			"index": "index.html",
+			"main": "main.ts",
+			"polyfills": "polyfills.ts",
+			"test": "../test.ts",
+			"tsconfig": "tsconfig.packaged.json",
+			"testTsconfig": "../tsconfig.spec.json",
+			"prefix": "aa",
+			"styles": [
+				"styles.scss"
+			],
+			"scripts": [],
+			"environmentSource": "environments/environment.ts",
+			"environments": {
+				"dev": "environments/environment.ts",
+				"prod": "environments/environment.prod.ts"
+			}
+		},
+		{
 			"name": "ngx-animating-datepicker",
-			"root": "libs/ngx-animating-datepicker/src",
-			"test": "../../../test.js",
-			"appRoot": ""
+			"root": "./libs/ngx-animating-datepicker/src",
+			"test": "../test.ts",
+			"appRoot": "."
 		}
 	]
 }

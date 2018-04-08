@@ -50,7 +50,7 @@ export class DatepickerComponent implements OnInit {
 			this.date = this.options.currentDate;
 		}
 
-		this.goToDate(this.date);
+		this.goToDate();
 	}
 	get options(): Options {
 		return this._options;
@@ -89,7 +89,7 @@ export class DatepickerComponent implements OnInit {
 			return;
 		}
 		this._minDate = new Date(value);
-		this.goToDate(this.date);
+		this.goToDate();
 	}
 	get minDate(): Date {
 		return this._minDate;
@@ -105,7 +105,7 @@ export class DatepickerComponent implements OnInit {
 			return;
 		}
 		this._maxDate = new Date(value);
-		this.goToDate(this.date);
+		this.goToDate();
 	}
 	get maxDate(): Date {
 		return this._maxDate;
@@ -129,7 +129,7 @@ export class DatepickerComponent implements OnInit {
 			this.resetRange();
 		}
 
-		this.goToDate(this.date);
+		this.goToDate();
 
 		this.selectedDatesChange.emit(this._selectedDates);
 	}
@@ -466,11 +466,11 @@ export class DatepickerComponent implements OnInit {
 	}
 
     /**
-     * Go to a specific month
+     * Go to a specific month. Is also used to rerender the datepicker
      *
-     * @param date
+     * @param date - default is the current date.
      */
-	goToDate(date: Date): void {
+	goToDate(date: Date = this.date): void {
 		this.month = date.getMonth();
 		this.year = date.getFullYear();
 		this.currentMonthYear = [{ month: this.month, year: this.year }];

@@ -1,15 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AnimatepickerComponent } from './animatepicker.component';
+import { NavigationComponent } from '../navigation/navigation.component';
+import { UtilitiesService } from '../../services/utilities.service';
 
-describe('AnimatePickerComponent', () => {
+describe('AnimatepickerComponent', () => {
 	let component: AnimatepickerComponent;
 	let fixture: ComponentFixture<AnimatepickerComponent>;
 
 	beforeEach(
 		async(() => {
 			TestBed.configureTestingModule({
-				declarations: [AnimatepickerComponent]
+				declarations: [AnimatepickerComponent, NavigationComponent],
+				providers: [UtilitiesService]
 			}).compileComponents();
 		})
 	);
