@@ -1,0 +1,19 @@
+{
+	"$schema": "../../node_modules/ng-packagr/package.schema.json",
+	"name": "ngx-animating-datepicker",
+	"version": "1.0.0",
+	"license": "MIT",
+	"private": true,
+	"author": "Koen Zigterman <koen@zigterman.com> (http://zigterman.com)",
+	"description": "An Animating Datepicker for Angular 2+, for some smooth date picking :).",
+	"peerDependencies": {
+		"@angular/common": "^5.1.0",
+		"@angular/core": "^5.1.0"
+	},
+	"ngPackage": {
+		"lib": {
+			"entryFile": "public_apis.ts"
+		},
+		"dest": "../../dist/ngx-animating-datepicker"
+	}
+}

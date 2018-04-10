@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "ngx-animating-datepicker": ["./dist/ngx-animating-datepicker"]
+    }
+  }
+}
