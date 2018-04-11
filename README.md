@@ -11,13 +11,13 @@ To install go through the following steps
 	`yarn add ngx-animating-datepicker`
 2. Add `aaDatepickerModule` to your module imports:
 ```ts
-import {aaDatepickerModule} from  'ng2-animating-datepicker';
+import {aaDatepickerModule} from  'ngx-animating-datepicker';
 
 @NgModule({
  ...
  imports: [
    ...
-   DpDatePickerModule
+   aaDatepickerModule
  ]
 }
 ```
