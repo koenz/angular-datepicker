@@ -12,6 +12,7 @@ import {
 import { DatepickerComponent } from '../datepicker/datepicker.component';
 import { UtilitiesService } from '../../services/utilities.service';
 import { Month } from '../../models/datepicker.model';
+import { DatepickerService } from '../../services/datepicker.service';
 
 
 @Component({
@@ -117,8 +118,8 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 		const array = [];
 		for (let index = 0; index < this._numberOfMonths.length; index++) {
 			array.push({ 'year': year, 'month': month });
-			year = this.getYearOfNextMonth(year, month);
-			month = this.getNextMonth(month);
+			year = DatepickerService.getYearOfNextMonth(year, month);
+			month = DatepickerService.getNextMonth(month);
 		}
 		return array;
 	}
@@ -133,8 +134,8 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 		const array = [];
 		for (let index = 0; index < this._numberOfMonths.length; index++) {
 			array.unshift({ 'year': year, 'month': month });
-			year = this.getYearOfPreviousMonth(year, month);
-			month = this.getPreviousMonth(month);
+			year = DatepickerService.getYearOfPreviousMonth(year, month);
+			month = DatepickerService.getPreviousMonth(month);
 		}
 		return array;
 	}
@@ -182,8 +183,8 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 
 		// Get next year and month in an Object
 		const nextMonths = nextMonthsYearMonthArray || this.getNextYearMonthArray(
-			this.getYearOfNextMonth(currentYearMonth[lastIndex].year, currentYearMonth[lastIndex].month),
-			this.getNextMonth(currentYearMonth[lastIndex].month)
+			DatepickerService.getYearOfNextMonth(currentYearMonth[lastIndex].year, currentYearMonth[lastIndex].month),
+			DatepickerService.getNextMonth(currentYearMonth[lastIndex].month)
 		);
 
 		// Concatenates the two objects to create a total year and month object
@@ -215,8 +216,8 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 
 		// Get previous year and month in an Object
 		const previousMonths = this.getPreviousYearMonthArray(
-			this.getYearOfPreviousMonth(currentYearMonth[0].year, currentYearMonth[0].month),
-			this.getPreviousMonth(currentYearMonth[0].month)
+			DatepickerService.getYearOfPreviousMonth(currentYearMonth[0].year, currentYearMonth[0].month),
+			DatepickerService.getPreviousMonth(currentYearMonth[0].month)
 		);
 
 		// Concatenates the two objects to create a total year and month object

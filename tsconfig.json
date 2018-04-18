@@ -14,7 +14,7 @@
       "es2017",
       "dom"
 	],
-	"baseUrl": ".",
+	"baseUrl": "./",
     "paths": {
       "ngx-animating-datepicker": ["./libs/ngx-animating-datepicker"]
     }

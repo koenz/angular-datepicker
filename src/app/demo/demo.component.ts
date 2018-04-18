@@ -42,7 +42,8 @@ export class DemoComponent implements OnInit {
 			hideNavigation: new FormControl(), // Hide the navigation
 			range: new FormControl(), // Use range functionality
 			currentDate: new FormControl(), // Tne current displayed date (month, year)
-			timeoutBeforeClosing: new FormControl() // The timeout / delay before closing
+			timeoutBeforeClosing: new FormControl(), // The timeout / delay before closing
+			weekdayFormat: new FormControl() // "narrow", "short", "long"
 		});
 
 		this.basicOptionsForm = new FormGroup({
@@ -55,7 +56,8 @@ export class DemoComponent implements OnInit {
 			hideNavigation: new FormControl(), // Hide the navigation
 			range: new FormControl(), // Use range functionality
 			currentDate: new FormControl(), // Tne current displayed date (month, year)
-			timeoutBeforeClosing: new FormControl() // The timeout / delay before closing
+			timeoutBeforeClosing: new FormControl(), // The timeout / delay before closing
+			weekdayFormat: new FormControl() // "narrow", "short", "long"
 		});
 
 		this.directiveOptionsForm = new FormGroup({

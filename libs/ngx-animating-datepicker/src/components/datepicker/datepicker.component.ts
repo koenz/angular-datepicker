@@ -14,6 +14,7 @@ import { DefaultOptions } from './datepicker.options';
 import { Month, Day, Week } from '../../models/datepicker.model';
 import { Options } from '../../models/datepicker-options.model';
 import { UtilitiesService } from '../../services/utilities.service';
+import { DatepickerService } from '../../services/datepicker.service';
 
 @Component({
 	selector: 'aa-datepicker',
@@ -67,13 +68,13 @@ export class DatepickerComponent implements OnInit {
 	_language = navigator.language;
 	@Input()
 	set language(value: string) {
-		if (!value || value === undefined || !DatepickerComponent.isValidIsoCode(value)) {
+		if (!value || value === undefined || !DatepickerService.isValidIsoCode(value)) {
 			return;
 		}
 
 		this._language = value;
 
-		this.weekdays = DatepickerComponent.getWeekDays(this._language, 'short', 'monday');
+		this.weekdays = DatepickerService.getWeekDays(this._language, this.options.weekdayFormat, 'monday');
 	}
 	get language() {
 		return this._language;
@@ -151,63 +152,6 @@ export class DatepickerComponent implements OnInit {
 	@HostBinding('style.bottom.px') bottomPosition = null;
 	@HostBinding('style.right.px') rightPosition = null;
 
-    /* ==============================================
-	 * Static Methods
-	 * ============================================== */
-
-	static isValidIsoCode(isoCode: string): boolean {
-		const pattern = new RegExp(/([a-z]{2})-([A-Z]{2})/);
-		return pattern.test(isoCode);
-	}
-
-    /**
-     * Create a week array from the merged day arrays
-     *
-     * @param dayArray
-     */
-	static createWeekArray(dayArray: Day[]): Week[] {
-		const size = 7;
-		const weeks = [];
-		while (dayArray.length) {
-			weeks.push({
-				days: dayArray.splice(0, size)
-			});
-		}
-		return weeks;
-	}
-
-    /**
-     * Check if year is a leap year
-     *
-     * @param year
-     */
-	static isLeapYear(year: number): boolean {
-		return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-	}
-
-    /**
-     * Get the formatted weekdays
-     *
-     * @param language
-     * @param format
-     * @param start
-     */
-	static getWeekDays(language: string, format: string, start: string): string[] {
-		const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'faturday', 'sunday'];
-
-		const index = days.indexOf(start.toLowerCase());
-		if (index < 0) {
-			throw new Error('Invalid week day start :' + start);
-		}
-
-		const weekdays = [];
-		for (let day = 5; day <= 11; day++) {
-			weekdays.push(new Date(1970, 1 - 1, day + index).toLocaleString(language, { weekday: format }));
-		}
-
-		return weekdays;
-	}
-
 	constructor(
 		public utils: UtilitiesService,
 		public element: ElementRef
@@ -266,8 +210,8 @@ export class DatepickerComponent implements OnInit {
 		const monthLength = this.getDaysInMonth(year, month);
 		const endOfTheMonth = new Date(year, month, monthLength).getDay();
 		const nextDays = this.createDayArray(
-			this.getYearOfNextMonth(year, month),
-			this.getNextMonth(month),
+			DatepickerService.getYearOfNextMonth(year, month),
+			DatepickerService.getNextMonth(month),
 			true
 		).slice(0, 7 - endOfTheMonth);
 		return nextDays.length > 6 ? [] : nextDays;
@@ -279,8 +223,8 @@ export class DatepickerComponent implements OnInit {
 	getPreviousRestDays(year, month): Day[] {
 		const startOfTheMonth = new Date(year, month, 0).getDay();
 		const previousDays = this.createDayArray(
-			this.getYearOfPreviousMonth(year, month),
-			this.getPreviousMonth(month),
+			DatepickerService.getYearOfPreviousMonth(year, month),
+			DatepickerService.getPreviousMonth(month),
 			true
 		);
 		return previousDays.slice(previousDays.length - startOfTheMonth, previousDays.length);
@@ -305,7 +249,7 @@ export class DatepickerComponent implements OnInit {
      */
 	createCalendarArray(year: number, month: number): [{ weeks: Week[] }] {
 		const dayArray = this.getMergedDayArrays(year, month);
-		const weeks = DatepickerComponent.createWeekArray(dayArray);
+		const weeks = DatepickerService.createWeekArray(dayArray);
 		return [{ weeks: weeks }];
 	}
 
@@ -346,7 +290,7 @@ export class DatepickerComponent implements OnInit {
 	selectRange(date: Date): void {
 		if (this.isSelected(date)) {
 			this.deselectDate(date);
-		} else if (this.isEarlier(date, this.startDate)) {
+		} else if (DatepickerService.isEarlier(date, this.startDate)) {
 			if (this.startDate) {
 				this.toggleDate(date, this.startDate, true);
 			} else {
@@ -354,7 +298,7 @@ export class DatepickerComponent implements OnInit {
 			}
 			this.startDate = date;
 			this.selectEndDate();
-		} else if (this.endDate && this.isLater(date, this.endDate)) {
+		} else if (this.endDate && DatepickerService.isLater(date, this.endDate)) {
 			this.toggleDate(date, this.endDate);
 			this.endDate = date;
 			this.selectStartDate();
@@ -449,8 +393,8 @@ export class DatepickerComponent implements OnInit {
      * Go to the next month
      */
 	goToNextMonth(): void {
-		this.year = this.getYearOfNextMonth(this.year, this.month);
-		this.month = this.getNextMonth(this.month);
+		this.year = DatepickerService.getYearOfNextMonth(this.year, this.month);
+		this.month = DatepickerService.getNextMonth(this.month);
 		this.currentMonthYear = [{ month: this.month, year: this.year }];
 		this.months = this.createCalendarArray(this.year, this.month);
 	}
@@ -459,8 +403,8 @@ export class DatepickerComponent implements OnInit {
      * Go to the previous month
      */
 	goToPreviousMonth(): void {
-		this.year = this.getYearOfPreviousMonth(this.year, this.month);
-		this.month = this.getPreviousMonth(this.month);
+		this.year = DatepickerService.getYearOfPreviousMonth(this.year, this.month);
+		this.month = DatepickerService.getPreviousMonth(this.month);
 		this.currentMonthYear = [{ month: this.month, year: this.year }];
 		this.months = this.createCalendarArray(this.year, this.month);
 	}
@@ -508,22 +452,6 @@ export class DatepickerComponent implements OnInit {
 		this.selectedRange = 'endDate';
 	}
 
-	getYearOfNextMonth(year: number, month: number): number {
-		return month === 11 ? year + 1 : year;
-	}
-
-	getNextMonth(month: number): number {
-		return month === 11 ? 0 : month + 1;
-	}
-
-	getYearOfPreviousMonth(year: number, month: number): number {
-		return month === 0 ? year - 1 : year;
-	}
-
-	getPreviousMonth(month: number): number {
-		return month === 0 ? 11 : month - 1;
-	}
-
 	// TODO: maybe output the startDate and Endate or just of internal use
 	isStartDate(date: Date): boolean {
 		return this.startDate && date.toDateString() === this.startDate.toDateString();
@@ -535,18 +463,6 @@ export class DatepickerComponent implements OnInit {
 
 	isToday(date: Date): boolean {
 		return date.toDateString() === this.today.toDateString();
-	}
-
-	isLater(date: Date, compareDate: Date): boolean {
-		return date > compareDate;
-	}
-
-	isEarlier(date: Date, compareDate: Date): boolean {
-		return date < compareDate;
-	}
-
-	isLaterThenSelected(date: Date): boolean {
-		return;
 	}
 
 	isSelected(dateToCheck: Date): boolean {
@@ -570,22 +486,18 @@ export class DatepickerComponent implements OnInit {
 	}
 
 	getDaysInMonth(year: number, month: number): number {
-		return [31, DatepickerComponent.isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+		return [31, DatepickerService.isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
 	}
 
 	isValidDate(value: any): boolean {
 		let validDate = true;
 
 		for (let i = 0; i < value.length; i++) {
-			if (!this.isDate(value[i]) && validDate) {
+			if (!DatepickerService.isDate(value[i]) && validDate) {
 				validDate = false;
 			}
 		}
 
 		return validDate;
-	}
-
-	isDate(value: Date) {
-		return value instanceof Date;
 	}
 }
