@@ -60,7 +60,10 @@
 			"testTsconfig": "../tsconfig.spec.json",
 			"prefix": "aa",
 			"styles": [
-				"styles.scss"
+				"styles.scss",
+				"../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fontawesome.scss",
+				"../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fa-regular.scss",
+				"../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fa-solid.scss"
 			],
 			"scripts": [],
 			"environmentSource": "environments/environment.ts",

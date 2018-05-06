@@ -49,17 +49,18 @@ In the following example you'll see the default options:
 
 ```ts
 datepickerOptions: Options = {
-	selectMultiple:  false, // Select multiple dates
-	closeOnSelect:  false, // Close datepicker when date(s) selected
-	animationSpeed:  400, // Animation speed in ms
-	easing:  'ease-in', // CSS easing type string
-	numberOfMonths:  1, // Number of months shown
-	hideRestDays:  false, // Hide the rest days
-	disableRestDays:  true, // Disable the click on rest days
-	hideNavigation:  false, // Hide the navigation
-	range:  false, // Use range functionality
-	currentDate:  new  Date(), // Tne current displayed date (month, year)
-	timeoutBeforeClosing:  5000  // The timeout / delay before closing
+	selectMultiple: false, // Select multiple dates
+	closeOnSelect: false, // Close datepicker when date(s) selected
+	animationSpeed: 400, // Animation speed in ms
+	easing: 'ease-in', // Easing type string
+	hideRestDays: false, // Hide the rest days
+	disableRestDays: true, // Disable the click on rest days
+	hideNavigation: false, // Hide the navigation
+	range: false, // Use range functionality
+	currentDate: new Date(), // Tne current displayed date (month, year)
+	timeoutBeforeClosing: 5000, // The timeout / delay before closing
+	weekdayFormat: 'short', // "narrow", "short", "long"
+	weekStart: 'monday' // Set the week start day
 };
 ```
 
@@ -75,6 +76,7 @@ directiveOptions: DirectiveOptions = {
 	appendToBody: true, // Append Datepicker to body
 	openDirection: 'bottom', // The direction it should open to
 	closeOnBlur: true  // Close the datepicker onBlur
+	useAnimatePicker: true // Use the regular datepicker or the animating one
 };
 ```
 
@@ -103,7 +105,9 @@ All the above @Input's() can be used with the directive implementation as well. 
 ### Regular Datepicker Component
 The Animatepicker is an extension of the regular datepicker component. Don't want all that fancy animations? Then this is exactly what you need. Use `aa-datepicker` to implement in your component
 
-## Advanced Usage
+## "Advanced" Usage
+
+### Control the datepicker programmatically 
 You can also control the datepicker programmatically from within your component by using `ViewChild()`. Like so:
 
 ```ts
@@ -130,4 +134,13 @@ And in your template:
 
 ```html
 <aa-animatepicker #demoDatepicker></aa-animatepicker>
+```
+
+### Include your component in the datepicker
+Implement you custom component into the datepicker by using the `ng-content` located on the bottom of the datepicker
+
+```html
+<aa-animatepicker #demoDatepicker>
+    <app-custom-component></app-custom-component>
+</aa-animatepicker>
 ```

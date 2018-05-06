@@ -8,11 +8,7 @@ export class UtilitiesService {
 		return { x: x, y: y };
 	}
 
-	createArray(start: number, end: number): number[] {
-		return new Array(end - start + 1).fill(1).map((_, idx) => start + idx);
-	}
-
-	getPageOffset(el: HTMLElement) {
+	static getPageOffset(el: HTMLElement) {
 		const scrollOffset = UtilitiesService.getScrollOffset();
 		const width = el.offsetWidth;
 		const height = el.offsetHeight;
@@ -31,4 +27,10 @@ export class UtilitiesService {
 			return position;
 		}
 	}
+
+	createArray(start: number, end: number): number[] {
+		return new Array(end - start + 1).fill(1).map((_, idx) => start + idx);
+	}
+
+
 }

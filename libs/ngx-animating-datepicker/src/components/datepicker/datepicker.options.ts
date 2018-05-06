@@ -9,7 +9,8 @@ export const DefaultOptions = {
 	range: false, // Use range functionality
 	currentDate: new Date(), // Tne current displayed date (month, year)
 	timeoutBeforeClosing: 5000, // The timeout / delay before closing
-	weekdayFormat: 'short' // "narrow", "short", "long"
+	weekdayFormat: 'short', // "narrow", "short", "long"
+	weekStart: 'monday' // Set the week start day
 };
 
 export const DefaultDirectiveOptions = {

@@ -1,23 +1,21 @@
-@mixin clearfix() { 
+@mixin clearfix() {
 	*zoom: 1;
 
 	&::before,
 	&::after {
-		content: " ";
+		content: ' ';
 		display: table;
 	}
 
 	&::after {
 		clear: both;
 	}
- }
+}
 
- @mixin reset-btn() { 
+@mixin reset-btn() {
 	padding: 0;
 	background-color: transparent;
 	border: none;
 	outline: none;
 	font-style: inherit;
- }
-
- 
+}
