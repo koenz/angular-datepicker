@@ -1,6 +1,8 @@
 # Animating Angular Datepicker
 An Animating Datepicker for Angular 2+. For some smooth date picking :). Including range functionality, multiple calendars next to each other and loads of other functionality. Checkout the [Demo page](http://zigterman.com/datepicker) for a preview.
 
+Want a improvement or found bug? please use the pull request functionality or create an issue.
+
 ## Installation
 
 To install go through the following steps
@@ -137,7 +139,7 @@ And in your template:
 ```
 
 ### Include your component in the datepicker
-Implement you custom component into the datepicker by using the `ng-content` located on the bottom of the datepicker
+Implement your custom component into the datepicker by using the `ng-content` located on the bottom of the datepicker
 
 ```html
 <aa-animatepicker #demoDatepicker>

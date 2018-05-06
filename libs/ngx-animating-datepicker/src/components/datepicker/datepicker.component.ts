@@ -8,7 +8,7 @@ import {
 	Output,
 	ViewChild
 } from '@angular/core';
-import { Options } from 'ngx-animating-datepicker';
+import { Options } from '../../models/datepicker-options.model';
 import { Day, Month, Week } from '../../models/datepicker.model';
 import { DatepickerService } from '../../services/datepicker.service';
 import { UtilitiesService } from '../../services/utilities.service';
@@ -502,9 +502,6 @@ export class DatepickerComponent implements OnInit {
 	// TODO: maybe output the startDate and Endate or just of internal use
 	/**
 	 * Check if date is the start date
-	 *
-	 * @param {Date} date
-	 * @returns {boolean}
 	 */
 	isStartDate(date: Date): boolean {
 		return this.startDate && date.toDateString() === this.startDate.toDateString();
@@ -512,9 +509,6 @@ export class DatepickerComponent implements OnInit {
 
 	/**
 	 * Check if date is the end date
-	 *
-	 * @param {Date} date
-	 * @returns {boolean}
 	 */
 	isEndDate(date: Date): boolean {
 		return this.endDate && date.toDateString() === this.endDate.toDateString();
@@ -522,9 +516,6 @@ export class DatepickerComponent implements OnInit {
 
 	/**
 	 * Check if date is today
-	 *
-	 * @param {Date} date
-	 * @returns {boolean}
 	 */
 	isToday(date: Date): boolean {
 		return date.toDateString() === this.today.toDateString();
@@ -532,9 +523,6 @@ export class DatepickerComponent implements OnInit {
 
 	/**
 	 * Check if date is selected
-	 *
-	 * @param {Date} dateToCheck
-	 * @returns {boolean}
 	 */
 	isSelected(dateToCheck: Date): boolean {
 		return (
@@ -546,9 +534,6 @@ export class DatepickerComponent implements OnInit {
 
 	/**
 	 * Check if date is disabled
-	 *
-	 * @param {Date} date
-	 * @returns {boolean}
 	 */
 	isDisabled(date: Date): boolean {
 		if (!this.minDate) {
@@ -564,9 +549,6 @@ export class DatepickerComponent implements OnInit {
 
 	/**
 	 * Check if date is in range
-	 *
-	 * @param {Date} date
-	 * @returns {boolean}
 	 */
 	isInRange(date: Date): boolean {
 		return this.startDate && this.endDate && this.startDate < date && date < this.endDate;
