@@ -1,7 +1,7 @@
 {
 	"$schema": "../../node_modules/ng-packagr/package.schema.json",
 	"name": "ngx-animating-datepicker",
-	"version": "1.0.1",
+	"version": "1.1.1",
 	"license": "MIT",
 	"author": "Koen Zigterman <koen@zigterman.com> (http://zigterman.com)",
 	"description": "An Animating Datepicker for Angular 2+, for some smooth date picking :).",
@@ -11,7 +11,8 @@
 		"animating",
 		"ngx",
 		"ng2",
-		"angular 2"
+		"angular 2",
+		"angular 5"
 	],
 	"private": false,
 	"repository": {

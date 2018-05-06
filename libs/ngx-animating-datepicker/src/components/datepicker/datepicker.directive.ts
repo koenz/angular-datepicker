@@ -11,8 +11,8 @@ import {
 	Renderer2,
 	ViewContainerRef
 } from '@angular/core';
-import { Options } from 'ngx-animating-datepicker';
-import { DirectiveOptions } from 'ngx-animating-datepicker';
+import { Options } from '../../models/datepicker-options.model';
+import { DirectiveOptions } from '../../models/directive-options.model';
 import { UtilitiesService } from '../../services/utilities.service';
 import { AnimatepickerComponent } from '../animatepicker/animatepicker.component';
 import { DatepickerComponent } from './datepicker.component';
