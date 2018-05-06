@@ -7,18 +7,16 @@ import {
 	HostListener,
 	Injector,
 	Input,
-	OnInit,
 	Output,
 	Renderer2,
 	ViewContainerRef
 } from '@angular/core';
-import { AnimatepickerComponent } from '../animatepicker/animatepicker.component';
-import { DefaultDirectiveOptions } from './datepicker.options';
-import { tokenKey } from '@angular/core/src/view';
-import { DirectiveOptions } from '../../models/directive-options.model';
 import { Options } from '../../models/datepicker-options.model';
+import { DirectiveOptions } from '../../models/directive-options.model';
 import { UtilitiesService } from '../../services/utilities.service';
+import { AnimatepickerComponent } from '../animatepicker/animatepicker.component';
 import { DatepickerComponent } from './datepicker.component';
+import { DefaultDirectiveOptions } from './datepicker.options';
 
 @Directive({
 	selector: '[aaDatepicker]'
@@ -33,7 +31,7 @@ export class DatepickerDirective {
 		if (options === undefined || !options) {
 			return;
 		}
-		this._options = {...this._options, ...options};
+		this._options = { ...this._options, ...options };
 	}
 	get options(): DirectiveOptions {
 		return this._options;
@@ -44,11 +42,11 @@ export class DatepickerDirective {
 	set datepickerOptions(options: Options) {
 		this._datepickerOptions = options;
 
-		if(this.datepicker){		
+		if (this.datepicker) {
 			this.datepicker.options = options;
 		}
 	}
-	get datepickerOptions(){
+	get datepickerOptions() {
 		return this._datepickerOptions;
 	}
 
@@ -61,7 +59,7 @@ export class DatepickerDirective {
 	set language(value: string) {
 		this._language = value;
 
-		if(this.datepicker){
+		if (this.datepicker) {
 			this.datepicker.language = value;
 		}
 	}
@@ -74,11 +72,11 @@ export class DatepickerDirective {
 	set minDate(value: Date) {
 		this._minDate = value;
 
-		if(this.datepicker){
+		if (this.datepicker) {
 			this.datepicker.minDate = value;
 		}
 	}
-	get minDate(){
+	get minDate() {
 		return this._minDate;
 	}
 
@@ -90,11 +88,11 @@ export class DatepickerDirective {
 	set maxDate(value: Date) {
 		this._maxDate = value;
 
-		if(this.datepicker){
+		if (this.datepicker) {
 			this.datepicker.maxDate = value;
 		}
 	}
-	get maxDate(){
+	get maxDate() {
 		return this._minDate;
 	}
 
@@ -104,13 +102,13 @@ export class DatepickerDirective {
 	private _numberOfMonths;
 	@Input()
 	set numberOfMonths(value) {
-		this._numberOfMonths = value
+		this._numberOfMonths = value;
 
-		if(this.datepicker){
+		if (this.datepicker) {
 			this.datepicker.numberOfMonths = value;
 		}
 	}
-	get numberOfMonths(){
+	get numberOfMonths() {
 		return this._numberOfMonths;
 	}
 
@@ -120,13 +118,11 @@ export class DatepickerDirective {
 	private _theme;
 	@Input()
 	set theme(value) {
-		this._theme;
-
-		if(this.datepicker){
+		if (this.datepicker) {
 			this.datepicker.theme = value;
 		}
 	}
-	get theme(){
+	get theme() {
 		return this._theme;
 	}
 
@@ -138,7 +134,7 @@ export class DatepickerDirective {
 	set isOpen(value) {
 		this._isOpen = value;
 
-		if(this.datepicker){
+		if (this.datepicker) {
 			this.datepicker.isOpen = value;
 		}
 	}
@@ -156,7 +152,7 @@ export class DatepickerDirective {
 		if (value === undefined || this._selectedDates === value) {
 			return;
 		}
-		
+
 		this._selectedDates = value;
 		this.selectedDatesChange.emit(this._selectedDates);
 	}
@@ -168,7 +164,7 @@ export class DatepickerDirective {
 	onClick() {
 		if (!this.datepicker) {
 			this.datepicker = this.createDatepicker();
-			
+
 			this.setDatepickerOptionsAndInputs();
 			this.subscribeToSelectedChanges();
 		}
@@ -181,7 +177,12 @@ export class DatepickerDirective {
 
 			if (this.options.closeOnBlur) {
 				setTimeout(
-					() => (this.clickListener = this.renderer.listen('document', 'click', this.onBlurHandler.bind(this)))
+					() =>
+						(this.clickListener = this.renderer.listen(
+							'document',
+							'click',
+							this.onBlurHandler.bind(this)
+						))
 				);
 			}
 		}
@@ -194,7 +195,7 @@ export class DatepickerDirective {
 		private appRef: ApplicationRef,
 		private injector: Injector,
 		private renderer: Renderer2
-	) { }
+	) {}
 
 	/**
 	 * Add selected changes
@@ -211,7 +212,6 @@ export class DatepickerDirective {
 		this.datepicker.asDirective = true;
 		this.datepicker.numberOfMonths = this.numberOfMonths;
 		this.datepicker.theme = this.theme;
-		// TODO: check if this works
 		this.datepicker._selectedDates = this.selectedDates;
 		this.datepicker.language = this.language;
 		this.datepicker.minDate = this.minDate;
@@ -242,7 +242,7 @@ export class DatepickerDirective {
 	 * Sets the position of the datepicker
 	 */
 	setPosition() {
-		const position = this.utils.getPageOffset(this.viewContainerRef.element.nativeElement);
+		const position = UtilitiesService.getPageOffset(this.viewContainerRef.element.nativeElement);
 		if (this.options.openDirection === 'bottom') {
 			this.datepicker.topPosition = position.bottom;
 			this.datepicker.leftPosition = position.left;
@@ -268,7 +268,9 @@ export class DatepickerDirective {
 	 * Appends the DatepickerComponent to the body and returns the instance
 	 */
 	appendToBody(): any {
-		const datepickerComponent = this.options.useAnimatePicker ? AnimatepickerComponent : DatepickerComponent;
+		const datepickerComponent = this.options.useAnimatePicker
+			? AnimatepickerComponent
+			: DatepickerComponent;
 		const componentRef = this.componentFactoryResolver
 			.resolveComponentFactory(datepickerComponent)
 			.create(this.injector);
@@ -286,8 +288,12 @@ export class DatepickerDirective {
 	 * Appends the DatepickerComponent to the container and returns the instance
 	 */
 	appendToContainer(): any {
-		const datepickerComponent = this.options.useAnimatePicker ? AnimatepickerComponent : DatepickerComponent;
-		const componentRef = this.componentFactoryResolver.resolveComponentFactory(datepickerComponent);
+		const datepickerComponent = this.options.useAnimatePicker
+			? AnimatepickerComponent
+			: DatepickerComponent;
+		const componentRef = this.componentFactoryResolver.resolveComponentFactory(
+			datepickerComponent
+		);
 		return this.viewContainerRef.createComponent(componentRef).instance;
 	}
 }

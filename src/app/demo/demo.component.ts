@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { DefaultDirectiveOptions, DefaultOptions } from '../../../libs/ngx-animating-datepicker/src/components/datepicker/datepicker.options';
 import { AnimatepickerComponent } from 'ngx-animating-datepicker';
-
+import {
+	DefaultDirectiveOptions,
+	DefaultOptions
+} from '../../../libs/ngx-animating-datepicker/src/components/datepicker/datepicker.options';
 
 @Component({
 	selector: 'aa-demo',
@@ -16,18 +18,15 @@ export class DemoComponent implements OnInit {
 	public basicOptionsForm: FormGroup;
 	public directiveOptionsForm: FormGroup;
 	public selectedDirectiveDates;
-	public selectedDatesAnimate
+	public selectedDatesAnimate;
 	public directiveOptions;
 	public animateOptions;
-	public animateInputs;
 	public basicOptions;
-	public basicInputs;
 	public selectedBasicMinDate;
 	public selectedBasicMaxDate;
 	public selectedMinDate;
 	public selectedMaxDate;
 	public numberOfMonths;
-	public selectedDates = '';
 
 	@ViewChild('demoDatepicker') demoDatepicker: AnimatepickerComponent;
 
@@ -42,7 +41,9 @@ export class DemoComponent implements OnInit {
 			hideNavigation: new FormControl(), // Hide the navigation
 			range: new FormControl(), // Use range functionality
 			currentDate: new FormControl(), // Tne current displayed date (month, year)
-			timeoutBeforeClosing: new FormControl() // The timeout / delay before closing
+			timeoutBeforeClosing: new FormControl(), // The timeout / delay before closing
+			weekdayFormat: new FormControl(), // "narrow", "short", "long"
+			weekStart: new FormControl() // 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
 		});
 
 		this.basicOptionsForm = new FormGroup({
@@ -55,7 +56,8 @@ export class DemoComponent implements OnInit {
 			hideNavigation: new FormControl(), // Hide the navigation
 			range: new FormControl(), // Use range functionality
 			currentDate: new FormControl(), // Tne current displayed date (month, year)
-			timeoutBeforeClosing: new FormControl() // The timeout / delay before closing
+			timeoutBeforeClosing: new FormControl(), // The timeout / delay before closing
+			weekdayFormat: new FormControl() // "narrow", "short", "long"
 		});
 
 		this.directiveOptionsForm = new FormGroup({
@@ -70,7 +72,7 @@ export class DemoComponent implements OnInit {
 
 		this.directiveOptionsForm.patchValue(DefaultDirectiveOptions);
 
-		this.animateOptionsForm.valueChanges.subscribe(data => {		
+		this.animateOptionsForm.valueChanges.subscribe(data => {
 			this.animateOptions = data;
 		});
 
@@ -97,25 +99,24 @@ export class DemoComponent implements OnInit {
 		});
 	}
 
-	removeDate(i){
+	removeDate(i) {
 		this.selectedDatesAnimate.splice(i, 1);
 		this.selectedDatesAnimate = [...this.selectedDatesAnimate];
-		
 	}
 
-	close(){
+	close() {
 		this.demoDatepicker.close();
 	}
 
-	open(){
+	open() {
 		this.demoDatepicker.open();
 	}
 
-	next(){
+	next() {
 		this.demoDatepicker.goToNextMonth();
 	}
 
-	previous(){
+	previous() {
 		this.demoDatepicker.goToPreviousMonth();
 	}
 }

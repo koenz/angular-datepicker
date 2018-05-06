@@ -1,11 +1,12 @@
 // Required
-@import "node_modules/bootstrap/scss/functions";
-@import "node_modules/bootstrap/scss/variables";
-@import "node_modules/bootstrap/scss/mixins";
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/variables';
+@import 'node_modules/bootstrap/scss/mixins';
 
-@import "node_modules/bootstrap/scss/reboot";
-@import "node_modules/bootstrap/scss/grid";
-@import "node_modules/prismjs/themes/prism-okaidia";
+@import 'node_modules/bootstrap/scss/reboot';
+@import 'node_modules/bootstrap/scss/grid';
+@import 'node_modules/bootstrap/scss/buttons';
+@import 'node_modules/prismjs/themes/prism-okaidia';
 
 :host {
 	font-family: Arial, Helvetica, sans-serif;
@@ -24,9 +25,8 @@
 		background-color: #272822;
 	}
 
-
 	.demo__text-block {
-		background:	#fff;
+		background: #fff;
 		padding: 60px;
 	}
 
@@ -42,7 +42,7 @@
 	.demo__action-button {
 		background-color: #fff;
 		padding: 8px;
-		font-size: 12px;
+		font-size: 18px;
 		height: 50px;
 		width: 50px;
 		cursor: pointer;
@@ -111,6 +111,10 @@
 		margin-right: 5px;
 	}
 
+	.form-select-input {
+		height: 30px;
+	}
+
 	.form-check {
 		display: inline-block;
 		margin-right: 5px;
@@ -126,12 +130,26 @@
 		font-size: 13px;
 	}
 
+	.form-button {
+		margin: 4px 12px 4px 0;
+		border: 1px solid rgba(#fff, .4);
+		background-color: rgba(#fff, .8);
+		border-radius: 4px;
+		color: #000;
+		cursor: pointer;
+		display: flex;
+
+		&:hover {
+			color: #fff;
+			background-color: #000;
+		}
+	}
+
 	.form-control {
 		border: 1px solid rgba(#fff, .4);
-		color: #fff; 
+		color: #fff;
 		border-radius: 4px;
 		margin: 4px 12px 4px 0;
-		font-size: 14px;
 		padding: 4px;
 		width: 130px;
 		background-color: rgba(#fff, .1);
@@ -139,7 +157,7 @@
 
 		&.is-white {
 			border: 1px solid rgba(#000, .1);
-			color: #000; 
+			color: #000;
 			background-color: rgba(#fff, .8);
 			padding: 8px;
 		}

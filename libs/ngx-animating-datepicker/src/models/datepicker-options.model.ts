@@ -9,4 +9,6 @@ export interface Options {
 	range: boolean; // Use range functionality
 	currentDate: Date; // Tne current displayed date (month, year)
 	timeoutBeforeClosing: number; // The timeout / delay before closing
+	weekdayFormat: string;  // "narrow", "short", "long"
+	weekStart: string; // 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
 }

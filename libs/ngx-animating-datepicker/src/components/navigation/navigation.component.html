@@ -1,4 +1,4 @@
-<button *ngIf="!hideNavigation" class="navigation__button is-previous" (click)="previous()"><</button>
+<button *ngIf="!hideNavigation" class="navigation__button is-previous" (click)="previous()"></button>
 <div class="navigation__title-wrapper" [ngStyle]="{
   'transform': 'translateX(' + translateX + '%)',
   'transition': transition,
@@ -10,4 +10,4 @@
     }"
   ><span>{{title.m}}</span> <span>{{title.year}}</span></div>
 </div>
-<button *ngIf="!hideNavigation" class="navigation__button is-next" (click)="next()">></button>
+<button *ngIf="!hideNavigation" class="navigation__button is-next" (click)="next()"></button>
