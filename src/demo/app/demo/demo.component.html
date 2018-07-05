@@ -22,7 +22,8 @@
 						[theme]="animateInputsForm.value.theme"
 						[options]="animateOptions"
 						[(selectedDates)]="selectedDatesAnimate"
-						#demoDatepicker></aa-animatepicker>
+						#demoDatepicker>
+					</aa-animatepicker>
 				</div>
 				<div class="demo__output-example">
 					<h4>Output:</h4>
@@ -301,11 +302,12 @@
 			</div>
 			<div class="demo__datepicker-block col-lg-6  justify-content-center align-items-center">
 				<div class="demo__datepicker-container">
-					<input class="form-control is-white" type="text" 
-					[numberOfMonths]="1"
-					[value]="selectedDirectiveDates | date" 	
-					[(selectedDates)]="selectedDirectiveDates"
-					 [aaDatepicker]="directiveOptions">
+					<form [formGroup]="directiveForm">
+						<input class="form-control is-white" type="text"
+							   [value]="directiveForm.get('directiveFormControl').value | date"
+							formControlName="directiveFormControl"
+						 [aaDatepicker]="directiveOptions">
+					</form>
 				</div>
 			</div>
 		</div>

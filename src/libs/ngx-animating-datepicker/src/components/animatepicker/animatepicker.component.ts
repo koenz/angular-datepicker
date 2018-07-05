@@ -31,6 +31,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	public translateX: number;
 	public currentYearMonth: object = null;
 	public datepickerPosition: object;
+	public initialised = false;
 
 	/* ==============================================
 	 * External Properties
@@ -50,6 +51,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 		}
 		this._numberOfMonths = new Array(value);
 		this.setDatePickerDimension();
+
 		this.goToDate(this.date);
 	}
 
@@ -72,6 +74,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 			.getComputedStyle(this.elementRef.nativeElement, null)
 			.getPropertyValue('width');
 		this.initialWidth = parseInt(computedWidth, 10);
+		this.initialised = true;
 
 		// Set the current year and month object
 		if (!this.month && !this.year) {
@@ -265,13 +268,13 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 			}
 
 			if (this.options.closeOnSelect) {
-				this.close();
+				this.close(true);
 			}
 		} else {
 			this.deselectDate(date);
 
 			if (this.options.closeOnSelect) {
-				this.close();
+				this.close(true);
 			}
 		}
 		this.months = this.getNextMonthArray(this.currentYearMonth, true);

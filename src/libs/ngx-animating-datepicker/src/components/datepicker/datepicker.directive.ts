@@ -7,10 +7,12 @@ import {
 	HostListener,
 	Injector,
 	Input,
+	Optional,
 	Output,
 	Renderer2,
 	ViewContainerRef
 } from '@angular/core';
+import { NgControl } from '@angular/forms';
 import { Options } from '../../models/datepicker-options.model';
 import { DirectiveOptions } from '../../models/directive-options.model';
 import { UtilitiesService } from '../../services/utilities.service';
@@ -26,11 +28,13 @@ export class DatepickerDirective {
 	clickListener;
 
 	_options = DefaultDirectiveOptions;
+
 	@Input('aaDatepicker')
 	set options(options: DirectiveOptions) {
 		if (options === undefined || !options) {
 			return;
 		}
+		// TODO: could be improved
 		this._options = { ...this._options, ...options };
 	}
 	get options(): DirectiveOptions {
@@ -189,12 +193,12 @@ export class DatepickerDirective {
 	}
 
 	constructor(
-		public utils: UtilitiesService,
 		public viewContainerRef: ViewContainerRef,
 		public componentFactoryResolver: ComponentFactoryResolver,
 		private appRef: ApplicationRef,
 		private injector: Injector,
-		private renderer: Renderer2
+		private renderer: Renderer2,
+		@Optional() public formControl: NgControl
 	) {}
 
 	/**
@@ -202,18 +206,25 @@ export class DatepickerDirective {
 	 */
 	subscribeToSelectedChanges(): void {
 		this.datepicker.selectedDatesChange.subscribe(date => {
-			this.selectedDates = date;
+			if (this.formControl) {
+				this.formControl.control.setValue(date);
+			} else {
+				this.selectedDates = date;
+			}
 		});
 	}
 
-	setDatepickerOptionsAndInputs() {
+	/**
+	 * Set all the options and inputs of the datepicker
+	 */
+	setDatepickerOptionsAndInputs(): void {
 		this.datepicker.options = this.datepickerOptions;
 		this.datepicker.isOpen = this.isOpen || false;
 		this.datepicker.asDirective = true;
 		this.datepicker.numberOfMonths = this.numberOfMonths;
 		this.datepicker.theme = this.theme;
 		this.datepicker._selectedDates = this.selectedDates;
-		this.datepicker.language = this.language;
+		// this.datepicker.language = this.language;
 		this.datepicker.minDate = this.minDate;
 		this.datepicker.minDate = this.maxDate;
 	}
@@ -224,10 +235,13 @@ export class DatepickerDirective {
 	 * @param event
 	 */
 	onBlurHandler(event: Event): void {
-		if (!this.datepicker.element.nativeElement.contains(event.target)) {
+		if (
+			event.target !== this.datepicker.element.nativeElement &&
+			!this.datepicker.element.nativeElement.contains(event.target)
+		) {
 			// check click origin
 			this.clickListener();
-			this.datepicker.close();
+			this.datepicker.close(true);
 		}
 	}
 
@@ -242,7 +256,9 @@ export class DatepickerDirective {
 	 * Sets the position of the datepicker
 	 */
 	setPosition() {
-		const position = UtilitiesService.getPageOffset(this.viewContainerRef.element.nativeElement);
+		const position = UtilitiesService.getPageOffset(
+			this.viewContainerRef.element.nativeElement
+		);
 		if (this.options.openDirection === 'bottom') {
 			this.datepicker.topPosition = position.bottom;
 			this.datepicker.leftPosition = position.left;

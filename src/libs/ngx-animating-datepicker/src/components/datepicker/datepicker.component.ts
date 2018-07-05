@@ -4,7 +4,7 @@ import {
 	EventEmitter,
 	HostBinding,
 	Input,
-	OnInit,
+	OnInit, Optional,
 	Output,
 	ViewChild
 } from '@angular/core';
@@ -13,6 +13,7 @@ import { Day, Month, Week } from '../../models/datepicker.model';
 import { DatepickerService } from '../../services/datepicker.service';
 import { UtilitiesService } from '../../services/utilities.service';
 import { DefaultOptions } from './datepicker.options';
+import {NgModel} from '@angular/forms';
 
 @Component({
 	selector: 'aa-datepicker',
@@ -43,6 +44,8 @@ export class DatepickerComponent implements OnInit {
 		'sunday'
 	];
 
+	public initialised = false;
+
 	/* ==============================================
 	 * Initial Options
 	 * ============================================== */
@@ -52,14 +55,15 @@ export class DatepickerComponent implements OnInit {
 		if (options === undefined || !options) {
 			return;
 		}
-		console.log(options);
 		this._options = { ...this._options, ...options };
 
 		if (options.currentDate !== undefined) {
 			this.date = this.options.currentDate;
 		}
 
-		this.goToDate();
+		if (this.initialised) {
+			this.goToDate();
+		}
 	}
 
 	get options(): Options {
@@ -173,6 +177,8 @@ export class DatepickerComponent implements OnInit {
 	constructor(public utils: UtilitiesService, public element: ElementRef) {}
 
 	ngOnInit() {
+		this.initialised = true;
+
 		if (!this.month && !this.year) {
 			this.goToDate(this.options.currentDate);
 		}
@@ -294,13 +300,13 @@ export class DatepickerComponent implements OnInit {
 			}
 
 			if (this.options.closeOnSelect) {
-				this.close();
+				this.close(true);
 			}
 		} else {
 			this.deselectDate(date);
 
 			if (this.options.closeOnSelect) {
-				this.close();
+				this.close(true);
 			}
 		}
 
@@ -344,7 +350,7 @@ export class DatepickerComponent implements OnInit {
 			this.endDate = date;
 			this.selectStartDate();
 			if (this.options.closeOnSelect) {
-				this.close();
+				this.close(true);
 			}
 		}
 	}
@@ -471,14 +477,14 @@ export class DatepickerComponent implements OnInit {
 	/**
 	 * Close the datepicker
 	 *
-	 * @param noTimeout - optional timeout
+	 * @param useTimeout - optional timeout
 	 */
-	close(noTimeout?: boolean): void {
+	close(useTimeout?: boolean): void {
 		if (!this.isOpen) {
 			return;
 		}
 
-		const timeout = noTimeout ? this.options.timeoutBeforeClosing : 0;
+		const timeout = useTimeout ? this.options.timeoutBeforeClosing : 0;
 
 		setTimeout(() => {
 			this.isOpen = false;

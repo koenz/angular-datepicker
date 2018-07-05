@@ -7,10 +7,20 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 import { UtilitiesService } from './services/utilities.service';
 
 @NgModule({
-	declarations: [DatepickerComponent, NavigationComponent, AnimatepickerComponent, DatepickerDirective],
+	declarations: [
+		DatepickerComponent,
+		NavigationComponent,
+		AnimatepickerComponent,
+		DatepickerDirective
+	],
 	imports: [CommonModule],
 	providers: [UtilitiesService],
-	exports: [DatepickerComponent, NavigationComponent, AnimatepickerComponent, DatepickerDirective],
+	exports: [
+		DatepickerComponent,
+		NavigationComponent,
+		AnimatepickerComponent,
+		DatepickerDirective
+	],
 	entryComponents: [DatepickerComponent, AnimatepickerComponent]
 })
-export class AaDatepickerModule { }
+export class AaDatepickerModule {}

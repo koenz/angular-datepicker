@@ -11,11 +11,11 @@
 	},
 	"lint": [
 		{
-			"project": "src/tsconfig.app.json",
+			"project": "src/demo/tsconfig.app.json",
 			"exclude": "**/node_modules/**"
 		},
 		{
-			"project": "src/tsconfig.spec.json",
+			"project": "./tsconfig.spec.json",
 			"exclude": "**/node_modules/**"
 		},
 		{
@@ -46,7 +46,7 @@
 	"apps": [
 		{
 			"name": "demo",
-			"root": "src",
+			"root": "src/demo",
 			"outDir": "dist/demo",
 			"assets": [
 				"assets",
@@ -57,13 +57,13 @@
 			"polyfills": "polyfills.ts",
 			"test": "../test.ts",
 			"tsconfig": "tsconfig.app.json",
-			"testTsconfig": "../tsconfig.spec.json",
+			"testTsconfig": "tsconfig.spec.json",
 			"prefix": "aa",
 			"styles": [
 				"styles.scss",
-				"../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fontawesome.scss",
-				"../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fa-regular.scss",
-				"../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fa-solid.scss"
+				"../../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fontawesome.scss",
+				"../../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fa-regular.scss",
+				"../../node_modules/@fortawesome/fontawesome-free-webfonts/scss/fa-solid.scss"
 			],
 			"scripts": [],
 			"environmentSource": "environments/environment.ts",
@@ -75,8 +75,8 @@
 		},
 		{
 			"name": "ngx-animating-datepicker",
-			"root": "./libs/ngx-animating-datepicker/src",
-			"test": "../test.ts",
+			"root": "src/libs/ngx-animating-datepicker/src",
+			"test": "../../test.ts",
 			"appRoot": "."
 		}
 	]

@@ -20,7 +20,7 @@ export class DemoComponent implements OnInit {
 	public selectedDirectiveDates;
 	public selectedDatesAnimate;
 	public directiveOptions;
-	public animateOptions;
+	public animateOptions = {...DefaultOptions, hideRestDays: true};
 	public basicOptions;
 	public selectedBasicMinDate;
 	public selectedBasicMaxDate;
@@ -29,8 +29,13 @@ export class DemoComponent implements OnInit {
 	public numberOfMonths;
 
 	@ViewChild('demoDatepicker') demoDatepicker: AnimatepickerComponent;
+	private directiveForm: FormGroup;
 
 	ngOnInit() {
+		this.directiveForm = new FormGroup({
+			directiveFormControl: new FormControl()
+		});
+
 		this.animateOptionsForm = new FormGroup({
 			selectMultiple: new FormControl(), // Select multiple dates
 			closeOnSelect: new FormControl(), // Close datepicker when date(s) selected
@@ -66,7 +71,7 @@ export class DemoComponent implements OnInit {
 			closeOnBlur: new FormControl() // Close datepicker on blur
 		});
 
-		this.animateOptionsForm.patchValue(DefaultOptions);
+		this.animateOptionsForm.patchValue(this.animateOptions);
 
 		this.basicOptionsForm.patchValue(DefaultOptions);
 
