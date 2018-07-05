@@ -1,19 +1,9 @@
-import {
-	Component,
-	ElementRef,
-	EventEmitter,
-	HostBinding,
-	Input,
-	OnInit, Optional,
-	Output,
-	ViewChild
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Options } from '../../models/datepicker-options.model';
 import { Day, Month, Week } from '../../models/datepicker.model';
 import { DatepickerService } from '../../services/datepicker.service';
 import { UtilitiesService } from '../../services/utilities.service';
 import { DefaultOptions } from './datepicker.options';
-import {NgModel} from '@angular/forms';
 
 @Component({
 	selector: 'aa-datepicker',
@@ -34,15 +24,7 @@ export class DatepickerComponent implements OnInit {
 	public selectedRange = 'startDate';
 	public startDate: Date = null;
 	public endDate: Date = null;
-	private weekDays = [
-		'monday',
-		'tuesday',
-		'wednesday',
-		'thursday',
-		'friday',
-		'saturday',
-		'sunday'
-	];
+	private weekDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 	public initialised = false;
 
@@ -213,9 +195,7 @@ export class DatepickerComponent implements OnInit {
 					(isRestDays && this.options.disableRestDays),
 				isInRange:
 					this.isInRange(date) ||
-					((this.isStartDate(date) || this.isEndDate(date)) &&
-						this.startDate &&
-						this.endDate),
+					((this.isStartDate(date) || this.isEndDate(date)) && this.startDate && this.endDate),
 				isStartDate: this.isStartDate(date),
 				isEndDate: this.isEndDate(date)
 			};
@@ -531,11 +511,7 @@ export class DatepickerComponent implements OnInit {
 	 * Check if date is selected
 	 */
 	isSelected(dateToCheck: Date): boolean {
-		return (
-			this._selectedDates
-				.map(date => date.toDateString())
-				.indexOf(dateToCheck.toDateString()) !== -1
-		);
+		return this._selectedDates.map(date => date.toDateString()).indexOf(dateToCheck.toDateString()) !== -1;
 	}
 
 	/**

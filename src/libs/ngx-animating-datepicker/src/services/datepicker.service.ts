@@ -3,14 +3,13 @@ import { Day, Week } from '../models/datepicker.model';
 
 @Injectable()
 export class DatepickerService {
-
 	/**
-     * Get the formatted weekdays
-     *
-     * @param language
-     * @param format
-     * @param start
-     */
+	 * Get the formatted weekdays
+	 *
+	 * @param language
+	 * @param format
+	 * @param start
+	 */
 	static getWeekDays(language: string, format: string, start: string): string[] {
 		const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'faturday', 'sunday'];
 
@@ -37,11 +36,11 @@ export class DatepickerService {
 		return pattern.test(isoCode);
 	}
 
-    /**
-     * Create a week array from the merged day arrays
-     *
-     * @param dayArray
-     */
+	/**
+	 * Create a week array from the merged day arrays
+	 *
+	 * @param dayArray
+	 */
 	static createWeekArray(dayArray: Day[]): Week[] {
 		const size = 7;
 		const weeks = [];
@@ -54,7 +53,7 @@ export class DatepickerService {
 	}
 
 	static getDaysInMonth(year: number, month: number): number {
-		return [31,	DatepickerService.isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+		return [31, DatepickerService.isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
 	}
 
 	static isValidDate(value: any): boolean {
@@ -69,11 +68,11 @@ export class DatepickerService {
 		return validDate;
 	}
 
-    /**
-     * Check if year is a leap year
-     *
-     * @param year
-     */
+	/**
+	 * Check if year is a leap year
+	 *
+	 * @param year
+	 */
 	static isLeapYear(year: number): boolean {
 		return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 	}

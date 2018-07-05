@@ -20,7 +20,7 @@
     "test": "ng test",
     "lint:fix": "ng lint --fix",
     "e2e": "ng e2e",
-    "prettier": "prettier --single-quote --write --print-width=120 --tab-width 4 'src/app/**/*.ts'",
+    "prettier": "prettier --single-quote --write --print-width=120 --tab-width 4 'src/libs/**/*.ts'",
     "tslint": "tslint --format stylish 'src/app/**/*.ts'",
     "stylelint": "stylelint \"**/*.scss\"",
     "stylelint:fix": "stylelint \"**/*.scss\" --fix"

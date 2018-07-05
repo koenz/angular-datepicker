@@ -17,7 +17,9 @@ export class NavigationComponent implements OnChanges {
 	@Input() public leftPosition;
 	@Input() public hideNavigation;
 
-	@HostBinding('class.is-animate') @Input() public animate = false;
+	@HostBinding('class.is-animate')
+	@Input()
+	public animate = false;
 
 	private formatMonth;
 	public titleArray;

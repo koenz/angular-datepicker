@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { AnimatepickerComponent } from 'ngx-animating-datepicker';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormControl, FormGroup} from '@angular/forms';
+import {AnimatepickerComponent} from 'ngx-animating-datepicker';
 import {
 	DefaultDirectiveOptions,
 	DefaultOptions

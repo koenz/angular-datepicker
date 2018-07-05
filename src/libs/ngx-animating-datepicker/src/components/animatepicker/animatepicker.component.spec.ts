@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { AnimatepickerComponent } from './animatepicker.component';
-import { NavigationComponent } from '../navigation/navigation.component';
 import { UtilitiesService } from '../../services/utilities.service';
+import { NavigationComponent } from '../navigation/navigation.component';
+import { AnimatepickerComponent } from './animatepicker.component';
 
 describe('AnimatepickerComponent', () => {
 	let component: AnimatepickerComponent;

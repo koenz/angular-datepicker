@@ -182,11 +182,7 @@ export class DatepickerDirective {
 			if (this.options.closeOnBlur) {
 				setTimeout(
 					() =>
-						(this.clickListener = this.renderer.listen(
-							'document',
-							'click',
-							this.onBlurHandler.bind(this)
-						))
+						(this.clickListener = this.renderer.listen('document', 'click', this.onBlurHandler.bind(this)))
 				);
 			}
 		}
@@ -256,9 +252,7 @@ export class DatepickerDirective {
 	 * Sets the position of the datepicker
 	 */
 	setPosition() {
-		const position = UtilitiesService.getPageOffset(
-			this.viewContainerRef.element.nativeElement
-		);
+		const position = UtilitiesService.getPageOffset(this.viewContainerRef.element.nativeElement);
 		if (this.options.openDirection === 'bottom') {
 			this.datepicker.topPosition = position.bottom;
 			this.datepicker.leftPosition = position.left;
@@ -284,9 +278,7 @@ export class DatepickerDirective {
 	 * Appends the DatepickerComponent to the body and returns the instance
 	 */
 	appendToBody(): any {
-		const datepickerComponent = this.options.useAnimatePicker
-			? AnimatepickerComponent
-			: DatepickerComponent;
+		const datepickerComponent = this.options.useAnimatePicker ? AnimatepickerComponent : DatepickerComponent;
 		const componentRef = this.componentFactoryResolver
 			.resolveComponentFactory(datepickerComponent)
 			.create(this.injector);
@@ -304,12 +296,8 @@ export class DatepickerDirective {
 	 * Appends the DatepickerComponent to the container and returns the instance
 	 */
 	appendToContainer(): any {
-		const datepickerComponent = this.options.useAnimatePicker
-			? AnimatepickerComponent
-			: DatepickerComponent;
-		const componentRef = this.componentFactoryResolver.resolveComponentFactory(
-			datepickerComponent
-		);
+		const datepickerComponent = this.options.useAnimatePicker ? AnimatepickerComponent : DatepickerComponent;
+		const componentRef = this.componentFactoryResolver.resolveComponentFactory(datepickerComponent);
 		return this.viewContainerRef.createComponent(componentRef).instance;
 	}
 }

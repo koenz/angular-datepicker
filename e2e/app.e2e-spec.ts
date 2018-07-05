@@ -1,14 +1,14 @@
-import { DatepickerPage } from './app.po';
+import {DatepickerPage} from './app.po';
 
 describe('datepicker App', () => {
-  let page: DatepickerPage;
+	let page: DatepickerPage;
 
-  beforeEach(() => {
-    page = new DatepickerPage();
-  });
+	beforeEach(() => {
+		page = new DatepickerPage();
+	});
 
-  it('should display welcome message', () => {
-    page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to app!!');
-  });
+	it('should display welcome message', () => {
+		page.navigateTo();
+		expect(page.getParagraphText()).toEqual('Welcome to app!!');
+	});
 });

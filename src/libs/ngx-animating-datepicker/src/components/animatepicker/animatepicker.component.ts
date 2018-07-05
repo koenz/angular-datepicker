@@ -1,12 +1,4 @@
-import {
-	AfterViewInit,
-	Component,
-	ElementRef,
-	HostBinding,
-	Input,
-	OnInit,
-	ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostBinding, Input, OnInit, ViewChild } from '@angular/core';
 import { Month } from '../../models/datepicker.model';
 import { DatepickerService } from '../../services/datepicker.service';
 import { UtilitiesService } from '../../services/utilities.service';
@@ -70,9 +62,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 
 	ngOnInit() {
 		// Get the computed width from the calendar. Set the initial width
-		const computedWidth = window
-			.getComputedStyle(this.elementRef.nativeElement, null)
-			.getPropertyValue('width');
+		const computedWidth = window.getComputedStyle(this.elementRef.nativeElement, null).getPropertyValue('width');
 		this.initialWidth = parseInt(computedWidth, 10);
 		this.initialised = true;
 
@@ -94,8 +84,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	 */
 	setDatePickerDimension(): void {
 		this.datepickerHeight =
-			this.calendarContainer.nativeElement.offsetHeight +
-			this.calendarTopContainer.nativeElement.offsetHeight;
+			this.calendarContainer.nativeElement.offsetHeight + this.calendarTopContainer.nativeElement.offsetHeight;
 		this.datepickerWidth = this.initialWidth * this._numberOfMonths.length;
 	}
 
@@ -165,17 +154,14 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 
 		const that = this;
 		setTimeout(function() {
-			const calendarArray = that.elementRef.nativeElement.querySelectorAll(
-				'.datepicker__calendar-container'
-			);
+			const calendarArray = that.elementRef.nativeElement.querySelectorAll('.datepicker__calendar-container');
 			let offsetHeight = 0;
 			indexArray.forEach(el => {
 				if (offsetHeight === undefined || calendarArray[el].offsetHeight > offsetHeight) {
 					offsetHeight = calendarArray[el].offsetHeight;
 				}
 			});
-			that.datepickerHeight =
-				offsetHeight + that.calendarTopContainer.nativeElement.offsetHeight;
+			that.datepickerHeight = offsetHeight + that.calendarTopContainer.nativeElement.offsetHeight;
 		});
 	}
 
@@ -228,10 +214,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	getPreviousMonthArray(currentYearMonth, keepDate = false): Month[] {
 		// Get previous year and month in an Object
 		const previousMonths = this.getPreviousYearMonthArray(
-			DatepickerService.getYearOfPreviousMonth(
-				currentYearMonth[0].year,
-				currentYearMonth[0].month
-			),
+			DatepickerService.getYearOfPreviousMonth(currentYearMonth[0].year, currentYearMonth[0].month),
 			DatepickerService.getPreviousMonth(currentYearMonth[0].month)
 		);
 
@@ -327,8 +310,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	slideRight(): void {
 		this.setIsAnimating();
 		setTimeout(() => {
-			this.transition =
-				'transform ' + this.options.animationSpeed + 'ms ' + this.options.easing;
+			this.transition = 'transform ' + this.options.animationSpeed + 'ms ' + this.options.easing;
 			this.translateX = 50;
 		});
 	}
@@ -339,8 +321,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	slideLeft(): void {
 		this.setIsAnimating();
 		setTimeout(() => {
-			this.transition =
-				'transform ' + this.options.animationSpeed + 'ms ' + this.options.easing;
+			this.transition = 'transform ' + this.options.animationSpeed + 'ms ' + this.options.easing;
 			this.translateX = -50;
 		});
 	}
