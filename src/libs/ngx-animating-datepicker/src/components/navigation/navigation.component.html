@@ -4,10 +4,18 @@
   'transition': transition,
   'left.%': leftPosition
 }">
-  <div *ngFor="let title of titleArray" class="navigation__title"
-       [ngStyle]="{
-      'width.%': (100 / titleArray.length)
-    }"
-  ><span>{{title.m}}</span> <span>{{title.year}}</span></div>
+    <div *ngFor="let title of titles"
+         class="navigation__title"
+         [ngStyle]="{
+          'width.%': (100 / titles.length)
+        }"
+    ><span (click)="onMonthClick(title)">{{title.navigationTitle}}</span> <span (click)="onYearClick(title)">{{title.year}}</span></div>
 </div>
 <button *ngIf="!hideNavigation" class="navigation__button is-next" (click)="next()"></button>
+
+<aa-sub-navigation
+        *ngIf="subNavigationOpen"
+        (subNavigationClick)="onSubNavigationClick($event)"
+        (close)="toggleSubNavigation()"
+        [navigationItems]="navigationItems"
+></aa-sub-navigation>

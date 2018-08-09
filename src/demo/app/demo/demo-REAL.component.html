@@ -16,8 +16,8 @@
                 </div>
                 <div class="demo__datepicker-container">
                     <aa-animatepicker
-                            [minDate]="animateInputsForm.value.minDate"
-                            [maxDate]="animateInputsForm.value.maxDate"
+                            [minDate]="selectedMinDate"
+                            [maxDate]="selectedMaxDate"
                             [numberOfMonths]="animateInputsForm.value.numberOfMonths"
                             [language]="animateInputsForm.value.language"
                             [theme]="animateInputsForm.value.theme"
@@ -46,7 +46,8 @@
                             <label class="col-sm-3 col-form-label">minDate</label>
                             <div class="col-sm-9">
                                 <div class="demo__input-container">
-                                    <input [aaDatepicker] class="form-control" type="text" formControlName="minDate">
+                                    <input [value]="selectedMinDate | date" [(selectedDates)]="selectedMinDate"
+                                           [aaDatepicker] class="form-control" type="text" formControlName="minDate">
                                     <small class="text-muted token comment">
                                         Disables dates until this date
                                     </small>
@@ -57,7 +58,8 @@
                             <label class="col-sm-3 col-form-label">maxDate</label>
                             <div class="col-sm-9">
                                 <div class="demo__input-container">
-                                    <input aaDatepicker class="form-control" type="text" formControlName="maxDate">
+                                    <input [value]="selectedMaxDate | date" [(selectedDates)]="selectedMaxDate"
+                                           aaDatepicker class="form-control" type="text" formControlName="maxDate">
                                     <small class="text-muted token comment">
                                         Disables dates from this date
                                     </small>

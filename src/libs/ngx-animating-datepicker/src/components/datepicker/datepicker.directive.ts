@@ -156,7 +156,7 @@ export class DatepickerDirective {
 		if (value === undefined || this._selectedDates === value) {
 			return;
 		}
-
+		console.log('selecteddates: ', value);
 		this._selectedDates = value;
 		this.selectedDatesChange.emit(this._selectedDates);
 	}
@@ -202,6 +202,7 @@ export class DatepickerDirective {
 	 */
 	subscribeToSelectedChanges(): void {
 		this.datepicker.selectedDatesChange.subscribe(date => {
+			console.log('this.formControl: ', this.formControl);
 			if (this.formControl) {
 				this.formControl.control.setValue(date);
 			} else {

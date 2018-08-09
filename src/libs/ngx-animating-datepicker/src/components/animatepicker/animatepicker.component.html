@@ -1,16 +1,18 @@
 <div class="datepicker__wrapper" [ngStyle]="datepickerPosition">
 	<div #calendarTopContainer>
 		<aa-navigation
-				(onPreviousClick)="goToPreviousMonth()"
-				(onNextClick)="goToNextMonth()"
+				(previousClick)="goToPreviousMonth()"
+				(nextClick)="goToNextMonth()"
+				(subNavigationClick)="goToDate($event)"
 				[language]="language"
 				[animate]="animate"
 				[translateX]="translateX"
 				[transition]="transition"
 				[leftPosition]="leftInnerPosition"
 				[hideNavigation]="options.hideNavigation"
-				[currentMonthYear]="currentMonthYear"
+				[totalYearMonth]="totalYearMonth"
 		></aa-navigation>
+
 		<div class="datepicker__weekdays-wrapper">
 			<div 	*ngFor="let month of numberOfMonths"
 					[ngStyle]="{

@@ -2,10 +2,10 @@
 	<div>
 		<aa-navigation
 				[hideNavigation]="options.hideNavigation"
-				(onPreviousClick)="goToPreviousMonth()"
-				(onNextClick)="goToNextMonth()"
+                (previousClick)="goToPreviousMonth()"
+				(nextClick)="goToNextMonth()"
 				[language]="language"
-				[currentMonthYear]="currentMonthYear"></aa-navigation>
+				[totalYearMonth]="totalYearMonth"></aa-navigation>
 		<div class="datepicker__weekdays-wrapper">
 			<div class="datepicker__weekdays-container">
 				<table class="datepicker__weekdays">

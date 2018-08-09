@@ -19,6 +19,15 @@ export interface Month {
 	weeks: Week[];
 }
 
+export interface YearMonth {
+	year: number;
+	month: number;
+}
+
+export interface NavigationItem extends YearMonth {
+	navigationTitle: string | number;
+}
+
 export interface Range {
 	startDate;
 	endDate;

@@ -1,21 +1,21 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MonthpickerComponent } from './monthpicker.component';
+import { SubNavigationComponent } from './sub-navigation.component';
 
-describe('MonthpickerComponent', () => {
-	let component: MonthpickerComponent;
-	let fixture: ComponentFixture<MonthpickerComponent>;
+describe('SubNavigationComponent', () => {
+	let component: SubNavigationComponent;
+	let fixture: ComponentFixture<SubNavigationComponent>;
 
 	beforeEach(
 		async(() => {
 			TestBed.configureTestingModule({
-				declarations: [MonthpickerComponent]
+				declarations: [SubNavigationComponent]
 			}).compileComponents();
 		})
 	);
 
 	beforeEach(() => {
-		fixture = TestBed.createComponent(MonthpickerComponent);
+		fixture = TestBed.createComponent(SubNavigationComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

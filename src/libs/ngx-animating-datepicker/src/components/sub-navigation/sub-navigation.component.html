@@ -1,0 +1,6 @@
+<span (click)="close.emit()">Close</span>
+<div class="sub-navigation__items-container">
+  <div class="sub-navigation__item" *ngFor="let item of navigationItems;" (click)="onItemCLick(item)">
+    <span class="sub-navigation__label">{{item.navigationTitle}}</span>
+  </div>
+</div>

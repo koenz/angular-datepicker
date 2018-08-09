@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Options } from '../../models/datepicker-options.model';
-import { Day, Month, Week } from '../../models/datepicker.model';
+import {YearMonth, Day, Month, Week} from '../../models/datepicker.model';
 import { DatepickerService } from '../../services/datepicker.service';
 import { UtilitiesService } from '../../services/utilities.service';
 import { DefaultOptions } from './datepicker.options';
@@ -20,7 +20,7 @@ export class DatepickerComponent implements OnInit {
 	public today: Date = this.date;
 	public months: Month[] = null;
 	public weekdays: string[] = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-	public currentMonthYear: Object[];
+	public totalYearMonth: YearMonth[];
 	public selectedRange = 'startDate';
 	public startDate: Date = null;
 	public endDate: Date = null;
@@ -33,7 +33,7 @@ export class DatepickerComponent implements OnInit {
 	 * ============================================== */
 	public _options: Options = DefaultOptions;
 	@Input('options')
-	set options(options) {
+	set options(options: Options) {
 		if (options === undefined || !options) {
 			return;
 		}
@@ -82,6 +82,7 @@ export class DatepickerComponent implements OnInit {
 	public _minDate = null;
 	@Input()
 	set minDate(value: Date) {
+		console.log('value: ', value);
 		if (value === undefined || value === this._minDate) {
 			return;
 		}
@@ -122,7 +123,7 @@ export class DatepickerComponent implements OnInit {
 		if (!DatepickerService.isValidDate(_value)) {
 			return;
 		}
-
+		console.log(': ', _value);
 		this._selectedDates = _value;
 
 		if (this.options.range) {
@@ -151,10 +152,10 @@ export class DatepickerComponent implements OnInit {
 	isOpen = true;
 	@HostBinding('class.is-directive') asDirective = false;
 	@HostBinding('class.is-animate') animate = false;
-	@HostBinding('style.top.px') topPosition = null;
-	@HostBinding('style.left.px') leftPosition = null;
-	@HostBinding('style.bottom.px') bottomPosition = null;
-	@HostBinding('style.right.px') rightPosition = null;
+	@HostBinding('style.top.px') topPosition: number = null;
+	@HostBinding('style.left.px') leftPosition: number = null;
+	@HostBinding('style.bottom.px') bottomPosition: number = null;
+	@HostBinding('style.right.px') rightPosition: number = null;
 
 	constructor(public utils: UtilitiesService, public element: ElementRef) {}
 
@@ -406,7 +407,7 @@ export class DatepickerComponent implements OnInit {
 	goToNextMonth(): void {
 		this.year = DatepickerService.getYearOfNextMonth(this.year, this.month);
 		this.month = DatepickerService.getNextMonth(this.month);
-		this.currentMonthYear = [{ month: this.month, year: this.year }];
+		this.totalYearMonth = [{ month: this.month, year: this.year }];
 		this.months = this.createCalendarArray(this.year, this.month);
 	}
 
@@ -416,7 +417,7 @@ export class DatepickerComponent implements OnInit {
 	goToPreviousMonth(): void {
 		this.year = DatepickerService.getYearOfPreviousMonth(this.year, this.month);
 		this.month = DatepickerService.getPreviousMonth(this.month);
-		this.currentMonthYear = [{ month: this.month, year: this.year }];
+		this.totalYearMonth = [{ month: this.month, year: this.year }];
 		this.months = this.createCalendarArray(this.year, this.month);
 	}
 
@@ -428,7 +429,7 @@ export class DatepickerComponent implements OnInit {
 	goToDate(date: Date = this.date): void {
 		this.month = date.getMonth();
 		this.year = date.getFullYear();
-		this.currentMonthYear = [{ month: this.month, year: this.year }];
+		this.totalYearMonth = [{ month: this.month, year: this.year }];
 		this.months = this.createCalendarArray(this.year, this.month);
 	}
 
