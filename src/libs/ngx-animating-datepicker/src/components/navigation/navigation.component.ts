@@ -1,5 +1,5 @@
 import {Component, EventEmitter, HostBinding, Input, OnInit, Output} from '@angular/core';
-import {YearMonth, NavigationItem} from '../../models/datepicker.model';
+import {NavigationItem, YearMonth} from '../../models/datepicker.model';
 
 @Component({
 	selector: 'aa-navigation',
@@ -72,10 +72,10 @@ export class NavigationComponent implements OnInit {
 	/**
 	 * Sets the title
 	 *
-	 * @param {YearMonth[]} totalMonthYear
-	 * @param {boolean} monthType
-	 * @param {Intl.DateTimeFormat} formatMonth
-	 * @returns {NavigationItem[]}
+	 * @param totalMonthYear
+	 * @param monthType
+	 * @param formatMonth
+	 * @returns NavigationItem[]
 	 */
 	createNavigationItems(totalMonthYear: YearMonth[], monthType = true, formatMonth = null): NavigationItem[] {
 		const _formatMonth = formatMonth || this.formatMonth;
@@ -101,8 +101,8 @@ export class NavigationComponent implements OnInit {
 	/**
 	 * Create an array of navigation items with year as label
 	 *
-	 * @param {NavigationItem} navigationItem
-	 * @returns {NavigationItem[]}
+	 * @param navigationItem
+	 * @returns NavigationItem[]
 	 */
 	createYearArray(navigationItem: NavigationItem): NavigationItem[] {
 		const currentYear = navigationItem.year,
