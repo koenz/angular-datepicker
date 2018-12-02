@@ -1,0 +1,481 @@
+<div class="demo__wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="demo__text-block col-sm-12">
+                <h1>The Animatepicker</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="demo__datepicker-block col-lg-12 justify-content-center align-items-center">
+                <div class="demo__datepicker-actions">
+                    <div class="demo__action-button" (click)="next()"><i class="fas fa-chevron-circle-right"></i></div>
+                    <div class="demo__action-button" (click)="previous()"><i class="fas fa-chevron-circle-left"></i>
+                    </div>
+                    <div class="demo__action-button" (click)="open()"><i class="fas fa-external-link-alt"></i></div>
+                    <div class="demo__action-button" (click)="close()"><i class="fas fa-times-circle"></i></div>
+                </div>
+                <div class="demo__datepicker-container">
+                    <aa-animatepicker
+                            [minDate]="animateInputsForm.value.minDate"
+                            [maxDate]="animateInputsForm.value.maxDate"
+                            [numberOfMonths]="animateInputsForm.value.numberOfMonths"
+                            [language]="animateInputsForm.value.language"
+                            [theme]="animateInputsForm.value.theme"
+                            [options]="animateOptions"
+                            [(selectedDates)]="selectedDatesAnimate"
+                            #demoDatepicker>
+                    </aa-animatepicker>
+                </div>
+                <div class="demo__output-example">
+                    <h4>Output:</h4>
+                    <ul class="demo__selected-dates-list">
+                        <li *ngFor="let date of selectedDatesAnimate; let i = index" class="demo__selected-dates-item">
+                            <span (click)="removeDate(i)" class="demo__remove-date-button">x</span>{{date}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="demo__option-block col-lg-6">
+                <h2>Animatepicker @Input()</h2>
+                <code class="language-typescript">
+                    <form [formGroup]="animateInputsForm">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">minDate</label>
+                            <div class="col-sm-9">
+                                <div class="demo__input-container">
+                                    <input [aaDatepicker] class="form-control" type="text" formControlName="minDate">
+                                    <small class="text-muted token comment">
+                                        Disables dates until this date
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">maxDate</label>
+                            <div class="col-sm-9">
+                                <div class="demo__input-container">
+                                    <input aaDatepicker class="form-control" type="text" formControlName="maxDate">
+                                    <small class="text-muted token comment">
+                                        Disables dates from this date
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">numberOfMonths</label>
+                            <div class="col-sm-9">
+                                <div class="demo__input-container">
+                                    <input class="form-control is-small" type="number" formControlName="numberOfMonths">
+                                    <small class="text-muted token comment">
+                                        Number of months shown
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">language</label>
+                            <div class="col-sm-9">
+                                <div class="demo__input-container">
+                                    <input class="form-control is-small" type="text" formControlName="language">
+                                    <small class="text-muted token comment">
+                                        Set a language. example: nl-NL. default: browser language
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">theme</label>
+                            <div class="col-sm-9">
+                                <div class="demo__input-container">
+                                    <input class="form-control" type="text" formControlName="theme">
+                                    <small class="text-muted token comment">
+                                        Theme string is added to the host
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </code>
+            </div>
+            <div class="demo__option-block col-lg-6">
+                <h2>Animatepicker Options</h2>
+                <code class="language-typescript">
+                    <form [formGroup]="animateOptionsForm">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">selectMultiple</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox"
+                                               formControlName="selectMultiple">
+                                    </label>
+                                </div>
+                                <small class="text-muted token comment">
+                                    Select multiple dates
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">animationSpeed</label>
+                            <div class="col-sm-9">
+                                <div class="demo__input-container">
+                                    <input class="form-control is-small" type="number" formControlName="animationSpeed">
+                                    <small class="text-muted token comment">
+                                        Animation speed in ms
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">easing</label>
+                            <div class="col-sm-9">
+                                <div class="demo__input-container">
+                                    <input class="form-control" type="text" formControlName="easing">
+                                    <small class="text-muted token comment">
+                                        CSS easing type string
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">closeOnSelect</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" formControlName="closeOnSelect">
+                                    </label>
+                                </div>
+                                <small class="text-muted token comment">
+                                    Close datepicker when date(s) selected
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">hideRestDays</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" formControlName="hideRestDays">
+                                    </label>
+                                </div>
+                                <small class="text-muted token comment">
+                                    Hide the rest days
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">disableRestDays</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox"
+                                               formControlName="disableRestDays">
+                                    </label>
+                                </div>
+                                <small class="text-muted token comment">
+                                    Disable the rest days
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">hideNavigation</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox"
+                                               formControlName="hideNavigation">
+                                    </label>
+                                </div>
+                                <small class="text-muted token comment">
+                                    Hide the navigation
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">range</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" formControlName="range">
+                                    </label>
+                                </div>
+                                <small class="text-muted token comment">
+                                    Use range functionality
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">weekdayFormat</label>
+                            <div class="col-sm-9">
+                                <div class="demo__input-container">
+                                    <select class="form-control form-select-input is-small"
+                                            formControlName="weekdayFormat">
+                                        <option value="narrow">narrow</option>
+                                        <option value="short">short</option>
+                                        <option value="long">long</option>
+                                    </select>
+                                    <button class="form-button" (click)="demoDatepicker.renderWeekdays()"><i
+                                            class="fas fa-sync"></i></button>
+                                    <small class="text-muted token comment">
+                                        "narrow", "short", "long"
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">weekStart</label>
+                            <div class="col-sm-9">
+                                <div class="demo__input-container">
+                                    <select class="form-control form-select-input is-small" formControlName="weekStart">
+                                        <option value="monday">monday</option>
+                                        <option value="tuesday">tuesday</option>
+                                        <option value="wednesday">wednesday</option>
+                                        <option value="thursday">thursday</option>
+                                        <option value="friday">friday</option>
+                                        <option value="staturday">staturday</option>
+                                        <option value="sunday">sunday</option>
+                                    </select>
+                                    <button class="form-button" (click)="demoDatepicker.renderWeekdays()"><i
+                                            class="fas fa-sync"></i></button>
+                                    <small class="text-muted token comment">
+                                        Start of the week
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </code>
+            </div>
+        </div>
+        <div class="row">
+            <div class="demo__text-block col-sm-12">
+                <h1>Animatepicker as directive</h1>
+            </div>
+        </div>
+
+        <div class="row row-eq-height">
+            <div class="demo__option-block col-lg-6">
+                <h2>Directive @Input()</h2>
+                <code class="language-typescript">
+                    <form [formGroup]="directiveOptionsForm">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">appendToBody</label>
+                            <div class="col-sm-9 demo__input-container">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" formControlName="appendToBody">
+                                    </label>
+                                </div>
+                                <small class="text-muted token comment">
+                                    Append Datepicker to the body else append to directive
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">openDirection</label>
+                            <div class="col-sm-9">
+                                <div class="demo__input-container">
+                                    <select class="form-control is-small" type="text" formControlName="openDirection">
+                                        <option value="top">top</option>
+                                        <option value="right">right</option>
+                                        <option value="bottom">bottom</option>
+                                        <option value="left">left</option>
+                                    </select>
+                                    <small class="text-muted token comment">
+                                        Open direction. 'top', 'left', 'right', 'bottom'
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">closeOnBlur</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" formControlName="closeOnBlur">
+                                    </label>
+                                </div>
+                                <small class="text-muted token comment">
+                                    Close datepicker on blur
+                                </small>
+                            </div>
+                        </div>
+                    </form>
+                </code>
+            </div>
+            <div class="demo__datepicker-block col-lg-6  justify-content-center align-items-center">
+                <div class="demo__datepicker-container">
+                    <form [formGroup]="directiveForm">
+                        <input class="form-control is-white"
+                               type="text"
+                               [value]="directiveForm.get('directiveFormControl').value | date"
+                               formControlName="directiveFormControl"
+                               [minDate]="animateInputsForm.value.minDate"
+                               [maxDate]="animateInputsForm.value.maxDate"
+                               [language]="animateInputsForm.value.language"
+                               [theme]="animateInputsForm.value.theme"
+                               [aaDatepicker]="directiveOptions">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="demo__text-block col-sm-12">
+                <h1>Regular Datepicker component</h1>
+            </div>
+        </div>
+
+        <div class="row row-eq-height">
+            <div class="demo__datepicker-block col-lg-6  justify-content-center align-items-center">
+                <div class="demo__datepicker-container">
+                    <aa-datepicker [options]="basicOptionsForm.value"></aa-datepicker>
+                </div>
+            </div>
+            <div class="demo__option-block col-lg-6">
+                <h2>Datepicker Options</h2>
+                <code class="language-typescript">
+                    <form [formGroup]="basicOptionsForm">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">selectMultiple</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox"
+                                               formControlName="selectMultiple">
+                                    </label>
+                                </div>
+                                <small class="text-muted token comment">
+                                    Select multiple dates
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">closeOnSelect</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" formControlName="closeOnSelect">
+                                    </label>
+                                </div>
+                                <small class="text-muted token comment">
+                                    Close datepicker when date(s) selected
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">hideRestDays</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" formControlName="hideRestDays">
+                                    </label>
+                                </div>
+                                <small class="text-muted token comment">
+                                    Hide the rest days
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">disableRestDays</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox"
+                                               formControlName="disableRestDays">
+                                    </label>
+                                </div>
+                                <small class="text-muted token comment">
+                                    Disable the rest days
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">hideNavigation</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox"
+                                               formControlName="hideNavigation">
+                                    </label>
+                                </div>
+                                <small class="text-muted token comment">
+                                    Hide the navigation
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">range</label>
+                            <div class="col-sm-9">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" formControlName="range">
+                                    </label>
+                                </div>
+                                <small class="text-muted token comment">
+                                    Theme string is added to the host
+                                </small>
+                            </div>
+                        </div>
+                    </form>
+                </code>
+            </div>
+        </div>
+
+        <div class="row row-eq-height">
+            <div class="demo__option-block col-lg-6">
+                <h2>Datepicker @Input()</h2>
+                <code class="language-typescript">
+                    <form [formGroup]="basicInputsForm">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">minDate</label>
+                            <div class="col-sm-9">
+                                <div class="demo__input-container">
+                                    <input [value]="selectedBasicMinDate | date"
+                                           [(selectedDates)]="selectedBasicMinDate" aaDatepicker class="form-control"
+                                           type="text" formControlName="basicMinDate">
+                                    <small class="text-muted token comment">
+                                        Disables dates until this date
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">maxDate</label>
+                            <div class="col-sm-9">
+                                <div class="demo__input-container">
+                                    <input [value]="selectedBasicMaxDate | date"
+                                           [(selectedDates)]="selectedBasicMaxDate" [aaDatepicker] class="form-control"
+                                           type="text" formControlName="basicMaxDate">
+                                    <small class="text-muted token comment">
+                                        Disables dates from this date
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">theme</label>
+                            <div class="col-sm-9">
+                                <div class="demo__input-container">
+                                    <input class="form-control" type="text" formControlName="theme">
+                                    <small class="text-muted token comment">
+                                        Theme string is added to the host
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </code>
+            </div>
+            <div class="demo__datepicker-block col-lg-6  justify-content-center align-items-center">
+                <div class="demo__datepicker-container">
+                    <aa-datepicker [minDate]="selectedBasicMinDate" [maxDate]="selectedBasicMaxDate"></aa-datepicker>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
