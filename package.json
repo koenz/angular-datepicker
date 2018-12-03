@@ -7,7 +7,8 @@
     "build": "ng build",
     "lib:build": "ng build ngx-animating-datepicker",
     "lib:pack": "cd dist/ngx-animating-datepicker && npm pack",
-    "lib:publish": "yarn run lib:build && yarn run lib:pack",
+    "lib:publish": "yarn run lib:build && yarn run copy:readme && yarn run lib:pack",
+    "copy:readme": "cp -av README.md dist/ngx-animating-datepicker",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
