@@ -10,6 +10,10 @@
 :host {
     font-family: Arial, Helvetica, sans-serif;
 
+    .demo__datepicker-footer {
+        padding: 10px;
+    }
+
     .demo__datepicker-block {
         background-color: rgb(232, 232, 232);
         display: flex;

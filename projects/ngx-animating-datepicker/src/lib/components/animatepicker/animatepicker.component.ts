@@ -5,7 +5,7 @@ import {
 	HostBinding,
 	Input,
 	OnInit,
-	ViewChild
+	ViewChild,
 } from '@angular/core';
 import { YearMonth, Month } from '../../models/datepicker.model';
 import { DatepickerService } from '../../services/datepicker.service';
@@ -32,6 +32,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	public currentYearMonth: object = null;
 	public datepickerPosition: object;
 	public initialised = false;
+	public calendarHeight: number
 
 	/* ==============================================
 	 * External Properties
@@ -62,6 +63,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 
 	@ViewChild('calendarContainer') public calendarContainer: ElementRef;
 	@ViewChild('calendarTopContainer') public calendarTopContainer: ElementRef;
+	@ViewChild('footer') public footer: ElementRef;
 	@HostBinding('style.width.px') public datepickerWidth: number;
 	@HostBinding('style.height.px') public datepickerHeight: number;
 
@@ -96,7 +98,9 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	setDatePickerDimension(): void {
 		this.datepickerHeight =
 			this.calendarContainer.nativeElement.offsetHeight +
-			this.calendarTopContainer.nativeElement.offsetHeight;
+			this.calendarTopContainer.nativeElement.offsetHeight + 
+			this.footer.nativeElement.offsetHeight;
+		this.calendarHeight = this.calendarContainer.nativeElement.offsetHeight;
 		this.datepickerWidth = this.initialWidth * this._numberOfMonths.length;
 	}
 
@@ -152,7 +156,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	 * @param directionRight - Set optional when sliding to the right
 	 */
 	setDatepickerHeight(directionRight?: boolean): void {
-		let indexArray;
+		let indexArray: number[];
 
 		if (this._numberOfMonths.length > 1) {
 			const start = directionRight ? 0 : this._numberOfMonths.length;
@@ -171,12 +175,13 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 			);
 			let offsetHeight = 0;
 			indexArray.forEach(el => {
-				if (offsetHeight === undefined || calendarArray[el].offsetHeight > offsetHeight) {
+				if (calendarArray[el].offsetHeight > offsetHeight) {
 					offsetHeight = calendarArray[el].offsetHeight;
 				}
 			});
 			that.datepickerHeight =
-				offsetHeight + that.calendarTopContainer.nativeElement.offsetHeight;
+				offsetHeight + that.calendarTopContainer.nativeElement.offsetHeight + that.footer.nativeElement.offsetHeight;
+			that.calendarHeight = offsetHeight;
 		});
 	}
 

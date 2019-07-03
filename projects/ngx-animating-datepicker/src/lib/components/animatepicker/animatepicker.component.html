@@ -27,42 +27,47 @@
 			</div>
 		</div>
 	</div>
-	<div class="datepicker__calendar-wrapper" #calendarContainer [ngStyle]="{
-				'transform': 'translateX(' + translateX + '%)',
-				'transition': transition,
-				'left.%': leftInnerPosition
-				}"
-	>
-		<div
-				*ngFor="let month of months;"
-				class="datepicker__calendar-container"
-				[ngStyle]="{'width.%': calendarWidth}"
+	<div class="datepicker__main" [ngStyle]="{
+		'height.px': calendarHeight}">
+		<div class="datepicker__calendar-wrapper" #calendarContainer [ngStyle]="{
+					'transform': 'translateX(' + translateX + '%)',
+					'transition': transition,
+					'left.%': leftInnerPosition
+					}"
 		>
-			<table class="datepicker__calendar">
-				<tbody>
-				<tr *ngFor="let week of month.weeks; index as i" class="datepicker__week">
-					<td class="datepicker__day" *ngFor="let day of week.days; index as i"
-						[ngClass]="{
-					'is-first': day.isFirst,
-					'is-last': day.isLast,
-					'is-hidden': day.isHidden,
-					'is-disabled': day.isDisabled,
-					'is-today': day.isToday,
-					'is-selected': day.isSelected,
-					'is-in-range': day.isInRange,
-					'is-start-date': day.isStartDate,
-					'is-end-date': day.isEndDate,
-					'is-rest': day.isRest
-					}">
-						<button class="datepicker__button" [disabled]="day.isDisabled || day.isHidden"
-								(click)="updateValue(day.date)">{{day.dayNumber}}
-						</button>
-					</td>
-				</tr>
-				</tbody>
-			</table>
+			<div
+					*ngFor="let month of months;"
+					class="datepicker__calendar-container"
+					[ngStyle]="{'width.%': calendarWidth}"
+			>
+				<table class="datepicker__calendar">
+					<tbody>
+					<tr *ngFor="let week of month.weeks; index as i" class="datepicker__week">
+						<td class="datepicker__day" *ngFor="let day of week.days; index as i"
+							[ngClass]="{
+						'is-first': day.isFirst,
+						'is-last': day.isLast,
+						'is-hidden': day.isHidden,
+						'is-disabled': day.isDisabled,
+						'is-today': day.isToday,
+						'is-selected': day.isSelected,
+						'is-in-range': day.isInRange,
+						'is-start-date': day.isStartDate,
+						'is-end-date': day.isEndDate,
+						'is-rest': day.isRest
+						}">
+							<button class="datepicker__button" [disabled]="day.isDisabled || day.isHidden"
+									(click)="updateValue(day.date)">{{day.dayNumber}}
+							</button>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
-	<ng-content></ng-content>
+	<div #footer>
+		<ng-content select="footer"></ng-content>
+	</div>
 </div>
 		
