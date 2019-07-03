@@ -1,7 +1,19 @@
 # Animating Angular Datepicker
 An Animating Datepicker for Angular 2+. For some smooth date picking :). Including range functionality, multiple calendars next to each other and loads of other functionality. Checkout the [Demo page](http://zigterman.com/datepicker) for a preview.
 
-Want a improvement or found bug? please use the pull request functionality or create an issue.
+Want an improvement or found bug? please use the pull request functionality or create an issue.
+
+#### Some existing- and upcoming features
+- [x] Directive
+- [x] Reactive Forms Support
+- [x] Multiple Calendars next to each other
+- [x] Composable footer
+- [x] Themable
+- [x] Multi Languages support using Intl.DateTimeFormat
+- [x] Animations
+- [ ] i18n
+- [ ] Keyboard control
+- [ ] ...
 
 ## Installation
 
@@ -104,6 +116,18 @@ All the above @Input's() can be used with the directive implementation as well. 
 @Input() openDirection = 'bottom'  // 'top', 'left', 'right', 'bottom'
 @Input() closeOnBlur = true; // Close datepicker on blur
 ```
+
+### Composing
+You can add a footer to the datepicker by adding a `<footer>` element between the tags.
+
+```html
+<aa-animatepicker
+	[options]="datepickerOptions"
+	[(selectedDates)]="dates">
+	<footer (click)="someLogic()">put your logic here</footer>
+</aa-animatepicker>
+```
+
 ### Regular Datepicker Component
 The Animatepicker is an extension of the regular datepicker component. Don't want all that fancy animations? Then this is exactly what you need. Use `aa-datepicker` to implement in your component
 
