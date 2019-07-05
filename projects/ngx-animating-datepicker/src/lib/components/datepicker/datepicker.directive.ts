@@ -266,7 +266,7 @@ export class DatepickerDirective {
 	 */
 	setPosition() {
 		const position = UtilitiesService.getPageOffset(this.viewContainerRef.element.nativeElement);
-		console.log('this.options.openDirection: ', this.options.openDirection);
+
 		if (this.options.openDirection === 'bottom') {
 			this.datepicker.topPosition = position.bottom;
 			this.datepicker.leftPosition = position.left;

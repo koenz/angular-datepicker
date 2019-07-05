@@ -9,24 +9,23 @@
             <div class="demo__datepicker-block col-lg-12 justify-content-center align-items-center">
                 <div class="demo__datepicker-actions">
                     <div class="demo__action-button" (click)="next()"><i class="fas fa-chevron-circle-right"></i></div>
-                    <div class="demo__action-button" (click)="previous()"><i class="fas fa-chevron-circle-left"></i>
-                    </div>
+                    <div class="demo__action-button" (click)="previous()"><i class="fas fa-chevron-circle-left"></i></div>
                     <div class="demo__action-button" (click)="open()"><i class="fas fa-external-link-alt"></i></div>
                     <div class="demo__action-button" (click)="close()"><i class="fas fa-times-circle"></i></div>
                 </div>
                 <div class="demo__datepicker-container">
                     <aa-animatepicker
-                            [minDate]="animateInputsForm.value.minDate"
-                            [maxDate]="animateInputsForm.value.maxDate"
-                            [numberOfMonths]="animateInputsForm.value.numberOfMonths"
-                            [language]="animateInputsForm.value.language"
-                            [theme]="animateInputsForm.value.theme"
-                            [options]="animateOptions"
-                            [(selectedDates)]="selectedDatesAnimate"
-                            #demoDatepicker>
-                            <footer class="demo__datepicker-footer">
-                                <button>Apply</button>
-                            </footer>
+                        [minDate]="animateInputsForm.value.minDate"
+                        [maxDate]="animateInputsForm.value.maxDate"
+                        [numberOfMonths]="animateInputsForm.value.numberOfMonths"
+                        [language]="animateInputsForm.value.language"
+                        [theme]="animateInputsForm.value.theme"
+                        [options]="animateOptions"
+                        [(selectedDates)]="selectedDatesAnimate"
+                        #demoDatepicker>
+                        <footer class="demo__datepicker-footer">
+                            <button>Apply</button>
+                        </footer>
                     </aa-animatepicker>
                 </div>
                 <div class="demo__output-example">
