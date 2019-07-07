@@ -23,6 +23,11 @@
 		padding: 0 $outer-spacing $outer-spacing;
 	}
 
+	.datepicker__footer {
+		position: relative;
+		z-index: 1;
+	}
+
 	table {
 		width: 100%;
 		table-layout: fixed;

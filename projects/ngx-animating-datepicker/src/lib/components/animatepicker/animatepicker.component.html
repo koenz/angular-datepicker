@@ -1,5 +1,8 @@
 <div class="datepicker__wrapper" [ngStyle]="datepickerPosition">
 	<div #calendarTopContainer>
+		<div class="datepicker__header" #header>
+			<ng-content select="header"></ng-content>
+		</div>
 		<aa-navigation
 				(previousClick)="goToPreviousMonth()"
 				(nextClick)="goToNextMonth()"
@@ -66,7 +69,7 @@
 			</div>
 		</div>
 	</div>
-	<div #footer>
+	<div class="datepicker__footer" #footer>
 		<ng-content select="footer"></ng-content>
 	</div>
 </div>

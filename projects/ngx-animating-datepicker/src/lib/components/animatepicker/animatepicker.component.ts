@@ -158,6 +158,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	setDatepickerHeight(directionRight?: boolean): void {
 		let indexArray: number[];
 
+		// TODO: Seperate this logic for readability purpose
 		if (this._numberOfMonths.length > 1) {
 			const start = directionRight ? 0 : this._numberOfMonths.length;
 			const end = directionRight
@@ -169,7 +170,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 		}
 
 		const that = this;
-		setTimeout(function() {
+		setTimeout(() => {
 			const calendarArray = that.elementRef.nativeElement.querySelectorAll(
 				'.datepicker__calendar-container'
 			);
@@ -179,6 +180,8 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 					offsetHeight = calendarArray[el].offsetHeight;
 				}
 			});
+			
+			// TODO: Merge with setHeight function.
 			that.datepickerHeight =
 				offsetHeight + that.calendarTopContainer.nativeElement.offsetHeight + that.footer.nativeElement.offsetHeight;
 			that.calendarHeight = offsetHeight;
