@@ -1,0 +1,8 @@
+<!-- <h1 class="title">Angular Router</h1>
+<nav>
+  <a routerLink="/demo" routerLinkActive="active">Demo</a>
+  <a routerLink="/recipes" routerLinkActive="active">Recipies</a>
+</nav> -->
+<div [@routeAnimation]="getAnimationData(routerOutlet)">
+  <router-outlet #routerOutlet="outlet"></router-outlet>
+</div>

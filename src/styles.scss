@@ -1,0 +1,35 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: #fbfbfb;
+}
+
+.google-flights {
+    border-radius: 10px !important;
+
+    .datepicker__day {
+        border-radius: 50%;
+        border: none !important;
+
+        &.is-selected {
+            .datepicker__button {
+                background-color: #4285f4 !important;
+            }
+        }
+
+        &.is-rest {
+            border: none;
+        }
+    }
+
+    .datepicker__button {
+        border-radius: 50%;
+        border: 2px solid transparent !important;
+
+        &:hover {
+            border-color: #4285f4 !important;
+        }
+    }
+} 

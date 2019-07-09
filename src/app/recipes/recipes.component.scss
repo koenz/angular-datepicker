@@ -1,0 +1,52 @@
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/variables';
+@import 'node_modules/bootstrap/scss/mixins';
+@import 'node_modules/bootstrap/scss/reboot';
+@import '../shared/scss/helpers';
+
+$google-border-color: #dadce0;
+
+:host {
+    .recipes__datepicker-header {
+        padding: 8px;
+        border-bottom: 1px solid $google-border-color;
+    }
+
+    .recipes__datepicker-footer {
+        @include clearfix();
+
+        padding: 8px;
+        border-top: 1px solid $google-border-color;
+    }
+
+    .recipes__button {
+        @include reset-btn();
+
+        padding: 4px 12px;
+        background-color: #4285f4;
+        color: #fff;
+        border-radius: 4px;
+        height: 34px;
+        float: right;
+    }
+
+    .recipes__input {
+        min-width: 400px;
+        flex: 0 1 0px;
+        border: 1px solid $google-border-color;
+        height: 44px;
+        color: #3c4043;
+        font: 400 14px/20px Roboto, HelveticaNeue, Arial, sans-serif;
+        letter-spacing: 0.2px;
+        padding: 0 20px;
+        border-radius: 6px;
+
+        &:focus {
+            background-color: #F4F8FF;
+            border-color: #1967d2;
+            border-width: 2px;
+            outline: none;
+        }
+
+    }
+}

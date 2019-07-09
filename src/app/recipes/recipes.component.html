@@ -1,0 +1,15 @@
+<div class="container">
+  <aa-animatepicker
+    [theme]="'google-flights'"
+    [options]="animateOptionsGoogle"
+    [numberOfMonths]="2"
+    [(selectedDates)]="selectedDatesAnimate"
+    #googleDatepicker>
+      <header class="recipes__datepicker-header">
+          <button>Reset</button><input class="recipes__input" type="text" [value]="selectedDatesAnimate | date">
+      </header>
+      <footer class="recipes__datepicker-footer">
+          <button class="recipes__button" (click)="googleDatepicker.close()">Apply</button>
+      </footer>
+  </aa-animatepicker>
+</div>
