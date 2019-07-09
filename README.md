@@ -118,12 +118,13 @@ All the above @Input's() can be used with the directive implementation as well. 
 ```
 
 ### Composing
-You can add a footer to the datepicker by adding a `<footer>` element between the tags.
+You can add a footer or header to the datepicker by adding a `<footer>` or `<header>` element between the tags.
 
 ```html
 <aa-animatepicker
 	[options]="datepickerOptions"
 	[(selectedDates)]="dates">
+	<header (click)="someLogic()">put your logic here</header>
 	<footer (click)="someLogic()">put your logic here</footer>
 </aa-animatepicker>
 ```
