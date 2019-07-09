@@ -1,0 +1,14 @@
+<button *ngIf="!hideNavigation" class="navigation__button is-previous" (click)="previous()"></button>
+<div class="navigation__title-wrapper" [ngStyle]="{
+  'transform': 'translateX(' + translateX + '%)',
+  'transition': transition,
+  'left.%': leftPosition
+}">
+    <div *ngFor="let title of titles"
+         class="navigation__title"
+         [ngStyle]="{
+          'width.%': (100 / titles.length)
+        }"
+    ><span (click)="onMonthClick(title)">{{title.navigationTitle}}</span>&nbsp;<span (click)="onYearClick(title)">{{title.year}}</span></div>
+</div>
+<button *ngIf="!hideNavigation" class="navigation__button is-next" (click)="next()"></button>

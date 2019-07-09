@@ -2,176 +2,179 @@
 @import 'node_modules/bootstrap/scss/functions';
 @import 'node_modules/bootstrap/scss/variables';
 @import 'node_modules/bootstrap/scss/mixins';
-
 @import 'node_modules/bootstrap/scss/reboot';
 @import 'node_modules/bootstrap/scss/grid';
 @import 'node_modules/bootstrap/scss/buttons';
 @import 'node_modules/prismjs/themes/prism-okaidia';
 
 :host {
-	font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 
-	.demo__datepicker-block {
-		background-color: rgb(232, 232, 232);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 60px;
-	}
+    .demo__datepicker-footer {
+        padding: 10px;
+    }
 
-	.demo__option-block {
-		padding: 60px;
-		color: #fff;
-		background-color: #272822;
-	}
+    .demo__datepicker-block {
+        background-color: rgb(232, 232, 232);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 60px;
+    }
 
-	.demo__text-block {
-		background: #fff;
-		padding: 60px;
-	}
+    .demo__option-block {
+        padding: 60px;
+        color: #fff;
+        background-color: #272822;
+    }
 
-	.demo__datepicker-actions {
-		position: absolute;
-		top: 20px;
-		left: 20px;
-		border-radius: 4px;
-		overflow: hidden;
-		border: 1px solid rgb(232, 232, 232);
-	}
+    .demo__text-block {
+        background: #fff;
+        padding: 60px;
+    }
 
-	.demo__action-button {
-		background-color: #fff;
-		padding: 8px;
-		font-size: 18px;
-		height: 50px;
-		width: 50px;
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-bottom: 1px solid rgb(232, 232, 232);
+    .demo__datepicker-actions {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        border-radius: 4px;
+        overflow: hidden;
+        border: 1px solid rgb(232, 232, 232);
+    }
 
-		&:hover {
-			background-color: #f2f2f2;
-		}
+    .demo__action-button {
+        background-color: #fff;
+        padding: 8px;
+        font-size: 18px;
+        height: 50px;
+        width: 50px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid rgb(232, 232, 232);
 
-		&:last-of-type {
-			border: none;
-		}
-	}
+        &:hover {
+            background-color: #f2f2f2;
+        }
 
-	.demo__selected-dates-list {
-		padding: 0;
-		margin: 0;
-	}
+        &:last-of-type {
+            border: none;
+        }
+    }
 
-	.demo__selected-dates-item {
-		position: relative;
-		margin-bottom: 4px;
-	}
+    .demo__selected-dates-list {
+        padding: 0;
+        margin: 0;
+    }
 
-	.demo__remove-date-button {
-		border-radius: 50%;
-		width: 14px;
-		height: 14px;
-		line-height: 14px;
-		display: block;
-		position: absolute;
-		top: 0;
-		right: 0;
-		color: #fff;
-		background-color: #272822;
-		text-align: center;
-		font-size: 10px;
-		cursor: pointer;
+    .demo__selected-dates-item {
+        position: relative;
+        margin-bottom: 4px;
+    }
 
-		&:hover {
-			background-color: lighten(#272822, 20);
-		}
-	}
+    .demo__remove-date-button {
+        border-radius: 50%;
+        width: 14px;
+        height: 14px;
+        line-height: 14px;
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: #fff;
+        background-color: #272822;
+        text-align: center;
+        font-size: 10px;
+        cursor: pointer;
 
-	.demo__output-example {
-		font-size: 13px;
-		position: absolute;
-		top: 20px;
-		right: 20px;
-		width: 180px;
-	}
+        &:hover {
+            background-color: lighten(#272822, 20);
+        }
+    }
 
-	.demo__datepicker-container {
-		display: inline-block;
-	}
+    .demo__output-example {
+        font-size: 13px;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 180px;
+    }
 
-	.text-muted {
-		display: inline-flex;
-		align-items: center;
-	}
+    .demo__datepicker-container {
+        display: inline-block;
+    }
 
-	.form-check-input {
-		margin-right: 5px;
-	}
+    .text-muted {
+        display: inline-flex;
+        align-items: center;
+    }
 
-	.form-select-input {
-		height: 30px;
-	}
+    .form-check-input {
+        margin-right: 5px;
+    }
 
-	.form-check {
-		display: inline-block;
-		margin-right: 5px;
-	}
+    .form-select-input {
+        height: 30px;
+    }
 
-	.form-check-label {
-		margin-top: 5px;
-	}
+    .form-check {
+        display: inline-block;
+        margin-right: 5px;
+    }
 
-	.col-form-label {
-		padding: 4px;
-		margin: 4px 0;
-		font-size: 13px;
-	}
+    .form-check-label {
+        margin-top: 5px;
+    }
 
-	.form-button {
-		margin: 4px 12px 4px 0;
-		border: 1px solid rgba(#fff, .4);
-		background-color: rgba(#fff, .8);
-		border-radius: 4px;
-		color: #000;
-		cursor: pointer;
-		display: flex;
+    .col-form-label {
+        padding: 4px;
+        margin: 4px 0;
+        font-size: 13px;
+    }
 
-		&:hover {
-			color: #fff;
-			background-color: #000;
-		}
-	}
+    .form-button {
+        margin: 4px 12px 4px 0;
+        border: 1px solid rgba(#fff, .4);
+        background-color: rgba(#fff, .8);
+        border-radius: 4px;
+        color: #000;
+        cursor: pointer;
+        display: flex;
 
-	.form-control {
-		border: 1px solid rgba(#fff, .4);
-		color: #fff;
-		border-radius: 4px;
-		margin: 4px 12px 4px 0;
-		padding: 4px;
-		width: 130px;
-		background-color: rgba(#fff, .1);
-		font-size: 12px;
+        &:hover {
+            color: #fff;
+            background-color: #000;
+        }
+    }
 
-		&.is-white {
-			border: 1px solid rgba(#000, .1);
-			color: #000;
-			background-color: rgba(#fff, .8);
-			padding: 8px;
-		}
+    .form-control {
+        border: 1px solid rgba(#fff, .4);
+        color: #fff;
+        border-radius: 4px;
+        margin: 4px 12px 4px 0;
+        padding: 4px;
+        width: 130px;
+        background-color: rgba(#fff, .1);
+        font-size: 12px;
 
-		&.is-small {
-			width: 90px;
-		}
+        &.is-white {
+            border: 1px solid rgba(#000, .1);
+            color: #000;
+            background-color: rgba(#fff, .8);
+            padding: 8px;
+        }
 
-		&.is-big {
-			width: 290px;
-		}
-	}
+        &.is-small {
+            width: 90px;
+        }
 
-	.demo__input-container {
-		display: flex;
-	}
+        &.is-big {
+            width: 290px;
+        }
+    }
+
+    .demo__input-container {
+        display: flex;
+    }
 }

@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { AaDatepickerModule } from 'ngx-animating-datepicker';
-import { DemoComponent } from './demo/demo.component';
+import {NgModule} from '@angular/core';
+import {ReactiveFormsModule} from '@angular/forms';
+import {BrowserModule} from '@angular/platform-browser';
+import {DemoComponent} from './demo/demo.component';
+import {AaDatepickerModule} from 'ngx-animating-datepicker';
 
 @NgModule({
 	imports: [BrowserModule, AaDatepickerModule, ReactiveFormsModule],
@@ -10,4 +10,5 @@ import { DemoComponent } from './demo/demo.component';
 	bootstrap: [DemoComponent],
 	entryComponents: [DemoComponent]
 })
-export class DemoModule {}
+export class DemoModule {
+}
