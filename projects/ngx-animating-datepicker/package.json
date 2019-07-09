@@ -1,6 +1,6 @@
 {
   "name": "ngx-animating-datepicker",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "license": "MIT",
   "author": "Koen Zigterman <koen@zigterman.com> (http://zigterman.com)",
   "description": "An Animating Datepicker for Angular 2+, for some smooth date picking :).",
