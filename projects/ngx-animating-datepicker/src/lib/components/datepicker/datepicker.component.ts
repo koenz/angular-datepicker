@@ -24,9 +24,8 @@ export class DatepickerComponent implements OnInit {
 	public selectedRange = 'startDate';
 	public startDate: Date = null;
 	public endDate: Date = null;
-	private weekDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-
 	public initialised = false;
+	private weekStartArray = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 	/* ==============================================
 	 * Initial Options
@@ -175,10 +174,8 @@ export class DatepickerComponent implements OnInit {
 	createDayArray(year: number, month: number, isRestDays?: boolean): Day[] {
 		const days = [];
 		const daysInMonth = DatepickerService.getDaysInMonth(year, month);
-		const weekStart = 1 + this.weekDays.indexOf(this.options.weekStart);
-
 		for (let index = 0; index < daysInMonth; index++) {
-			const dayNumber = index + weekStart;
+			const dayNumber = index + 1;
 			const date = new Date(year, month, dayNumber);
 			const day = {
 				date,
@@ -205,24 +202,26 @@ export class DatepickerComponent implements OnInit {
 	}
 
 	/**
-	 * Get the days from the next month and fills the last week of the current
+	 * Get the days from the next month
 	 *
 	 * @param year
 	 * @param month
 	 */
 	getNextRestDays(year: number, month: number): Day[] {
 		const monthLength = DatepickerService.getDaysInMonth(year, month);
-		const endOfTheMonth = new Date(year, month, monthLength).getDay();
+		const weekStartIndex = this.weekStartArray.indexOf(this.options.weekStart);
+		const endOfTheMonth = new Date(year, month, monthLength).getDay() - weekStartIndex;
+		const _endOfTheMonth = endOfTheMonth < 0 ? 7 - Math.abs(endOfTheMonth) : endOfTheMonth;
 		const nextDays = this.createDayArray(
 			DatepickerService.getYearOfNextMonth(year, month),
 			DatepickerService.getNextMonth(month),
 			true
-		).slice(0, 7 - endOfTheMonth);
+		).slice(0, 7 - _endOfTheMonth);
 		return nextDays.length > 6 ? [] : nextDays;
 	}
 
 	/**
-	 * Get the days of the previous month and fills the first week of the current
+	 * Get the days of the previous month
 	 *
 	 * @param year
 	 * @param month
@@ -234,7 +233,11 @@ export class DatepickerComponent implements OnInit {
 			DatepickerService.getPreviousMonth(month),
 			true
 		);
-		return previousDays.slice(previousDays.length - startOfTheMonth, previousDays.length);
+		const weekStartIndex = this.weekStartArray.indexOf(this.options.weekStart);
+		const _weekStartIndex = weekStartIndex === 0 ? 0 : (7 - weekStartIndex);
+		let sliceIndex = previousDays.length - startOfTheMonth - _weekStartIndex;
+		sliceIndex = previousDays.length - sliceIndex >= 7 ? sliceIndex + 7 : sliceIndex
+		return previousDays.slice(sliceIndex, previousDays.length);
 	}
 
 	/**

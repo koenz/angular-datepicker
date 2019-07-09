@@ -11,11 +11,11 @@ export class DatepickerService {
 	 * @param start
 	 */
 	static getWeekDays(language: string, format: string, start: string): string[] {
-		const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'faturday', 'sunday'];
+		const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 		const index = days.indexOf(start.toLowerCase());
 		if (index < 0) {
-			throw new Error('Invalid week day start :' + start);
+			throw new Error('Invalid week day start: ' + start);
 		}
 
 		const weekdays = [];
