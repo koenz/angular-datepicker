@@ -2,51 +2,112 @@
 @import 'node_modules/bootstrap/scss/variables';
 @import 'node_modules/bootstrap/scss/mixins';
 @import 'node_modules/bootstrap/scss/reboot';
+@import 'node_modules/bootstrap/scss/grid';
+@import 'node_modules/bootstrap/scss/buttons';
 @import '../shared/scss/helpers';
 
 $google-border-color: #dadce0;
 
 :host {
+    .recipes__google-flights-container {
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 1px 3px rgba(60,64,67, 0.3), 0 4px 8px 3px rgba(60,64,67, 0.15);
+        padding: 8px 16px 48px;
+        display: flex;
+        flex-direction: row-reverse;
+    }
+
+    .recipes__goole-flights-date-container {
+        position: relative;
+        width: 400px;
+    }
+
+    .reciepes__google-flights-datepicker {
+        position: absolute;
+        top: 8px;
+        right: 16px;
+    }
+
     .recipes__datepicker-header {
         padding: 8px;
         border-bottom: 1px solid $google-border-color;
+        z-index: 2;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .recipes__date-fields-wrapper {
+        display: flex;
     }
 
     .recipes__datepicker-footer {
         @include clearfix();
 
-        padding: 8px;
+        padding: 8px;   
         border-top: 1px solid $google-border-color;
+    }
+
+    .recipes__nav-button {
+        position: absolute;
+        height: 40px;
+        width: 40px;
+        background-color: #fff;
+        border-radius: 100%;
+        box-shadow: 0 0 4px rgba(0,0,0,0.12), 0 4px 4px rgba(0,0,0,0.24);
+        cursor: pointer;
+        margin: 0 -20px;
+        pointer-events: all;
+        padding: 0;
+        top: 190px;
+
+        &:before {
+            height: 40px;
+            width: 40px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 24px;
+            content: '';
+            display: block;
+            outline: none;
+        }
+
+        &.is-prev {
+            left: 0;
+
+            &:before {
+                background-image: url(//www.gstatic.com/images/icons/material/system/2x/keyboard_arrow_left_black_24dp.png);
+            }
+        }
+
+        &.is-next {
+            right: 0;
+ 
+            &:before {
+                background-image: url(//www.gstatic.com/images/icons/material/system/2x/keyboard_arrow_right_black_24dp.png);
+            }
+        }
+    }
+
+    .recipes__reset-button {
+        @include reset-btn();
+
+        cursor: pointer;
+        margin-right: 6px;
     }
 
     .recipes__button {
         @include reset-btn();
 
+        cursor: pointer;
         padding: 4px 12px;
         background-color: #4285f4;
         color: #fff;
-        border-radius: 4px;
+        border-radius: 8px;
         height: 34px;
         float: right;
-    }
-
-    .recipes__input {
-        min-width: 400px;
-        flex: 0 1 0px;
-        border: 1px solid $google-border-color;
-        height: 44px;
-        color: #3c4043;
-        font: 400 14px/20px Roboto, HelveticaNeue, Arial, sans-serif;
-        letter-spacing: 0.2px;
-        padding: 0 20px;
-        border-radius: 6px;
-
-        &:focus {
-            background-color: #F4F8FF;
-            border-color: #1967d2;
-            border-width: 2px;
-            outline: none;
-        }
-
+        font-size: 14px;
+        text-transform: uppercase;
     }
 }

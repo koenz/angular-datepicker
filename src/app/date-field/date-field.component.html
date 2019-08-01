@@ -1,0 +1,24 @@
+
+
+<ng-template [ngIf]="isRange" [ngIfElse]="loading">
+   <input 
+      name="startDate" 
+      [class.is-selected]="selectedRange === 'startDate'" 
+      class="date-field__input is-range" 
+      type="text"
+      (focus)="open()"
+      [value]="selectedDates && selectedDates[0] ? (selectedDates[0] | date) : ''"
+   >
+   <input 
+      name="endDate" 
+      [class.is-selected]="selectedRange === 'endDate'" 
+      class="date-field__input is-range" 
+      type="text" 
+      (focus)="open()"
+      [value]="selectedDates && selectedDates[1] ? (selectedDates[1] | date) : ''"
+   >
+ </ng-template>
+ 
+ <ng-template [ngIf]="!isRange">
+    <input class="date-field__input is-selected" type="text" [value]="selectedDates | date">
+ </ng-template>

@@ -1,11 +1,19 @@
 @import '../../shared/scss/_helpers';
 @import '../../shared/scss/_vars';
-
+$navigation-height: 32px;
+$navigation-padding: 10px;
 :host {
 	@include clearfix();
 	display: block;
-	padding: 10px;
+	padding: $navigation-padding;
 	height: 52px;
+
+	.navigation__title-wrapper-container {
+		position: relative;
+		overflow: hidden;
+		width: 100%;
+		height: $navigation-height;
+	}
 
 	.navigation__title-wrapper {
 		position: absolute;
@@ -24,21 +32,22 @@
 	.navigation__button {
 		@include reset-btn();
 		cursor: pointer;
-		position: relative;
+		position: absolute;
 		z-index: 1;
 		background-color: white;
 		border: 1px solid $day-navigation-border-color;
 		text-align: center;
-		width: 32px;
-		height: 32px;
+		width: $navigation-height;
+		height: $navigation-height;
 		border-radius: $border-radius;
+		top: $navigation-padding;
 
 		&:hover {
 			border-color: $day-navigation-border-color-hover;
 		}
 
 		&.is-previous {
-			float: left;
+			left: $navigation-padding;
 
 			&::after {
 				content: '<';
@@ -46,11 +55,11 @@
 		}
 
 		&.is-next {
+			right: $navigation-padding;
+
 			&::before {
 				content: '>';
 			}
-
-			float: right;
 		}
 	}
 

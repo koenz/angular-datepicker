@@ -41,7 +41,8 @@ export class DatepickerComponent implements OnInit {
 		if (options.currentDate !== undefined) {
 			this.date = this.options.currentDate;
 		}
-
+		console.log('options', options);
+		
 		if (this.initialised) {
 			this.goToDate();
 		}
@@ -118,6 +119,14 @@ export class DatepickerComponent implements OnInit {
 	@Input()
 	set selectedDates(value: Date[]) {
 		const _value = Array.isArray(value) ? value : [value];
+
+		// TODO: Check for a better way of doing this.
+		if(value === null) {
+			this._selectedDates = [];
+			this.goToDate();
+			return;
+		}
+
 		if (!DatepickerService.isValidDate(_value)) {
 			return;
 		}

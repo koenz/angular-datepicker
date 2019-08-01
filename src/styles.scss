@@ -8,20 +8,38 @@ body {
 
 .google-flights {
     border-radius: 10px !important;
+    overflow: visible !important;
+    pointer-events: none;
+    position: absolute !important;
+    top: -8px;
+    right: -8px;
+
+    &.is-open {
+        pointer-events: initial;
+    }
+
+    .is-rest {
+        border: none;
+    }
+
+    .is-in-range {
+        background-color: #daedfd !important;
+        .datepicker__button {
+            color: #3c4043 !important;
+            background-color: transparent!important;
+        }
+    }
+
+    .is-selected {
+        .datepicker__button {
+            border-radius: 50%;
+            background-color: #4285f4 !important;
+        }
+    }
 
     .datepicker__day {
-        border-radius: 50%;
         border: none !important;
-
-        &.is-selected {
-            .datepicker__button {
-                background-color: #4285f4 !important;
-            }
-        }
-
-        &.is-rest {
-            border: none;
-        }
+        color: #3c4043 !important;
     }
 
     .datepicker__button {
@@ -30,6 +48,7 @@ body {
 
         &:hover {
             border-color: #4285f4 !important;
+            background-color: #fff !important;
         }
     }
 } 

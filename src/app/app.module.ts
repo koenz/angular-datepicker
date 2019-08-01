@@ -7,6 +7,7 @@ import {AaDatepickerModule} from 'ngx-animating-datepicker';
 import { RouterModule, Routes} from '@angular/router';
 import { RecipesComponent } from './recipes/recipes.component';
 import { AppComponent } from './app.component';
+import { DateFieldComponent } from './date-field/date-field.component';
 
 const appRoutes: Routes = [
 	{ path: '', redirectTo: 'demo', pathMatch: 'full' },
@@ -25,7 +26,7 @@ const appRoutes: Routes = [
 		AaDatepickerModule, 
 		ReactiveFormsModule
 	],
-	declarations: [AppComponent, DemoComponent, RecipesComponent],
+	declarations: [AppComponent, DemoComponent, RecipesComponent, DateFieldComponent],
 	bootstrap: [AppComponent],
 	entryComponents: [AppComponent]
 })

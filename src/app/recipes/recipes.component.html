@@ -1,15 +1,38 @@
 <div class="container">
-  <aa-animatepicker
-    [theme]="'google-flights'"
-    [options]="animateOptionsGoogle"
-    [numberOfMonths]="2"
-    [(selectedDates)]="selectedDatesAnimate"
-    #googleDatepicker>
-      <header class="recipes__datepicker-header">
-          <button>Reset</button><input class="recipes__input" type="text" [value]="selectedDatesAnimate | date">
-      </header>
-      <footer class="recipes__datepicker-footer">
-          <button class="recipes__button" (click)="googleDatepicker.close()">Apply</button>
-      </footer>
-  </aa-animatepicker>
+    <div class="recipes__google-flights-container">
+        <div class="recipes__goole-flights-date-container">
+            <app-date-field 
+                [isRange]="isRange" 
+                [selectedDates]="selectedDatesAnimate"
+                [(isOpen)]="isOpen"
+                >
+            </app-date-field>
+
+                <aa-animatepicker
+                    [theme]="'google-flights'"
+                    [options]="optionsGoogle"
+                    [isOpen]="isOpen"
+                    [numberOfMonths]="2"
+                    [(selectedDates)]="selectedDatesAnimate"
+                    #googleDatepicker>
+                    <header class="recipes__datepicker-header">
+                        <select (change)="onTicketTypeSelect($event)" name="ticket-type" id="ticket-type" class="recipes__select-ticket-type">
+                            <option value="oneway">One way</option>
+                            <option value="return">Return</option>
+                        </select>
+                        <div class="recipes__date-fields-wrapper">
+                            <button class="recipes__reset-button" (click)="selectedDatesAnimate = null">Reset</button>
+                            <app-date-field [isRange]="isRange" [selectedDates]="selectedDatesAnimate" [selectedRange]="googleDatepicker.selectedRange"></app-date-field>
+                        </div>
+                        <button (click)="googleDatepicker.goToPreviousMonth()" class="recipes__nav-button is-prev"></button>
+                        <button (click)="googleDatepicker.goToNextMonth()" class="recipes__nav-button is-next"></button>
+                    </header>
+                    <footer class="recipes__datepicker-footer">
+                        <button class="recipes__button" (click)="googleDatepicker.close(); isOpen = false">Apply</button>
+                    </footer>
+                </aa-animatepicker>
+
+        </div>
+    </div>
+
 </div>
