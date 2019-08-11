@@ -1,35 +1,29 @@
-@import 'node_modules/bootstrap/scss/functions';
-@import 'node_modules/bootstrap/scss/variables';
-@import 'node_modules/bootstrap/scss/mixins';
-@import 'node_modules/bootstrap/scss/reboot';
-@import 'node_modules/bootstrap/scss/grid';
-@import 'node_modules/bootstrap/scss/buttons';
-@import '../shared/scss/helpers';
+@import '../../../shared/scss/shared';
 
 $google-border-color: #dadce0;
 
 :host {
-    .recipes__google-flights-container {
+    .google-flights__container {
         border-radius: 8px;
         background-color: #fff;
         box-shadow: 0 1px 3px rgba(60,64,67, 0.3), 0 4px 8px 3px rgba(60,64,67, 0.15);
-        padding: 8px 16px 48px;
+        padding: 28px 16px 28px;
         display: flex;
         flex-direction: row-reverse;
     }
 
-    .recipes__goole-flights-date-container {
+    .google-flights__date-container {
         position: relative;
         width: 400px;
     }
 
-    .reciepes__google-flights-datepicker {
+    .google-flights__datepicker {
         position: absolute;
         top: 8px;
         right: 16px;
     }
 
-    .recipes__datepicker-header {
+    .google-flights__datepicker-header {
         padding: 8px;
         border-bottom: 1px solid $google-border-color;
         z-index: 2;
@@ -38,18 +32,18 @@ $google-border-color: #dadce0;
         justify-content: space-between;
     }
 
-    .recipes__date-fields-wrapper {
+    .google-flights__date-fields-wrapper {
         display: flex;
     }
 
-    .recipes__datepicker-footer {
+    .google-flights__datepicker-footer {
         @include clearfix();
 
         padding: 8px;   
         border-top: 1px solid $google-border-color;
     }
 
-    .recipes__nav-button {
+    .google-flights__nav-button {
         position: absolute;
         height: 40px;
         width: 40px;
@@ -90,14 +84,14 @@ $google-border-color: #dadce0;
         }
     }
 
-    .recipes__reset-button {
+    .google-flights__reset-button {
         @include reset-btn();
 
         cursor: pointer;
         margin-right: 6px;
     }
 
-    .recipes__button {
+    .google-flights__button {
         @include reset-btn();
 
         cursor: pointer;

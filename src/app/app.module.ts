@@ -5,9 +5,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {DemoComponent} from './demo/demo.component';
 import {AaDatepickerModule} from 'ngx-animating-datepicker';
 import { RouterModule, Routes} from '@angular/router';
-import { RecipesComponent } from './recipes/recipes.component';
+import { RecipesComponent } from './recipes/containers/recipes/recipes.component';
 import { AppComponent } from './app.component';
-import { DateFieldComponent } from './date-field/date-field.component';
+import { DateFieldComponent } from './recipes/components/date-field/date-field.component';
+import { GoogleFlightsComponent } from './recipes/components/google-flights/google-flights.component';
 
 const appRoutes: Routes = [
 	{ path: '', redirectTo: 'demo', pathMatch: 'full' },
@@ -26,7 +27,7 @@ const appRoutes: Routes = [
 		AaDatepickerModule, 
 		ReactiveFormsModule
 	],
-	declarations: [AppComponent, DemoComponent, RecipesComponent, DateFieldComponent],
+	declarations: [AppComponent, DemoComponent, RecipesComponent, DateFieldComponent, GoogleFlightsComponent],
 	bootstrap: [AppComponent],
 	entryComponents: [AppComponent]
 })

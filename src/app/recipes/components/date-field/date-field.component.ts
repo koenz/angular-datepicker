@@ -9,19 +9,9 @@ export class DateFieldComponent implements OnInit {
 
   @Input() isRange = false;
   @Input() selectedDates = null;
+  @Input() isOpen = false;
+  @Output() onFocus = new EventEmitter();
   
-  _isOpen = false;
-  @Output() isOpenChange = new EventEmitter();
-  @Input()
-  get isOpen() {
-    return this._isOpen
-  }
-
-	set isOpen(value: boolean) {
-    this._isOpen = value
-    this.isOpenChange.emit(value)
-  }
-
   private _selectedRange: string;
 	@Output() selectedRangeChange = new EventEmitter();
   @Input()
@@ -36,9 +26,9 @@ export class DateFieldComponent implements OnInit {
 
   constructor() { }
 
-  open() {
+  focus() {
     if(!this.isOpen) {
-      this.isOpen = true;
+      this.onFocus.emit()
     }
   }
 

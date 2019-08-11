@@ -6,7 +6,7 @@
       [class.is-selected]="selectedRange === 'startDate'" 
       class="date-field__input is-range" 
       type="text"
-      (focus)="open()"
+      (focus)="focus()"
       [value]="selectedDates && selectedDates[0] ? (selectedDates[0] | date) : ''"
    >
    <input 
@@ -14,7 +14,7 @@
       [class.is-selected]="selectedRange === 'endDate'" 
       class="date-field__input is-range" 
       type="text" 
-      (focus)="open()"
+      (focus)="focus()"
       [value]="selectedDates && selectedDates[1] ? (selectedDates[1] | date) : ''"
    >
  </ng-template>

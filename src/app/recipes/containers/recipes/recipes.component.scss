@@ -1,0 +1,14 @@
+
+@import '../../../shared/scss/shared';
+
+$google-border-color: #dadce0;
+
+:host {
+ .recipes__component-block {
+    background-color: rgb(232, 232, 232);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+ }
+}

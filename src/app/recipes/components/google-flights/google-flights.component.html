@@ -1,0 +1,37 @@
+<div class="google-flights__container">
+    <div class="google-flights__date-container">
+
+      <app-date-field 
+        [isRange]="isRange" 
+        [selectedDates]="selectedDatesAnimate" 
+        (onFocus)="openDatepicker()"
+        [isOpen]="isOpen">
+      </app-date-field>
+
+      <aa-animatepicker 
+        [theme]="'google-flights'"
+        [options]="optionsGoogle" 
+        [isOpen]="isOpen"
+        [numberOfMonths]="2"
+        [(selectedDates)]="selectedDatesAnimate" 
+        (onOpen)="onOpen($event)"
+        #googleDatepicker>
+        <header class="google-flights__datepicker-header">
+          <select (change)="onTicketTypeSelect($event)" name="ticket-type" id="ticket-type" class="google-flights__select-ticket-type">
+            <option value="oneway">One way</option>
+            <option value="return">Return</option>
+          </select>
+          <div class="google-flights__date-fields-wrapper">
+            <button class="google-flights__reset-button" (click)="selectedDatesAnimate = null">Reset</button>
+            <app-date-field [isRange]="isRange" [selectedDates]="selectedDatesAnimate" [selectedRange]="googleDatepicker.selectedRange"></app-date-field>
+          </div>
+          <button (click)="googleDatepicker.goToPreviousMonth()" class="google-flights__nav-button is-prev"></button>
+          <button (click)="googleDatepicker.goToNextMonth()" class="google-flights__nav-button is-next"></button>
+        </header>
+        <footer class="google-flights__datepicker-footer">
+          <button class="google-flights__button" (click)="googleDatepicker.close(); isOpen = false">Apply</button>
+        </footer>
+      </aa-animatepicker>
+
+    </div>
+</div>
