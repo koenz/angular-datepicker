@@ -139,8 +139,8 @@ export class DatepickerComponent implements OnInit {
 	/* ==============================================
 	 * Bindings and Children
 	 * ============================================== */
-	@ViewChild('calendarContainer') public calendarContainer: ElementRef;
-	@ViewChild('calendarTopContainer') public calendarTopContainer: ElementRef;
+	@ViewChild('calendarContainer', /* TODO: add static flag */ {}) public calendarContainer: ElementRef;
+	@ViewChild('calendarTopContainer', /* TODO: add static flag */ {}) public calendarTopContainer: ElementRef;
 	@HostBinding('class')
 	@Input()
 	theme = '';

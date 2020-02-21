@@ -28,7 +28,7 @@ export class DemoComponent implements OnInit {
 	public selectedMaxDate;
 	public numberOfMonths;
 
-	@ViewChild('demoDatepicker') demoDatepicker: AnimatepickerComponent;
+	@ViewChild('demoDatepicker', { static: true }) demoDatepicker: AnimatepickerComponent;
 	private directiveForm: FormGroup;
 
 	ngOnInit() {
