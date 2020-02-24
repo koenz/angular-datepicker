@@ -1,9 +1,9 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
-import {AnimatepickerComponent} from 'ngx-animating-datepicker';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { AnimatepickerComponent } from 'ngx-animating-datepicker';
 import {
-    DefaultDirectiveOptions,
-    DefaultOptions
+	DefaultDirectiveOptions,
+	DefaultOptions
 } from '../../../projects/ngx-animating-datepicker/src/lib/components/datepicker/datepicker.options';
 
 @Component({
@@ -20,13 +20,14 @@ export class DemoComponent implements OnInit {
 	public selectedDirectiveDates;
 	public selectedDatesAnimate;
 	public directiveOptions;
-	public animateOptions = {...DefaultOptions, hideRestDays: true};
+	public animateOptions = { ...DefaultOptions, hideRestDays: true };
 	public basicOptions;
 	public selectedBasicMinDate;
 	public selectedBasicMaxDate;
 	public selectedMinDate;
 	public selectedMaxDate;
 	public numberOfMonths;
+	public yearMonths;
 
 	@ViewChild('demoDatepicker') demoDatepicker: AnimatepickerComponent;
 	private directiveForm: FormGroup;
