@@ -61,9 +61,9 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	 * Bindings and Children
 	 * ============================================== */
 
-	@ViewChild('calendarContainer') public calendarContainer: ElementRef;
-	@ViewChild('calendarTopContainer') public calendarTopContainer: ElementRef;
-	@ViewChild('footer') public footer: ElementRef;
+	@ViewChild('calendarContainer', { static: true }) public calendarContainer: ElementRef;
+	@ViewChild('calendarTopContainer', { static: true }) public calendarTopContainer: ElementRef;
+	@ViewChild('footer', { static: true }) public footer: ElementRef;
 	@HostBinding('style.width.px') public datepickerWidth: number;
 	@HostBinding('style.height.px') public datepickerHeight: number;
 

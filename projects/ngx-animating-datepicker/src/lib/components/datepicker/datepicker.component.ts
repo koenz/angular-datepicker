@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Options } from '../../models/datepicker-options.model';
-import {YearMonth, Day, Month, Week} from '../../models/datepicker.model';
+import { YearMonth, Day, Month, Week } from '../../models/datepicker.model';
 import { DatepickerService } from '../../services/datepicker.service';
 import { UtilitiesService } from '../../services/utilities.service';
 import { DefaultOptions } from './datepicker.options';
@@ -139,8 +139,8 @@ export class DatepickerComponent implements OnInit {
 	/* ==============================================
 	 * Bindings and Children
 	 * ============================================== */
-	@ViewChild('calendarContainer') public calendarContainer: ElementRef;
-	@ViewChild('calendarTopContainer') public calendarTopContainer: ElementRef;
+	@ViewChild('calendarContainer', { static: true }) public calendarContainer: ElementRef;
+	@ViewChild('calendarTopContainer', { static: true }) public calendarTopContainer: ElementRef;
 	@HostBinding('class')
 	@Input()
 	theme = '';
@@ -154,7 +154,7 @@ export class DatepickerComponent implements OnInit {
 	@HostBinding('style.bottom.px') bottomPosition: number = null;
 	@HostBinding('style.right.px') rightPosition: number = null;
 
-	constructor(public utils: UtilitiesService, public element: ElementRef) {}
+	constructor(public utils: UtilitiesService, public element: ElementRef) { }
 
 	ngOnInit() {
 		this.initialised = true;
