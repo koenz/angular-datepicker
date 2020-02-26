@@ -6,6 +6,8 @@ import {
 	Input,
 	OnInit,
 	ViewChild,
+	Output,
+	EventEmitter,
 } from '@angular/core';
 import { YearMonth, Month } from '../../models/datepicker.model';
 import { DatepickerService } from '../../services/datepicker.service';
@@ -29,10 +31,20 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	public leftInnerPosition = 0;
 	public transition: string;
 	public translateX: number;
-	public currentYearMonth: object = null;
 	public datepickerPosition: object;
 	public initialised = false;
-	public calendarHeight: number
+	public calendarHeight: number;
+
+	private _currentYearMonth: YearMonth[] = null;
+
+	set currentYearMonth(yearMonths: YearMonth[]) {
+		this._currentYearMonth = yearMonths;
+		this.navigate.emit(yearMonths);
+	}
+
+	get currentYearMonth() {
+		return this._currentYearMonth;
+	}
 
 	/* ==============================================
 	 * External Properties
@@ -58,6 +70,13 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	}
 
 	/* ==============================================
+	 * Outputs
+	 * ============================================== */
+
+	@Output()
+	navigate = new EventEmitter<YearMonth[]>();
+
+	/* ==============================================
 	 * Bindings and Children
 	 * ============================================== */
 
@@ -66,6 +85,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	@ViewChild('footer', { static: true }) public footer: ElementRef;
 	@HostBinding('style.width.px') public datepickerWidth: number;
 	@HostBinding('style.height.px') public datepickerHeight: number;
+
 
 	constructor(public elementRef: ElementRef, public utilities: UtilitiesService) {
 		super(utilities, elementRef);
@@ -98,7 +118,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	setDatePickerDimension(): void {
 		this.datepickerHeight =
 			this.calendarContainer.nativeElement.offsetHeight +
-			this.calendarTopContainer.nativeElement.offsetHeight + 
+			this.calendarTopContainer.nativeElement.offsetHeight +
 			this.footer.nativeElement.offsetHeight;
 		this.calendarHeight = this.calendarContainer.nativeElement.offsetHeight;
 		this.datepickerWidth = this.initialWidth * this._numberOfMonths.length;
@@ -180,7 +200,7 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 					offsetHeight = calendarArray[el].offsetHeight;
 				}
 			});
-			
+
 			// TODO: Merge with setHeight function.
 			that.datepickerHeight =
 				offsetHeight + that.calendarTopContainer.nativeElement.offsetHeight + that.footer.nativeElement.offsetHeight;
