@@ -8,6 +8,7 @@ import {
 
 @Component({
 	selector: 'app-demo',
+	standalone: false,
 	templateUrl: './demo.component.html',
 	styleUrls: ['./demo.component.scss']
 })
@@ -29,7 +30,7 @@ export class DemoComponent implements OnInit {
 	public numberOfMonths;
 
 	@ViewChild('demoDatepicker', { static: true }) demoDatepicker: AnimatepickerComponent;
-	private directiveForm: FormGroup;
+	public directiveForm: FormGroup;
 
 	ngOnInit() {
 		this.directiveForm = new FormGroup({

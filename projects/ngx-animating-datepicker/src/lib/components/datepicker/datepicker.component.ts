@@ -7,6 +7,7 @@ import { DefaultOptions } from './datepicker.options';
 
 @Component({
 	selector: 'aa-datepicker',
+	standalone: false,
 	templateUrl: './datepicker.component.html',
 	styleUrls: ['./datepicker.component.scss']
 })

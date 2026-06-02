@@ -1,6 +1,5 @@
 import {
 	ApplicationRef,
-	ComponentFactoryResolver,
 	Directive,
 	EmbeddedViewRef,
 	EventEmitter,
@@ -21,7 +20,8 @@ import {DatepickerComponent} from './datepicker.component';
 import {DefaultDirectiveOptions} from './datepicker.options';
 
 @Directive({
-	selector: '[aaDatepicker]'
+	selector: '[aaDatepicker]',
+	standalone: false
 })
 export class DatepickerDirective {
 	datepicker: any = null; // TODO: fix types: DatepickerComponent | AnimatepickerComponent
@@ -176,7 +176,7 @@ export class DatepickerDirective {
 		return this._selectedDates;
 	}
 
-	@HostListener('click', ['$event.target'])
+	@HostListener('click')
 	onClick() {
 		if (!this.datepicker) {
 			this.datepicker = this.createDatepicker();
@@ -202,7 +202,6 @@ export class DatepickerDirective {
 
 	constructor(
 		public viewContainerRef: ViewContainerRef,
-		public componentFactoryResolver: ComponentFactoryResolver,
 		private appRef: ApplicationRef,
 		private injector: Injector,
 		private renderer: Renderer2,
@@ -235,7 +234,7 @@ export class DatepickerDirective {
 		this.datepicker._selectedDates = this.selectedDates;
 		this.datepicker.language = this.language;
 		this.datepicker.minDate = this.minDate;
-		this.datepicker.minDate = this.maxDate;
+		this.datepicker.maxDate = this.maxDate;
 	}
 
 	/**
@@ -293,9 +292,9 @@ export class DatepickerDirective {
 	 */
 	appendToBody(): any {
 		const datepickerComponent = this.options.useAnimatePicker ? AnimatepickerComponent : DatepickerComponent;
-		const componentRef = this.componentFactoryResolver
-			.resolveComponentFactory(datepickerComponent)
-			.create(this.injector);
+		const componentRef = this.viewContainerRef.createComponent(datepickerComponent, {
+			injector: this.injector
+		});
 
 		this.appRef.attachView(componentRef.hostView);
 
@@ -311,7 +310,6 @@ export class DatepickerDirective {
 	 */
 	appendToContainer(): any {
 		const datepickerComponent = this.options.useAnimatePicker ? AnimatepickerComponent : DatepickerComponent;
-		const componentRef = this.componentFactoryResolver.resolveComponentFactory(datepickerComponent);
-		return this.viewContainerRef.createComponent(componentRef).instance;
+		return this.viewContainerRef.createComponent(datepickerComponent).instance;
 	}
 }

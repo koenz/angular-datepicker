@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class UtilitiesService {
 	private static getScrollOffset() {
 		const x = window.pageXOffset || document.documentElement.scrollLeft;
@@ -26,6 +26,15 @@ export class UtilitiesService {
 
 			return position;
 		}
+
+		return {
+			top: 0,
+			left: 0,
+			right: width,
+			bottom: height,
+			forRight: window.innerWidth,
+			forBottom: window.innerHeight
+		};
 	}
 
 	createArray(start: number, end: number): number[] {

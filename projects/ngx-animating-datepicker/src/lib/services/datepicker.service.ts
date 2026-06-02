@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Day, Week } from '../models/datepicker.model';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class DatepickerService {
 	/**
 	 * Get the formatted weekdays
@@ -20,7 +20,11 @@ export class DatepickerService {
 
 		const weekdays = [];
 		for (let day = 5; day <= 11; day++) {
-			weekdays.push(new Date(1970, 1 - 1, day + index).toLocaleString(language, { weekday: format }));
+			weekdays.push(
+				new Date(1970, 1 - 1, day + index).toLocaleString(language, {
+					weekday: format as Intl.DateTimeFormatOptions['weekday']
+				})
+			);
 		}
 
 		return weekdays;

@@ -5,8 +5,6 @@ import { DatepickerComponent } from './components/datepicker/datepicker.componen
 import { DatepickerDirective } from './components/datepicker/datepicker.directive';
 import { SubNavigationComponent } from './components/sub-navigation/sub-navigation.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
-import { UtilitiesService } from './services/utilities.service';
-
 @NgModule({
 	declarations: [
 		DatepickerComponent,
@@ -16,13 +14,11 @@ import { UtilitiesService } from './services/utilities.service';
 		SubNavigationComponent
 	],
 	imports: [CommonModule],
-	providers: [UtilitiesService],
 	exports: [
 		DatepickerComponent,
 		NavigationComponent,
 		AnimatepickerComponent,
 		DatepickerDirective
-	],
-	entryComponents: [DatepickerComponent, AnimatepickerComponent]
+	]
 })
 export class AaDatepickerModule {}
