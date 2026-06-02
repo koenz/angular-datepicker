@@ -1,4 +1,4 @@
-@import 'prismjs/themes/prism-okaidia';
+@use 'sass:color';
 
 :host {
     font-family: Arial, Helvetica, sans-serif;
@@ -82,7 +82,7 @@
         cursor: pointer;
 
         &:hover {
-            background-color: lighten(#272822, 20);
+            background-color: color.adjust(#272822, $lightness: 20%);
         }
     }
 
