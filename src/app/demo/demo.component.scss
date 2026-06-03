@@ -19,6 +19,18 @@
         padding: 60px;
         color: #fff;
         background-color: #272822;
+
+        code.language-typescript {
+            display: block;
+            background: transparent;
+            color: #fff;
+
+            small,
+            small.text-muted,
+            small.token.comment {
+                color: rgba(#fff, 0.7) !important;
+            }
+        }
     }
 
     .demo__text-block {
@@ -169,5 +181,8 @@
 
     .demo__input-container {
         display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        position: relative;
     }
 }

@@ -1,7 +1,10 @@
 import {
 	ApplicationRef,
+	ComponentRef,
+	createComponent,
 	Directive,
 	EmbeddedViewRef,
+	EnvironmentInjector,
 	EventEmitter,
 	HostListener,
 	Injector,
@@ -25,6 +28,7 @@ import {DefaultDirectiveOptions} from './datepicker.options';
 })
 export class DatepickerDirective {
 	datepicker: any = null; // TODO: fix types: DatepickerComponent | AnimatepickerComponent
+	datepickerRef: ComponentRef<DatepickerComponent | AnimatepickerComponent> | null = null;
 	clickListener;
 
 	_options = DefaultDirectiveOptions;
@@ -105,7 +109,7 @@ export class DatepickerDirective {
 	}
 
 	get maxDate() {
-		return this._minDate;
+		return this._maxDate;
 	}
 
 	/**
@@ -292,17 +296,18 @@ export class DatepickerDirective {
 	 */
 	appendToBody(): any {
 		const datepickerComponent = this.options.useAnimatePicker ? AnimatepickerComponent : DatepickerComponent;
-		const componentRef = this.viewContainerRef.createComponent(datepickerComponent, {
-			injector: this.injector
+		this.datepickerRef = createComponent(datepickerComponent, {
+			environmentInjector: this.appRef.injector as EnvironmentInjector,
+			elementInjector: this.injector
 		});
 
-		this.appRef.attachView(componentRef.hostView);
+		this.appRef.attachView(this.datepickerRef.hostView);
 
-		const domElem = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
+		const domElem = (this.datepickerRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
 
 		document.body.appendChild(domElem);
 
-		return componentRef.instance;
+		return this.datepickerRef.instance;
 	}
 
 	/**
@@ -310,6 +315,7 @@ export class DatepickerDirective {
 	 */
 	appendToContainer(): any {
 		const datepickerComponent = this.options.useAnimatePicker ? AnimatepickerComponent : DatepickerComponent;
-		return this.viewContainerRef.createComponent(datepickerComponent).instance;
+		this.datepickerRef = this.viewContainerRef.createComponent(datepickerComponent);
+		return this.datepickerRef.instance;
 	}
 }
