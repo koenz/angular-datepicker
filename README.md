@@ -210,7 +210,7 @@ Requires **npm 11.10+** (`packageManager` in `package.json`; enable with `corepa
 #### Release a version
 
 1. Bump `version` in `projects/ngx-animating-datepicker/package.json`.
-2. Commit, merge to `develop`, then tag:
+2. Commit and merge to `main`, then tag:
 
 ```bash
 git tag v2.0.0
