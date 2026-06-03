@@ -2,9 +2,11 @@ import {
 	AfterViewInit,
 	Component,
 	ElementRef,
+	EventEmitter,
 	HostBinding,
 	Input,
 	OnInit,
+	Output,
 	ViewChild,
 } from '@angular/core';
 import { YearMonth, Month } from '../../models/datepicker.model';
@@ -30,10 +32,20 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	public leftInnerPosition = 0;
 	public transition: string;
 	public translateX: number;
-	public currentYearMonth: object = null;
 	public datepickerPosition: object;
 	public initialised = false;
-	public calendarHeight: number
+	public calendarHeight: number;
+
+	private _currentYearMonth: YearMonth[] = null;
+
+	set currentYearMonth(yearMonths: YearMonth[]) {
+		this._currentYearMonth = yearMonths;
+		this.navigate.emit(yearMonths);
+	}
+
+	get currentYearMonth(): YearMonth[] {
+		return this._currentYearMonth;
+	}
 
 	/* ==============================================
 	 * External Properties
@@ -57,6 +69,13 @@ export class AnimatepickerComponent extends DatepickerComponent implements OnIni
 	get numberOfMonths(): Number[] {
 		return this._numberOfMonths;
 	}
+
+	/* ==============================================
+	 * Outputs
+	 * ============================================== */
+
+	@Output()
+	navigate = new EventEmitter<YearMonth[]>();
 
 	/* ==============================================
 	 * Bindings and Children

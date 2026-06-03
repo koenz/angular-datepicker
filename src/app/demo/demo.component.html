@@ -22,10 +22,13 @@
                         [theme]="animateInputsForm.value.theme"
                         [options]="animateOptions"
                         [(selectedDates)]="selectedDatesAnimate"
+                        (navigate)="yearMonths = $event"
                         #demoDatepicker>
                     </aa-animatepicker>
                 </div>
                 <div class="demo__output-example">
+                    <h4>Visible months:</h4>
+                    <pre>{{ yearMonths | json }}</pre>
                     <h4>Output:</h4>
                     <ul class="demo__selected-dates-list">
                         <li *ngFor="let date of selectedDatesAnimate; let i = index" class="demo__selected-dates-item">

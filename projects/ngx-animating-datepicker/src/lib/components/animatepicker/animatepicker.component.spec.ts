@@ -21,4 +21,14 @@ describe('AnimatepickerComponent', () => {
 	it('should be created', () => {
 		expect(component).toBeTruthy();
 	});
+
+	it('should emit navigate when the visible month changes', () => {
+		const navigateSpy = vi.spyOn(component.navigate, 'emit');
+		component.goToDate(new Date(2024, 0, 1));
+		expect(navigateSpy).toHaveBeenCalledWith([{ year: 2024, month: 0 }]);
+
+		navigateSpy.mockClear();
+		component.goToNextMonth();
+		expect(navigateSpy).toHaveBeenCalledWith([{ year: 2024, month: 1 }]);
+	});
 });

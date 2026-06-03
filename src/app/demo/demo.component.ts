@@ -28,6 +28,7 @@ export class DemoComponent implements OnInit {
 	public selectedMinDate;
 	public selectedMaxDate;
 	public numberOfMonths;
+	public yearMonths;
 
 	@ViewChild('demoDatepicker', { static: true }) demoDatepicker: AnimatepickerComponent;
 	public directiveForm: FormGroup;

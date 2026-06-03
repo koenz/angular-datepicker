@@ -117,6 +117,14 @@ All the above @Input's() can be used with the directive implementation as well. 
 @Input() closeOnBlur = true; // Close datepicker on blur
 ```
 
+### Outputs
+
+The following output is available for Animatepicker:
+
+```ts
+@Output() navigate: EventEmitter<YearMonth[]>; // Emits year and month of each visible month when navigation changes
+```
+
 ### Composing
 You can add a footer to the datepicker by adding a `<footer>` element between the tags.
 
