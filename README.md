@@ -188,7 +188,7 @@ npm test               # run unit tests (non-watch)
 
 This repo uses a **7-day release cooldown** to reduce npm supply-chain risk (Shai-Hulud-style attacks):
 
-- `.npmrc` — `min-release-age=7d` blocks installing brand-new package versions
+- `.npmrc` — `min-release-age=7` blocks installing package versions published within the last 7 days
 - `.github/dependabot.yml` — matching Dependabot cooldown (security updates are not delayed)
 
 Requires **npm 11.10+** (`packageManager` in `package.json`; enable with `corepack enable`).
