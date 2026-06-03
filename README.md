@@ -180,6 +180,54 @@ Implement your custom component into the datepicker by using the `ng-content` lo
 npm install
 npm start              # demo app
 npm run lib:build      # build library
-npm run lib:publish    # build + pack for npm publish
+npm run lib:publish    # build + pack (dry run before publish)
 npm test               # run unit tests (non-watch)
 ```
+
+### Dependency safety
+
+This repo uses a **7-day release cooldown** to reduce npm supply-chain risk (Shai-Hulud-style attacks):
+
+- `.npmrc` — `min-release-age=7d` blocks installing brand-new package versions
+- `.github/dependabot.yml` — matching Dependabot cooldown (security updates are not delayed)
+
+Requires **npm 11.10+** (`packageManager` in `package.json`; enable with `corepack enable`).
+
+### Publishing to npm
+
+**Recommended setup:** [npm Trusted Publishers](https://docs.npmjs.com/trusted-publishers/) (OIDC via GitHub Actions). No long-lived `NPM_TOKEN` in secrets; publishes get provenance attestations automatically.
+
+#### One-time npm setup
+
+1. Sign in at [npmjs.com](https://www.npmjs.com/) as the package owner (`koenzz`).
+2. Open [ngx-animating-datepicker → Settings → Trusted Publisher](https://www.npmjs.com/package/ngx-animating-datepicker/access).
+3. Add a **GitHub Actions** trusted publisher:
+   - **Organization or user:** `koenz`
+   - **Repository:** `angular-datepicker`
+   - **Workflow filename:** `publish.yml`
+   - **Environment:** leave empty (unless you add a GitHub Environment later)
+
+#### Release a version
+
+1. Bump `version` in `projects/ngx-animating-datepicker/package.json`.
+2. Commit, merge to `develop`, then tag:
+
+```bash
+git tag v2.0.0
+git push origin v2.0.0
+```
+
+3. The [Publish to npm](.github/workflows/publish.yml) workflow runs tests, builds the library, and publishes from `dist/ngx-animating-datepicker`.
+
+The git tag must match the library version exactly (`v2.0.0` → `"version": "2.0.0"`).
+
+#### Manual publish (fallback)
+
+```bash
+npm run lib:build
+npm run copy:readme
+cd dist/ngx-animating-datepicker
+npm publish --access public
+```
+
+Use a granular npm access token with **Publish** scope only, or `npm login` with 2FA. Prefer Trusted Publishers for CI.
