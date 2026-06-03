@@ -3,6 +3,7 @@ import { NavigationItem } from '../../models/datepicker.model';
 
 @Component({
 	selector: 'aa-sub-navigation',
+	standalone: false,
 	templateUrl: './sub-navigation.component.html',
 	styleUrls: ['./sub-navigation.component.scss']
 })

@@ -1,11 +1,4 @@
-// Required
-@import 'node_modules/bootstrap/scss/functions';
-@import 'node_modules/bootstrap/scss/variables';
-@import 'node_modules/bootstrap/scss/mixins';
-@import 'node_modules/bootstrap/scss/reboot';
-@import 'node_modules/bootstrap/scss/grid';
-@import 'node_modules/bootstrap/scss/buttons';
-@import 'node_modules/prismjs/themes/prism-okaidia';
+@use 'sass:color';
 
 :host {
     font-family: Arial, Helvetica, sans-serif;
@@ -26,6 +19,18 @@
         padding: 60px;
         color: #fff;
         background-color: #272822;
+
+        code.language-typescript {
+            display: block;
+            background: transparent;
+            color: #fff;
+
+            small,
+            small.text-muted,
+            small.token.comment {
+                color: rgba(#fff, 0.7) !important;
+            }
+        }
     }
 
     .demo__text-block {
@@ -89,7 +94,7 @@
         cursor: pointer;
 
         &:hover {
-            background-color: lighten(#272822, 20);
+            background-color: color.adjust(#272822, $lightness: 20%);
         }
     }
 
@@ -176,5 +181,8 @@
 
     .demo__input-container {
         display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        position: relative;
     }
 }

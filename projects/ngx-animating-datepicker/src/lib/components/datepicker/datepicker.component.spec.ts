@@ -1,20 +1,16 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { UtilitiesService } from '../../services/utilities.service';
-import { NavigationComponent } from '../navigation/navigation.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DatepickerComponent } from './datepicker.component';
+import { AaDatepickerModule } from '../../ngx-animating-datepicker.module';
 
 describe('DatepickerComponent', () => {
 	let component: DatepickerComponent;
 	let fixture: ComponentFixture<DatepickerComponent>;
 
-	beforeEach(
-		async(() => {
-			TestBed.configureTestingModule({
-				declarations: [DatepickerComponent, NavigationComponent],
-				providers: [UtilitiesService]
-			}).compileComponents();
-		})
-	);
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			imports: [AaDatepickerModule]
+		}).compileComponents();
+	});
 
 	beforeEach(() => {
 		fixture = TestBed.createComponent(DatepickerComponent);

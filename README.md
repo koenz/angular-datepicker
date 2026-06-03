@@ -1,37 +1,31 @@
 # Animating Angular Datepicker
-An Animating Datepicker for Angular 2+. For some smooth date picking :). Including range functionality, multiple calendars next to each other and loads of other functionality. Checkout the [Demo page](http://zigterman.com/datepicker) for a preview.
 
-Want an improvement or found bug? please use the pull request functionality or create an issue.
+An animating datepicker for Angular 21+. For smooth date picking with range support, multiple calendars, and more. See the [demo page](http://zigterman.com/datepicker) for a preview.
 
-#### Some existing- and upcoming features
-- [x] Directive
-- [x] Reactive Forms Support
-- [x] Multiple Calendars next to each other
-- [x] Composable footer
-- [x] Themable
-- [x] Multi Languages support using Intl.DateTimeFormat
-- [x] Animations
-- [ ] i18n
-- [ ] Keyboard control
-- [ ] ...
+Want an improvement or found a bug? Please open a pull request or create an issue.
+
+## Requirements
+
+- **Angular 21+** (v2.0.0 is a breaking release; use v1.x if you are on Angular 6–20)
+- Node.js 20+ recommended
 
 ## Installation
 
-To install go through the following steps
+```bash
+npm install ngx-animating-datepicker
+```
 
-1.  `npm install ngx-animating-datepicker --save` -- or --
-	`yarn add ngx-animating-datepicker`
-2. Add `AaDatepickerModule` to your module imports:
+Add `AaDatepickerModule` to your module imports:
+
 ```ts
-import {AaDatepickerModule} from  'ngx-animating-datepicker';
+import { AaDatepickerModule } from 'ngx-animating-datepicker';
 
 @NgModule({
- ...
- imports: [
-   ...
-   AaDatepickerModule
- ]
-}
+  imports: [
+    AaDatepickerModule
+  ]
+})
+export class AppModule {}
 ```
 
 ## Basic Usage
@@ -170,4 +164,14 @@ Implement your custom component into the datepicker by using the `ng-content` lo
 <aa-animatepicker #demoDatepicker>
     <app-custom-component></app-custom-component>
 </aa-animatepicker>
+```
+
+## Development
+
+```bash
+npm install
+npm start              # demo app
+npm run lib:build      # build library
+npm run lib:publish    # build + pack for npm publish
+npm test               # run unit tests (non-watch)
 ```

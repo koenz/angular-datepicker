@@ -1,21 +1,16 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-
-import {ReactiveFormsModule} from '@angular/forms';
-import {AaDatepickerModule} from 'ngx-animating-datepicker';
-import {DemoComponent} from './demo.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DemoComponent } from './demo.component';
+import { AppTestingModule } from '../app.testing.module';
 
 describe('DemoComponent', () => {
 	let component: DemoComponent;
 	let fixture: ComponentFixture<DemoComponent>;
 
-	beforeEach(
-		async(() => {
-			TestBed.configureTestingModule({
-				declarations: [DemoComponent],
-				imports: [AaDatepickerModule, ReactiveFormsModule]
-			}).compileComponents();
-		})
-	);
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			imports: [AppTestingModule]
+		}).compileComponents();
+	});
 
 	beforeEach(() => {
 		fixture = TestBed.createComponent(DemoComponent);

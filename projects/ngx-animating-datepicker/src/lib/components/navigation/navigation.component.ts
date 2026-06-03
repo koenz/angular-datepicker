@@ -3,6 +3,7 @@ import {YearMonth, NavigationItem} from '../../models/datepicker.model';
 
 @Component({
 	selector: 'aa-navigation',
+	standalone: false,
 	templateUrl: './navigation.component.html',
 	styleUrls: ['./navigation.component.scss']
 })
@@ -14,7 +15,9 @@ export class NavigationComponent implements OnInit {
 
 	@Input()
 	private set language(language: string) {
-		this.formatMonth = new Intl.DateTimeFormat(language, {month: this.monthFormat});
+		this.formatMonth = new Intl.DateTimeFormat(language, {
+			month: this.monthFormat as Intl.DateTimeFormatOptions['month']
+		});
 		this._language = language;
 
 		if (this.initialised) {

@@ -4,6 +4,7 @@ import { slideInAnimation } from './animations';
 
 @Component({
   selector: 'app-root',
+  standalone: false,
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
   animations: [ slideInAnimation ]
