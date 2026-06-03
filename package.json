@@ -8,11 +8,11 @@
     "lib:build": "ng build ngx-animating-datepicker",
     "lib:pack": "cd dist/ngx-animating-datepicker && npm pack",
     "lib:publish": "npm run lib:build && npm run copy:readme && npm run lib:pack",
-    "copy:readme": "cp -av README.md dist/ngx-animating-datepicker",
+    "copy:readme": "cp -av projects/ngx-animating-datepicker/README.md dist/ngx-animating-datepicker/README.md",
     "test": "ng test ngx-animating-datepicker --watch=false && ng test ngx-animating-datepicker-app --watch=false"
   },
   "private": true,
-  "packageManager": "npm@10.9.2",
+  "packageManager": "npm@11.16.0",
   "dependencies": {
     "@angular/animations": "^21.2.0",
     "@angular/common": "^21.2.0",

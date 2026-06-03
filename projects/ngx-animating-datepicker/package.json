@@ -11,9 +11,22 @@
     "ngx",
     "angular 21"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koenz/angular-datepicker.git",
+    "directory": "projects/ngx-animating-datepicker"
+  },
+  "homepage": "https://github.com/koenz/angular-datepicker#readme",
+  "bugs": {
+    "url": "https://github.com/koenz/angular-datepicker/issues"
+  },
   "peerDependencies": {
     "@angular/common": "^21.0.0",
     "@angular/core": "^21.0.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
 }
