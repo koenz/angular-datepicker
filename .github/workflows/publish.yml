@@ -13,6 +13,9 @@ jobs:
   publish:
     runs-on: ubuntu-latest
 
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
       - uses: actions/checkout@v4
 
@@ -22,6 +25,18 @@ jobs:
         with:
           node-version: 22
           cache: npm
+
+      - name: Verify npm version supports OIDC trusted publishing
+        run: |
+          npm --version
+          node --version
+          npm --version | node -e "
+            const v = require('fs').readFileSync(0,'utf8').trim().split('.').map(Number);
+            if (v[0] < 11 || (v[0] === 11 && v[1] < 5)) {
+              console.error('npm 11.5.1+ required for trusted publishing');
+              process.exit(1);
+            }
+          "
 
       - run: npm ci
 
@@ -40,6 +55,5 @@ jobs:
 
       - run: npm run copy:readme
 
-      - name: Publish to npm
-        working-directory: dist/ngx-animating-datepicker
-        run: npm publish --access public
+      - name: Publish to npm via Trusted Publisher (OIDC)
+        run: npm publish dist/ngx-animating-datepicker --access public
