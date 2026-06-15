@@ -15,7 +15,7 @@
   "packageManager": "npm@11.16.0",
   "dependencies": {
     "@angular/animations": "^21.2.0",
-    "@angular/common": "^21.2.16",
+    "@angular/common": "^22.0.0",
     "@angular/compiler": "^21.2.16",
     "@angular/core": "^21.2.16",
     "@angular/forms": "^21.2.16",
